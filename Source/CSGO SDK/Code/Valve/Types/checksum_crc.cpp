@@ -121,7 +121,7 @@ JustAfew:
 			ulCrc = pulCRCTable[ *pb++ ^ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 
 		case 4:
-			ulCrc ^= LittleLong(*(CRC32_t *)pb);
+			ulCrc ^= LittleLong( *( CRC32_t * )pb );
 			ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 			ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 			ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
@@ -164,12 +164,12 @@ JustAfew:
 	nMain = nBuffer >> 3;
 	while ( nMain-- )
 	{
-		ulCrc ^= LittleLong(*(CRC32_t *)pb);
+		ulCrc ^= LittleLong( *(CRC32_t *)pb );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
-		ulCrc ^= LittleLong(*(CRC32_t *)(pb + 4));
+		ulCrc ^= LittleLong( *(CRC32_t *)(pb + 4) );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );
 		ulCrc = pulCRCTable[ ( unsigned char )ulCrc ] ^ ( ulCrc >> 8 );

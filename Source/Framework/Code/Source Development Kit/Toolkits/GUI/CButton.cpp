@@ -45,7 +45,7 @@ CButton::CButton( ) :
 	AddAnimatedValue( _LocationAnimation );
 }
 
-void CButton::SetText( const std::string& strNewText )
+void CButton::SetText( const std::string &strNewText )
 {
 	strText.clear( );
 	bCreateDrawables = true;

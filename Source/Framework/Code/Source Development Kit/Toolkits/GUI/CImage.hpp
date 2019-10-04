@@ -12,5 +12,5 @@ private:
 
 public:
 
-	CImage( const std::string& strResourceName );
+	CImage( const std::string &strResourceName );
 };

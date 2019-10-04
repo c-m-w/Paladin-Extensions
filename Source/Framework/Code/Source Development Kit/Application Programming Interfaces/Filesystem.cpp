@@ -50,7 +50,7 @@ std::string CFilesystem::GetAppdataDirectory( )
 		auto zWrittenBytes = 0u;
 
 		if ( 0 != _dupenv_s( &szBuffer, &zWrittenBytes, ENC( "appdata" ) )
-			 || zWrittenBytes == 0 )
+			|| zWrittenBytes == 0 )
 			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, ENC( "Error retrieving appdata environment directory." ) );
 
 		auto strDirectory = std::string( szBuffer );
@@ -281,11 +281,12 @@ bool CFilesystem::GetFilesInAbsoluteDirectory( const std::string &strDirectory, 
 bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 {
 	if ( !CheckAbsoluteDirectoryValidity( strPath )
-		 && !CheckAbsoluteFileValidity( strPath ) )
+		&& !CheckAbsoluteFileValidity( strPath ) )
 	{
 		const auto strEncryptedPath = GetAbsoluteEncryptedFilename( strPath );
 		return CheckAbsoluteDirectoryValidity( strEncryptedPath ) || CheckAbsoluteFileValidity( strEncryptedPath ) ?
-			DeleteAbsolutePath( strEncryptedPath ) : true;
+				   DeleteAbsolutePath( strEncryptedPath ) :
+				   true;
 	}
 
 	auto strFinal = strPath;
@@ -439,14 +440,14 @@ bool CFilesystem::EncryptAbsoluteFile( const std::string &strFilename )
 {
 	std::string strContents;
 	return ReadAbsoluteFile( strFilename, strContents, false )
-		&& WriteAbsoluteFile( strFilename, strContents, true );
+			&& WriteAbsoluteFile( strFilename, strContents, true );
 }
 
 bool CFilesystem::DecryptAbsoluteFile( const std::string &strFilename )
 {
 	std::string strContents;
 	return ReadAbsoluteFile( strFilename, strContents, true )
-		&& WriteAbsoluteFile( strFilename, strContents, false );
+			&& WriteAbsoluteFile( strFilename, strContents, false );
 }
 
 bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bVisible )
@@ -525,7 +526,8 @@ std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initia
 			FormatDirectory( strFolder );
 			vecSubDirectories.emplace_back( strFolder );
 			strSubDirectory = strSubDirectory.substr( strFolder.length( ) );
-		} while ( strSubDirectory.find_first_of( '\\' ) != std::string::npos );
+		}
+		while ( strSubDirectory.find_first_of( '\\' ) != std::string::npos );
 
 		for ( auto &strFolder: vecSubDirectories )
 			strWorkingDirectory += bHashSubDirectories ? CRYPTO.GenerateHash( strFolder.substr( 0, strFolder.length( ) - 1 ) ) + '\\' : strFolder;
@@ -551,10 +553,10 @@ std::string CFilesystem::FileToPath( const std::string &strFile )
 		strFinalFile.erase( strFinalFile.begin( ) );
 
 	if ( strFinalFile.find( '\\' ) != std::string::npos
-		 && strFinalFile.find( '\\' ) != strFinalFile.length( ) - 1 )
+		&& strFinalFile.find( '\\' ) != strFinalFile.length( ) - 1 )
 		throw std::runtime_error( ENC( "Cannot format a file in a non-current path."
-									 /*"Change the working directory rather than entering a relative directory;\n"
-									   "You may only modify a file in the current working directory."*/ ) );
+									  /*"Change the working directory rather than entering a relative directory;\n"
+										"You may only modify a file in the current working directory."*/ ) );
 
 	FormatDirectory( GetWorkingDirectory( ) );
 	return GetWorkingDirectory( ) + strFinalFile;

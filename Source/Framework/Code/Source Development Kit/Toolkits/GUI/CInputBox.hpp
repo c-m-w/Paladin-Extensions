@@ -8,11 +8,11 @@ public:
 
 	enum EFilter: unsigned
 	{
-		FILTER_NONE					= 0,
-		FILTER_LETTERS				= 1 << 0,
-		FILTER_NUMERIC				= 1 << 1,
-		FILTER_SPECIAL_CHARACTERS	= 1 << 2,
-		FILTER_SPACE				= 1 << 3
+		FILTER_NONE = 0,
+		FILTER_LETTERS = 1 << 0,
+		FILTER_NUMERIC = 1 << 1,
+		FILTER_SPECIAL_CHARACTERS = 1 << 2,
+		FILTER_SPACE = 1 << 3
 	};
 
 	enum EMode: unsigned
@@ -20,7 +20,7 @@ public:
 		MODE_INSERT,
 		MODE_REPLACE
 	};
-	
+
 private:
 
 	void CreateDrawables( ) override;
@@ -32,9 +32,9 @@ private:
 	EFilter _CurrentFilter = FILTER_NONE;
 	EMode _CurrentMode = MODE_INSERT;
 	std::size_t zMaxLength = 32u;
-	
+
 public:
-	
+
 	static constexpr auto TEXT_HEIGHT = 0.125;
 	static constexpr auto PADDING = 0.03125;
 	static constexpr auto FONT = FONT_ROBOTO_MONO;
@@ -44,9 +44,9 @@ public:
 	static inline std::function< bool( char ) > FILTERS[ 4 ]
 	{
 		[ ]( char chCharacter ) // FILTER_LETTERS
-		{ 
+		{
 			return chCharacter >= 'A' && chCharacter <= 'Z'
-				|| chCharacter >= 'a' || chCharacter <= 'z';
+					|| chCharacter >= 'a' || chCharacter <= 'z';
 		},
 		[ ]( char chCharacter ) // FILTER_NUMERIC
 		{
@@ -55,16 +55,16 @@ public:
 		[ ]( char chCharacter ) // FILTER_SPECIAL_CHARACTERS
 		{
 			return chCharacter >= '!' && chCharacter <= '/'
-				|| chCharacter >= ':' && chCharacter <= '@'
-				|| chCharacter >= '[' && chCharacter <= '`'
-				|| chCharacter >= '{' && chCharacter <= '~';
+					|| chCharacter >= ':' && chCharacter <= '@'
+					|| chCharacter >= '[' && chCharacter <= '`'
+					|| chCharacter >= '{' && chCharacter <= '~';
 		},
 		[ ]( char chCharacter ) // FILTER_SPACE
 		{
 			return chCharacter == ' ';
 		}
 	};
-	
+
 	CInputBox( );
 
 	void AddFilter( EFilter _NewFilter );

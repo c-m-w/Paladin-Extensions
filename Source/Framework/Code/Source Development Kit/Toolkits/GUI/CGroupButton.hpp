@@ -21,7 +21,7 @@ private:
 	std::string strText = ENC( "Button" );
 	bitmap_t _TextBitmap { };
 	EButtonType _Type = BUTTON_LEFT;
-	animated_value_t< Utilities::vector2_t >* _SizeAnimation = new animated_value_t< Utilities::vector2_t >( &vecRelativeSize );
+	animated_value_t< Utilities::vector2_t > *_SizeAnimation = new animated_value_t< Utilities::vector2_t >( &vecRelativeSize );
 
 public:
 
@@ -32,6 +32,6 @@ public:
 
 	CGroupButton( );
 
-	void SetText( const std::string& strNewText );
+	void SetText( const std::string &strNewText );
 	void SetType( EButtonType _NewType );
 };

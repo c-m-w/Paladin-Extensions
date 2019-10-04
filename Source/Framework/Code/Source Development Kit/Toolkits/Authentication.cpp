@@ -18,7 +18,7 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	SI.AddDeviceToQueue( device_info_t( &strHardware[ ESystemInformation::SYS_DRIVE ], ENC( L"Win32_DiskDrive" ), ENC( L"SerialNumber" ) ) );
 	SI.AddDeviceToQueue( device_info_t( &strHardware[ ESystemInformation::SYS_BOARD ], ENC( L"Win32_BaseBoard" ), ENC( L"Product" ) ) );
 	strHardware[ ESystemInformation::SYS_HASH ] = SI.GetHardwareHash( );
-	
+
 	if ( !SI.ProcessQueue( ) )
 		return false;
 
@@ -27,16 +27,16 @@ bool CAuthentication::GetHardware( std::string &strOut )
 			strDevice = strDevice.substr( 0, MAX_HARDWARE_LENGTH );
 
 	return ( strOut = nlohmann::json
-	{
-		{ ENC( "cpu" ), strHardware[ ESystemInformation::SYS_CPU ] },
-		{ ENC( "gpu" ), strHardware[ ESystemInformation::SYS_GPU ] },
-		{ ENC( "display" ), strHardware[ ESystemInformation::SYS_DISPLAY ] },
-		{ ENC( "pc" ), strHardware[ ESystemInformation::SYS_PC ] },
-		{ ENC( "os" ), strHardware[ ESystemInformation::SYS_OS ] },
-		{ ENC( "drive" ), strHardware[ ESystemInformation::SYS_DRIVE ] },
-		{ ENC( "board" ), strHardware[ ESystemInformation::SYS_BOARD ] }, 
-		{ ENC( "hash" ), strHardware[ ESystemInformation::SYS_HASH ] },
-	}.dump( ) ), true;
+		{
+			{ ENC( "cpu" ), strHardware[ ESystemInformation::SYS_CPU ] },
+			{ ENC( "gpu" ), strHardware[ ESystemInformation::SYS_GPU ] },
+			{ ENC( "display" ), strHardware[ ESystemInformation::SYS_DISPLAY ] },
+			{ ENC( "pc" ), strHardware[ ESystemInformation::SYS_PC ] },
+			{ ENC( "os" ), strHardware[ ESystemInformation::SYS_OS ] },
+			{ ENC( "drive" ), strHardware[ ESystemInformation::SYS_DRIVE ] },
+			{ ENC( "board" ), strHardware[ ESystemInformation::SYS_BOARD ] },
+			{ ENC( "hash" ), strHardware[ ESystemInformation::SYS_HASH ] },
+		}.dump( ) ), true;
 }
 
 bool CAuthentication::GetPurchaseKey( std::string &strOut )
@@ -87,7 +87,7 @@ void CAuthentication::UnsafeUninstall( )
 	auto strDestroyPath = strDestroyBatDirectory + strDestroyBatFile;
 
 	auto strDestroyBat = ENC( R"(:PX
-del )" ) + ('"' + ( strExecutablePath + '"' )) + ENC( R"(
+del )" ) + ( '"' + ( strExecutablePath + '"' ) ) + ENC( R"(
 if exist )" ) + '"' + strExecutablePath + '"' + ENC( R"( goto PX
 del "%APPDATA%\.bat")" );
 
@@ -105,7 +105,7 @@ del "%APPDATA%\.bat")" );
 
 	HANDLE hToken = nullptr;
 	if ( 0 == OpenProcessToken( GetCurrentProcess( ), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hToken )
-		 || hToken == nullptr )
+		|| hToken == nullptr )
 		LOG( ERROR, AUTHENTICATION, ENC( "OpenProcessToken failed for force uninstall" ) );
 
 	TOKEN_PRIVILEGES tpShutdown { };
@@ -159,21 +159,21 @@ std::string CAuthentication::CreateDataFile( )
 	nlohmann::json _Return;
 
 	// Creators and up (1703+)
-	_Return[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ]			= strNewestInsertInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ]				= ptrNewestInsertInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ]					= strNewestInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ]					= ptrNewestInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ] = strNewestInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ] = ptrNewestInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ] = strNewestInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ] = ptrNewestInvertedFunctionTable;
 
 	// Creators only (1703)
-	_Return[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ]			= strBackupInsertInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ]				= ptrBackupInsertInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ]					= ptrBackupInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ] = strBackupInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ] = ptrBackupInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ] = ptrBackupInvertedFunctionTable;
 
 	// Below creators and other Windows versions other than 10 (1703-)
-	_Return[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ]			= strResortInsertInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ]				= ptrResortInsertInvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ]			= ptrResortWindows10InvertedFunctionTable;
-	_Return[ CRYPTO.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ]	= ptrResortPreviousWindowsInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ] = strResortInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ] = ptrResortInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ] = ptrResortWindows10InvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ] = ptrResortPreviousWindowsInvertedFunctionTable;
 
 	return _Return.dump( 4 );
 }
@@ -214,7 +214,7 @@ bool CAuthentication::Ban( const std::string &strReason )
 		if ( !SI.GetProcesses( vecProcesses ) )
 			return false;
 
-		std::string strProcessList {  };
+		std::string strProcessList { };
 		for ( auto &strProcess: vecProcesses )
 		{
 			if ( !strProcessList.empty( ) )
@@ -246,7 +246,6 @@ bool CAuthentication::Ban( const std::string &strReason )
 	};
 
 	return fnBan( );
-
 }
 
 ELoginCode CAuthentication::Login( )
@@ -261,8 +260,8 @@ ELoginCode CAuthentication::Login( )
 
 	NET.AddPostData( EPostData::PURCHASE_KEY, strPurchaseKey );
 	NET.AddPostData( EPostData::HARDWARE, strHardware );
-	if ( !NET.Request( EAction::LOGIN, strResponse ) 
-		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+	if ( !NET.Request( EAction::LOGIN, strResponse )
+		|| !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return CONNECTION_ERROR;
 
 	ELoginCode _Return;
@@ -273,22 +272,22 @@ ELoginCode CAuthentication::Login( )
 		_Return = ELoginCode( std::stoi( strBuffer ) );
 		bLoggedIn = _Return == SUCCESS || _Return == STAFF_SUCCESS;
 	}
-	catch( nlohmann::json::parse_error &e )
+	catch ( nlohmann::json::parse_error &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from login. Message: %s." ), e.what( ) );
 		return SERVER_ERROR;
 	}
-	catch( nlohmann::json::type_error &e )
+	catch ( nlohmann::json::type_error &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to obtain string value of the exit code. Message: %s." ), e.what( ) );
 		return SERVER_ERROR;
 	}
-	catch( std::invalid_argument &e )
+	catch ( std::invalid_argument &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to convert string login code to an integer. Message: %s." ), e.what( ) );
 		return SERVER_ERROR;
 	}
-	catch( std::out_of_range &e )
+	catch ( std::out_of_range &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to convert string login code to an integer. Message: %s." ), e.what( ) );
 		return SERVER_ERROR;
@@ -298,11 +297,11 @@ ELoginCode CAuthentication::Login( )
 	return _Return;
 }
 
-bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTable, std::ptrdiff_t *pNewestInsertInvertedFunctionTableOffset, 
-								   std::string *pNewestInvertedFunctionTable, std::ptrdiff_t *pNewestInvertedFunctionTableOffset, 
-								   std::string *pBackupInsertInvertedFunctionTable, std::ptrdiff_t *pBackupInsertInvertedFunctionTableOffset, 
+bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTable, std::ptrdiff_t *pNewestInsertInvertedFunctionTableOffset,
+								   std::string *pNewestInvertedFunctionTable, std::ptrdiff_t *pNewestInvertedFunctionTableOffset,
+								   std::string *pBackupInsertInvertedFunctionTable, std::ptrdiff_t *pBackupInsertInvertedFunctionTableOffset,
 								   std::ptrdiff_t *pBackupInvertedFunctionTableOffset, std::string *pResortInsertInvertedFunctionTable,
-								   std::ptrdiff_t *pResortInsertInvertedFunctionTableOffset, std::ptrdiff_t *pResortWindows10InvertedFunctionTableOffset, 
+								   std::ptrdiff_t *pResortInsertInvertedFunctionTableOffset, std::ptrdiff_t *pResortWindows10InvertedFunctionTableOffset,
 								   std::ptrdiff_t *pResortPreviousWindowsInvertedFunctionTableOffset )
 {
 	if ( !bLoggedIn )
@@ -310,7 +309,7 @@ bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTab
 
 	std::string strResponse { }, strDecryptedResponse { };
 	if ( !NET.Request( EAction::GET_DATA, strResponse )
-		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+		|| !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining shellcode failed." ) ), false;
 
 	try
@@ -319,7 +318,7 @@ bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTab
 		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
-			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
+			|| _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Shellcode request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
 
 		std::string strData { };
@@ -329,21 +328,21 @@ bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTab
 		auto _Data = nlohmann::json::parse( strData );
 
 		// Creators and up (1703+)
-		*pNewestInsertInvertedFunctionTable					= _Data[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pNewestInsertInvertedFunctionTableOffset			= _Data[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pNewestInvertedFunctionTable						= _Data[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pNewestInvertedFunctionTableOffset					= _Data[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pNewestInsertInvertedFunctionTable = _Data[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pNewestInsertInvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pNewestInvertedFunctionTable = _Data[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pNewestInvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
 
 		// Creators only (1703)
-		*pBackupInsertInvertedFunctionTable					= _Data[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pBackupInsertInvertedFunctionTableOffset			= _Data[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pBackupInvertedFunctionTableOffset					= _Data[ CRYPTO.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pBackupInsertInvertedFunctionTable = _Data[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pBackupInsertInvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pBackupInvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
 
 		// Below creators and other Windows versions other than 10 (1703-)
-		*pResortInsertInvertedFunctionTable					= _Data[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pResortInsertInvertedFunctionTableOffset			= _Data[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pResortWindows10InvertedFunctionTableOffset		= _Data[ CRYPTO.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pResortPreviousWindowsInvertedFunctionTableOffset	= _Data[ CRYPTO.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortInsertInvertedFunctionTable = _Data[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pResortInsertInvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortWindows10InvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortPreviousWindowsInvertedFunctionTableOffset = _Data[ CRYPTO.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
 
 		return true;
 	}
@@ -367,7 +366,7 @@ bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsi
 
 	std::string strResponse { }, strDecryptedResponse { };
 	if ( !NET.Request( EAction::GET_SHELLCODE, strResponse )
-		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+		|| !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining shellcode failed." ) ), false;
 
 	try
@@ -389,7 +388,7 @@ bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsi
 		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
-			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
+			|| _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Shellcode request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
 
 		std::string strShellcode { };
@@ -423,7 +422,7 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 
 	NET.AddPostData( EPostData::LIBRARY, std::to_string( int( _Library ) ) );
 	if ( !NET.Request( EAction::GET_LIBRARY, strLibrary )
-		 || !CRYPTO.Decrypt( strLibrary, strDecryptedLibrary ) )
+		|| !CRYPTO.Decrypt( strLibrary, strDecryptedLibrary ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to receive or decrypt library %i." ), _Library ), false;
 
 	try
@@ -432,7 +431,7 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
-			 || _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
+			|| _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Library request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
 
 		std::string strData { };
@@ -470,7 +469,7 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 
 		strOut.clear( );
 
-		for ( auto &strSection : vecSections )
+		for ( auto &strSection: vecSections )
 			strOut += strSection;
 
 		return !strOut.empty( );
@@ -485,7 +484,7 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to access library member. Message: %s." ), e.what( ) );
 		return false;
 	}
-	catch( std::invalid_argument &e )
+	catch ( std::invalid_argument &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Could not convert string to int. Message: %s." ), e.what( ) );
 		return false;
@@ -506,7 +505,7 @@ bool CAuthentication::RequestLibraryData( ELibrary _Library, std::string &strOut
 
 	NET.AddPostData( EPostData::LIBRARY, std::to_string( int( _Library ) ) );
 	if ( !NET.Request( EAction::GET_LIBRARY_DATA, strLibraryData )
-		 || !CRYPTO.Decrypt( strLibraryData, strDecryptedLibraryData ) )
+		|| !CRYPTO.Decrypt( strLibraryData, strDecryptedLibraryData ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to receive or decrypt library data with ID %i." ), _Library ), false;
 
 	try
@@ -515,13 +514,13 @@ bool CAuthentication::RequestLibraryData( ELibrary _Library, std::string &strOut
 		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
-			 || _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
+			|| _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Library request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
 
 		if ( !CRYPTO.Decrypt( _Response[ "Other Data" ].get< std::string >( ), strOut ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Failed to decrypt library data data." ) ), false;
 	}
-	catch( nlohmann::json::parse_error& e )
+	catch ( nlohmann::json::parse_error &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from requesting library data. Message: %s." ), e.what( ) );
 		return false;
@@ -541,7 +540,7 @@ bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &
 
 	std::string strResponse { }, strDecryptedResponse { };
 	if ( !NET.Request( EAction::GET_HASHES, strResponse )
-		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+		|| !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining hashes failed." ) ), false;
 
 	try
@@ -550,7 +549,7 @@ bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &
 		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
-			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
+			|| _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Hash request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
 
 		std::string strHashes { };

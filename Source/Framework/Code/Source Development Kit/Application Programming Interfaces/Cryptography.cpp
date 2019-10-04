@@ -34,9 +34,9 @@ bool CCryptography::Initialize( )
 
 	strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, ENCRYPTION_KEY_SIZE );
 	strInitializationVector = strEncryptionKey.substr( 0, INITIALIZATION_VECTOR_SIZE );
-	if ( !strProtocol.empty( ) 
-		 || !GetInitializationState( )
-		 || b )
+	if ( !strProtocol.empty( )
+		|| !GetInitializationState( )
+		|| b )
 		return !strEncryptionKey.empty( );
 
 	b = true;
@@ -59,11 +59,11 @@ unsigned CCryptography::GenerateNumericHash( const std::string &strBytes )
 
 	try
 	{
-		char* pBuffer = nullptr;
+		char *pBuffer = nullptr;
 
-		uReturn = std::strtoul( &strOutput[0], &pBuffer, 16 );
+		uReturn = std::strtoul( &strOutput[ 0 ], &pBuffer, 16 );
 	}
-	catch( std::out_of_range& e )
+	catch ( std::out_of_range &e )
 	{
 		LOG( WARNING, CRYPTOGRAPHY, "Unable to get value of CRC32 hash. Message: %s.", e.what( ) );
 	}

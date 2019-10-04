@@ -14,7 +14,7 @@ void CallDrawLoop( );
 void OnLaunch( )
 {
 	if ( !SetupFramework( )
-		 || !_Functionality.Setup( ) )
+		|| !_Functionality.Setup( ) )
 		return;
 
 	std::thread tRun( CallRun );
@@ -64,9 +64,9 @@ void Draw( )
 	window->SetTitle( "Paladin Extensions" );
 	window->SetSubtitle( "Launcher" );
 	window->SetMinimizeCallback( [ & ]( )
-	{ } );
+								{ } );
 	window->SetCloseCallback( [ & ]( )
-	{ } );
+							 { } );
 	window->EnableScrollbars( );
 	window->AddObject( button, { 10.0 / 96.0, 2.96875 } );
 	window->AddObject( checkbox, { 50.0 / 96.0, 160.0 / 96.0 } );

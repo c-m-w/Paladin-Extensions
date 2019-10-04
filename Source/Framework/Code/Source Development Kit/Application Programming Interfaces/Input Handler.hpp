@@ -17,7 +17,7 @@ private:
 public:
 	CKeyState( ) = default;
 
-	CKeyState( const EKeyState& _KeyState )
+	CKeyState( const EKeyState &_KeyState )
 	{
 		ksKeyState = _KeyState;
 	}
@@ -32,22 +32,22 @@ public:
 		return ksKeyState;
 	}
 
-	bool operator==( const bool& rhs ) const
+	bool operator==( const bool &rhs ) const
 	{
 		return bool( *this ) == rhs;
 	}
 
-	bool operator!=( const bool& rhs ) const
+	bool operator!=( const bool &rhs ) const
 	{
 		return !( *this == rhs );
 	}
 
-	bool operator==( const int& rhs ) const
+	bool operator==( const int &rhs ) const
 	{
 		return int( *this ) == rhs;
 	}
 
-	bool operator!=( const int& rhs ) const
+	bool operator!=( const int &rhs ) const
 	{
 		return !( *this == rhs );
 	}
@@ -89,18 +89,18 @@ private:
 
 public:
 
-	void AddCallback( const key_callback_t& _Callback, const key_t& _Key );
-	void AddCallback( const key_typed_callback_t& _Callback );
-	void AddCallback( const global_key_callback_t& _Callback );
-	void AddCallback( const mouse_move_callback_t& _Callback );
-	void AddCallback( const scroll_callback_t& _Callback );
+	void AddCallback( const key_callback_t &_Callback, const key_t &_Key );
+	void AddCallback( const key_typed_callback_t &_Callback );
+	void AddCallback( const global_key_callback_t &_Callback );
+	void AddCallback( const mouse_move_callback_t &_Callback );
+	void AddCallback( const scroll_callback_t &_Callback );
 
-	std::vector< key_callback_t >& GetCallbacks( const key_t& _Key );
-	template< typename _t > std::vector< _t >& GetCallbacks( );
-	template< > std::vector< key_typed_callback_t >& GetCallbacks( );
-	template< > std::vector< global_key_callback_t >& GetCallbacks( );
-	template< > std::vector< mouse_move_callback_t >& GetCallbacks( );
-	template< > std::vector< scroll_callback_t >& GetCallbacks( );
+	std::vector< key_callback_t > &GetCallbacks( const key_t &_Key );
+	template< typename _t > std::vector< _t > &GetCallbacks( );
+	template< > std::vector< key_typed_callback_t > &GetCallbacks( );
+	template< > std::vector< global_key_callback_t > &GetCallbacks( );
+	template< > std::vector< mouse_move_callback_t > &GetCallbacks( );
+	template< > std::vector< scroll_callback_t > &GetCallbacks( );
 };
 
 class CInputHandler: public IBase

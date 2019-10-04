@@ -10,11 +10,11 @@
 bool CLogging::Initialize( )
 {
 #if defined _DEBUG || true
-	for ( auto &strLocation : strLocations )
+	for ( auto &strLocation: strLocations )
 		if ( strLocation.empty( ) )
 			throw std::runtime_error( ENC( "Ensure that all location strings are initialized." ) );
 #endif
-	
+
 	BeginLog( );
 	return true;
 }
@@ -76,16 +76,16 @@ void CLogging::HandleUnloggableError( EUnloggableError _ErrorCode )
 	{
 		std::string strEncryptedBuffer { };
 		if ( CRYPTO.Encrypt( strBuffer, strEncryptedBuffer, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector )
-			 && SI.SetClipboardData( strEncryptedBuffer ) )
+			&& SI.SetClipboardData( strEncryptedBuffer ) )
 		{
 			MessageBox( nullptr, ENC( "An error log has been copied to your clipboard. If this issue persists,\n"
-									"please open a support ticket with the copied error log in the appropriate box." ), ENC( "Error" ), MB_OK );
+									 "please open a support ticket with the copied error log in the appropriate box." ), ENC( "Error" ), MB_OK );
 			return;
 		}
 	}
 
 	MessageBox( nullptr, ENC( "An error has occurred. If this issue persists, please contact\n"
-								"support and include a screenshot of this message box."), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
+							 "support and include a screenshot of this message box." ), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
 }
 
 void CLogging::WriteToFile( )

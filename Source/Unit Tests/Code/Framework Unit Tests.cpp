@@ -14,9 +14,7 @@ namespace Framework
 	TEST_CLASS( Development_Environment )
 	{
 		TEST_METHOD( Logging ) // todo unit test
-		{
-
-		}
+		{ }
 	};
 
 	namespace Source_Development_Kit
@@ -40,7 +38,7 @@ namespace Framework
 					// test initialization list
 					unsigned char b[ 4 ] { 0xFF, 0xF0, 0xE8, 0xE0 };
 					unsigned char ba[ 4 ] { 0xF0, 0xE8, 0xE0, 0xFF };
-					color_t clr { 0xE0, 0xE8,0xF0,0xFF };
+					color_t clr { 0xE0, 0xE8, 0xF0, 0xFF };
 					{
 						Assert::AreEqual( b[ 3 ], clr.r, L"Red check failed" );
 						Assert::AreEqual( b[ 2 ], clr.g, L"Green check failed" );
@@ -79,7 +77,7 @@ namespace Framework
 						Assert::AreEqual( unsigned char( 0xFF ), clrFloat.a, L"Alpha 2 check failed" );
 
 						Assert::AreEqual( *reinterpret_cast< unsigned* >( b ), clr.rgba, L"RGBA 2 check failed" );
-						b[0 ]=0xff;
+						b[ 0 ] = 0xff;
 						Assert::AreEqual( *reinterpret_cast< unsigned* >( b ), clrFloat.rgba, L"RGBA float check failed" );
 						b[ 0 ] = 0x00;
 
@@ -96,16 +94,16 @@ namespace Framework
 						b[ 0 ] = 0x00;
 
 						clr.a = 0xff;
-						Assert::AreEqual(0.2126 * double( b[ 3 ] ) + 0.7152 * double( b[2 ] ) + 0.0722 * double( b[ 1 ] ), clr.luma, L"Luminance 1 check failed" );
-						Assert::AreEqual( 0.299 * double( b[ 3 ] ) + 0.587 * double( b[ 2] ) + 0.114 * double( b[ 1 ] ), clr.luma601, L"Luminance 2 check failed" );
-						Assert::AreEqual(0.2126 * double( b[ 3 ] ) + 0.7152 * double( b[2 ] ) + 0.0722 * double( b[ 1 ] ), clrFloat.luma, L"Luminance float 1 check failed" );
-						Assert::AreEqual( 0.299 * double( b[ 3 ] ) + 0.587 * double( b[ 2] ) + 0.114 * double( b[ 1 ] ), clrFloat.luma601, L"Luminance float 2 check failed" );
+						Assert::AreEqual( 0.2126 * double( b[ 3 ] ) + 0.7152 * double( b[ 2 ] ) + 0.0722 * double( b[ 1 ] ), clr.luma, L"Luminance 1 check failed" );
+						Assert::AreEqual( 0.299 * double( b[ 3 ] ) + 0.587 * double( b[ 2 ] ) + 0.114 * double( b[ 1 ] ), clr.luma601, L"Luminance 2 check failed" );
+						Assert::AreEqual( 0.2126 * double( b[ 3 ] ) + 0.7152 * double( b[ 2 ] ) + 0.0722 * double( b[ 1 ] ), clrFloat.luma, L"Luminance float 1 check failed" );
+						Assert::AreEqual( 0.299 * double( b[ 3 ] ) + 0.587 * double( b[ 2 ] ) + 0.114 * double( b[ 1 ] ), clrFloat.luma601, L"Luminance float 2 check failed" );
 					}
 				}
 
 				TEST_METHOD( Color_Sequence )
 				{
-									// test independent functionality
+					// test independent functionality
 					{
 						const color_t clrStart { 0xC8, 0x00, 0x00 };
 						const color_t clrEnd { 0x00, 0x00, 0xC8 };
@@ -139,7 +137,7 @@ namespace Framework
 						}
 						// multi init
 						{
-							CColor clrseq( { { clr[ 0 ], dur[ 0 ] }, { clr[ 1 ],dur[ 1 ] } } );
+							CColor clrseq( { { clr[ 0 ], dur[ 0 ] }, { clr[ 1 ], dur[ 1 ] } } );
 							Assert::AreEqual( clr[ 0 ].rgba, clrseq[ 0 ].clr.rgba, L"Get color 2 check failed" );
 							Assert::AreEqual( clr[ 1 ].rgba, clrseq[ 1 ].clr.rgba, L"Get color 3 check failed" );
 							Assert::AreEqual( dur[ 0 ], clrseq[ 0 ].mmtDuration, L"Get duration 2 check failed" );
@@ -157,7 +155,7 @@ namespace Framework
 
 			TEST_CLASS( Filesystem )
 			{ };
-			
+
 			TEST_CLASS( Utilities )
 			{
 				TEST_METHOD( String_Cast )

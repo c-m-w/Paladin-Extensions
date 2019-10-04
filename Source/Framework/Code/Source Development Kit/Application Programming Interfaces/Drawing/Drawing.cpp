@@ -23,7 +23,7 @@ rectangle_t::rectangle_t( RECT recNew )
 	*this = rectangle_t( float( recNew.left ), float( recNew.top ), float( recNew.right - recNew.left ), float( recNew.bottom - recNew.top ) );
 }
 
-rectangle_t& rectangle_t::operator=( const RECT &rhs )
+rectangle_t &rectangle_t::operator=( const RECT &rhs )
 {
 	return *this = rectangle_t( rhs );
 }
@@ -48,13 +48,13 @@ rectangle_t rectangle_t::operator/( const rectangle_t &rhs )
 	return rectangle_t( x / rhs.x, y / rhs.y, w, h );
 }
 
-void rectangle_t::operator+=( const rectangle_t & rhs )
+void rectangle_t::operator+=( const rectangle_t &rhs )
 {
 	x += rhs.x;
 	y += rhs.y;
 }
 
-void rectangle_t::operator-=( const rectangle_t & rhs )
+void rectangle_t::operator-=( const rectangle_t &rhs )
 {
 	x -= rhs.x;
 	y -= rhs.y;
@@ -112,7 +112,7 @@ void rectangle_t::PutH( double h )
 	vecSize.y = h;
 }
 
-void rectangle_t::Clamp( const rectangle_t & recClamp )
+void rectangle_t::Clamp( const rectangle_t &recClamp )
 {
 	if ( x < recClamp.x )
 		x = recClamp.x;
@@ -137,22 +137,22 @@ rectangle_t rectangle_t::ToInches( ) const
 	return { vecLocation.ToInches( ), vecSize.ToInches( ) };
 }
 
-bool rectangle_t::LocationInRectangle( const vector2_t & vecLocation ) const
+bool rectangle_t::LocationInRectangle( const vector2_t &vecLocation ) const
 {
 	return vecLocation.x >= x
-		&& vecLocation.x <= x + w
-		&& vecLocation.y >= y
-		&& vecLocation.y <= y + h;
+			&& vecLocation.x <= x + w
+			&& vecLocation.y >= y
+			&& vecLocation.y <= y + h;
 }
 
-bool rectangle_t::InRectangle( const rectangle_t & recLocation ) const
+bool rectangle_t::InRectangle( const rectangle_t &recLocation ) const
 {
 	return recLocation.LocationInRectangle( vector2_t( x, y ) )
-		|| recLocation.LocationInRectangle( vector2_t( x + w, y ) )
-		|| recLocation.LocationInRectangle( vector2_t( x + w, y + h ) )
-		|| recLocation.LocationInRectangle( vector2_t( x, y + h ) )
-		|| x < recLocation.x && x + w > recLocation.x + recLocation.w
-		|| y < recLocation.y && y + h > recLocation.y + recLocation.h;
+			|| recLocation.LocationInRectangle( vector2_t( x + w, y ) )
+			|| recLocation.LocationInRectangle( vector2_t( x + w, y + h ) )
+			|| recLocation.LocationInRectangle( vector2_t( x, y + h ) )
+			|| x < recLocation.x && x + w > recLocation.x + recLocation.w
+			|| y < recLocation.y && y + h > recLocation.y + recLocation.h;
 }
 
 RECT rectangle_t::ToRect( ) const
@@ -163,13 +163,13 @@ RECT rectangle_t::ToRect( ) const
 vector2_t rectangle_t::FindSpace( const vector2_t &vecTargetSize, EAlignment _Horizontal, EAlignment _Vertical ) const
 {
 	if ( vecTargetSize.x > vecSize.x
-		 || vecTargetSize.y > vecSize.y )
+		|| vecTargetSize.y > vecSize.y )
 		return { };
 
 	vector2_t vecReturn { };
 
 	if ( vecTargetSize.x != vecSize.x )
-		switch( _Horizontal )
+		switch ( _Horizontal )
 		{
 			case ALIGNMENT_LEFT:
 				break;
@@ -191,7 +191,7 @@ vector2_t rectangle_t::FindSpace( const vector2_t &vecTargetSize, EAlignment _Ho
 		}
 
 	if ( vecTargetSize.y != vecSize.y )
-		switch( _Vertical )
+		switch ( _Vertical )
 		{
 			case ALIGNMENT_TOP:
 				break;
@@ -215,28 +215,32 @@ vector2_t rectangle_t::FindSpace( const vector2_t &vecTargetSize, EAlignment _Ho
 	return vecReturn + vecLocation;
 }
 
-vector2_t vertex_t::PixelToRatio( const vector2_t & vecLocation )
+vector2_t vertex_t::PixelToRatio( const vector2_t &vecLocation )
 {
-	return { std::round( vecLocation.x ) * 2.0 / _Drawing.recRenderTarget.w - 1.0,
-			std::round( vecLocation.y ) * -2.0 / _Drawing.recRenderTarget.h + 1.0 };
+	return {
+		std::round( vecLocation.x ) * 2.0 / _Drawing.recRenderTarget.w - 1.0,
+		std::round( vecLocation.y ) * -2.0 / _Drawing.recRenderTarget.h + 1.0
+	};
 }
 
-vector2_t vertex_t::RatioToPixel( const vector2_t & vecRatio )
+vector2_t vertex_t::RatioToPixel( const vector2_t &vecRatio )
 {
-	return { std::round( ( vecRatio.x + 1.0 ) * _Drawing.recRenderTarget.w / 2.0 ),
-			std::round( ( vecRatio.y - 1.0 ) * _Drawing.recRenderTarget.h / -2.0 ) };
+	return {
+		std::round( ( vecRatio.x + 1.0 ) * _Drawing.recRenderTarget.w / 2.0 ),
+		std::round( ( vecRatio.y - 1.0 ) * _Drawing.recRenderTarget.h / -2.0 )
+	};
 }
 
-vertex_t::vertex_t( const vector2_t & vecRatio, color_t clrVertex ):
+vertex_t::vertex_t( const vector2_t &vecRatio, color_t clrVertex ):
 	x( float( vecRatio.x ) ), y( float( vecRatio.y ) ), clrVertex( clrVertex.rfl, clrVertex.gfl, clrVertex.bfl, clrVertex.afl )
 { }
 
-vertex_t::vertex_t( const vector2_t & vecRatio, const vector2_t & vecTextureRatio, color_t clrVertex ) :
+vertex_t::vertex_t( const vector2_t &vecRatio, const vector2_t &vecTextureRatio, color_t clrVertex ) :
 	x( float( vecRatio.x ) ), y( float( vecRatio.y ) ), u( float( vecTextureRatio.x ) ), v( float( vecTextureRatio.y ) ),
 	clrVertex( clrVertex.rfl, clrVertex.gfl, clrVertex.bfl, clrVertex.afl )
 { }
 
-void vertex_t::Rotate( double dAngle, const vector2_t & vecRotationPoint )
+void vertex_t::Rotate( double dAngle, const vector2_t &vecRotationPoint )
 {
 	auto vecCurrent = RatioToPixel( vector2_t( double( x ), double( y ) ) );
 
@@ -253,7 +257,7 @@ bool CDrawable::Create( )
 		return true;
 
 	if ( vecVertices.empty( )
-		 || vecIndices.empty( ) )
+		|| vecIndices.empty( ) )
 		return LOG( WARNING, DRAWING, "Attempting to create drawable when vertices / indices have not been set." ), false;
 
 	D3D11_BUFFER_DESC _VertexBufferDescription { }, _IndexBufferDescription { };
@@ -274,7 +278,7 @@ bool CDrawable::Create( )
 	_IndexBufferData.pSysMem = &vecIndices[ 0 ];
 
 	bCreated = SUCCEEDED( _Drawing.pDevice->CreateBuffer( &_VertexBufferDescription, &_VertexBufferData, &pVertexBuffer ) )
-		&& SUCCEEDED( _Drawing.pDevice->CreateBuffer( &_IndexBufferDescription, &_IndexBufferData, &pIndexBuffer ) );
+			&& SUCCEEDED( _Drawing.pDevice->CreateBuffer( &_IndexBufferDescription, &_IndexBufferData, &pIndexBuffer ) );
 
 	if ( !bCreated )
 		LOG( WARNING, DRAWING, "Unable to create vertex / index buffer for drawable." ), Destroy( );
@@ -347,9 +351,9 @@ void CDrawable::SetAntiAlias( bool bNewAntiAlias )
 	bAntiAlias = bNewAntiAlias;
 }
 
-void CDrawable::SetTexture( const std::string& strResourceName )
+void CDrawable::SetTexture( const std::string &strResourceName )
 {
-	const auto& strData = _ResourceManager.GetResource( strResourceName );
+	const auto &strData = _ResourceManager.GetResource( strResourceName );
 
 	if ( strData.empty( ) )
 		return;
@@ -362,7 +366,7 @@ void CDrawable::SetTexture( const std::string& strResourceName )
 		LOG( WARNING, DRAWING, "Could not create SRV from resource." );
 }
 
-void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vecSize, unsigned char** bImageDataOutput /*= nullptr*/ )
+void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vecSize, unsigned char **bImageDataOutput /*= nullptr*/ )
 {
 	const auto pImage = _Drawing.GetSVG( strSVGResourceName );
 
@@ -375,7 +379,7 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 		return LOG( WARNING, DRAWING, "Unable to initialize SVG rasterizer." ), nsvgDelete( pImage );
 
 	if ( vecSize.x == 0.0
-		 && vecSize.y == 0.0 )
+		&& vecSize.y == 0.0 )
 		vecSize = { double( pImage->width ), double( pImage->height ) };
 
 	auto vecScale = vector2_t { vecSize.x / double( pImage->width ), vecSize.y / double( pImage->height ) };
@@ -407,7 +411,7 @@ void CDrawable::SetTexture( unsigned char *bBitmap, vector2_t vecSize )
 {
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
 	D3D11_SUBRESOURCE_DATA _ResourceData { };
-	ID3D11Texture2D* pBufferTexture = nullptr;
+	ID3D11Texture2D *pBufferTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	_TextureDescription.Width = std::size_t( vecSize.x );
@@ -440,7 +444,7 @@ void CDrawable::SetTexture( unsigned char *bBitmap, vector2_t vecSize )
 		LOG( WARNING, DRAWING, "Failed to create SRV from bitmap." );
 }
 
-void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
+void CDrawable::SetTexture( ID3D11Texture2D *pNewTexture )
 {
 	if ( pNewTexture == nullptr )
 		return LOG( WARNING, DRAWING, "Invalid texture passed to SetTexture( )." );
@@ -449,7 +453,7 @@ void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
 		pTexture->Release( );
 
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
-	ID3D11Texture2D* pBufferTexture = nullptr;
+	ID3D11Texture2D *pBufferTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	pNewTexture->GetDesc( &_TextureDescription );
@@ -467,12 +471,12 @@ void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
 		LOG( WARNING, DRAWING, "Could not create SRV from texture." );
 }
 
-void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
+void CDrawable::SetTexture( const bitmap_t &_Bitmap, const color_t &clrText )
 {
 	const auto vecBytes = _Bitmap.GetColoredBitmapBytes( clrText.GetRBGA( ) );
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
 	D3D11_SUBRESOURCE_DATA _ResourceData { };
-	ID3D11Texture2D* pBufferTexture = nullptr;
+	ID3D11Texture2D *pBufferTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	_TextureDescription.Width = std::size_t( _Bitmap.vecSize.x );
@@ -500,15 +504,15 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
 }
 
-void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTexture )
+void CDrawable::SetTexture( const bitmap_t &_Bitmap, ID3D11Texture2D *pColorTexture )
 {
 	auto vecBytes = _Bitmap.GetColoredBitmapBytes( 0xFFFFFFFF );
 	D3D11_TEXTURE2D_DESC _ColorTextureDescription { };
-	ID3D11Texture2D* pCopiedTexture = nullptr;
+	ID3D11Texture2D *pCopiedTexture = nullptr;
 	D3D11_MAPPED_SUBRESOURCE _TextureData { };
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
 	D3D11_SUBRESOURCE_DATA _ResourceData { };
-	ID3D11Texture2D* pBufferTexture = nullptr;
+	ID3D11Texture2D *pBufferTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	if ( pColorTexture == nullptr )
@@ -517,7 +521,7 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	pColorTexture->GetDesc( &_ColorTextureDescription );
 
 	if ( _ColorTextureDescription.Width < std::size_t( _Bitmap.vecSize.x )
-		 || _ColorTextureDescription.Height < std::size_t( _Bitmap.vecSize.y ) )
+		|| _ColorTextureDescription.Height < std::size_t( _Bitmap.vecSize.y ) )
 		return;
 
 	_ColorTextureDescription.BindFlags = 0;
@@ -534,7 +538,7 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 		for ( auto x = 0u; x < std::size_t( _Bitmap.vecSize.x ); x++ )
 		{
 			const auto dwABGR = reinterpret_cast< DWORD* >( _TextureData.pData )[ y * _TextureData.RowPitch / sizeof( DWORD ) + x ];
-			auto& dwCurrent = vecBytes[ _Bitmap.GetBitIndex( x, y ) ];
+			auto &dwCurrent = vecBytes[ _Bitmap.GetBitIndex( x, y ) ];
 			const auto bAlpha = unsigned char( double( dwCurrent >> 24 & 0xFF ) / 255.0 * double( dwABGR >> 24 ) );
 			dwCurrent = dwABGR & 0x00FFFFFF | bAlpha << 24;
 		}
@@ -568,14 +572,14 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	if ( !SUCCEEDED( _Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture ) ) )
 		return LOG( WARNING, DRAWING, "Unable to create SRV for text." ), pBufferTexture->Release( ), void( );
 
-	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
+	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x, _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
 }
 
 void CDrawable::SetTexture( const bitmap_t &_Bitmap, const std::string &strResourceName )
 {
-	const auto& strData = _ResourceManager.GetResource( strResourceName );
-	ID3D11ShaderResourceView* pTemporaryTexture = nullptr;
-	ID3D11Resource* pTextureData = nullptr;
+	const auto &strData = _ResourceManager.GetResource( strResourceName );
+	ID3D11ShaderResourceView *pTemporaryTexture = nullptr;
+	ID3D11Resource *pTextureData = nullptr;
 
 	if ( strData.empty( ) )
 		return;
@@ -610,7 +614,7 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor )
 	return Rectangle( recLocation, clrRectangle );
 }
 
-void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
+void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor )
 {
 	decltype( vecVertices ) vecProposedVertices { };
 	decltype( vecIndices ) vecProposedIndicies { };
@@ -630,7 +634,7 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
 		vecPoints[ 2 ] = { recLocation.w, recLocation.h };
 		vecPoints[ 3 ] = { 0.0, recLocation.h };
 
-		for ( auto &vecPoint : vecPoints )
+		for ( auto &vecPoint: vecPoints )
 			vecPoint.Rotate( dRotation, vecRotationPoint ), vecPoint += recLocation.vecLocation;
 	}
 
@@ -685,17 +689,17 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor, color_t c
 		vecPoints[ 3 ] = { recLocation.w, recLocation.h };
 		vecPoints[ 5 ] = { 0.0, recLocation.h };
 
-		for ( auto &vecPoint : vecPoints )
+		for ( auto &vecPoint: vecPoints )
 			vecPoint.Rotate( dRotation, vecRotationPoint ), vecPoint += recLocation.vecLocation;
 	}
 
 	vecProposedVertices =
 	{
-		vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] ), { 0.5, 0.5 }, clrCenter								),
-		vertex_t( vertex_t::PixelToRatio( vecPoints[ 1 ] ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ]		),
-		vertex_t( vertex_t::PixelToRatio( vecPoints[ 2 ] ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ]	),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] ), { 0.5, 0.5 }, clrCenter ),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 1 ] ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 2 ] ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
 		vertex_t( vertex_t::PixelToRatio( vecPoints[ 3 ] ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( vecPoints[ 4 ] ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ]	)
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 4 ] ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
 	};
 	vecProposedIndicies =
 	{
@@ -732,7 +736,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 	return RoundedRectangle( recLocation, bCornerRounding, clrColor, clrColor, dbRoundingRatio );
 }
 
-void CDrawable::RoundedRectangle( rectangle_t recLocation, bool* bCornerRounding/*[ rectangle_t::MAX ]*/, color_t clrColor, color_t clrCenter, double dbRoundingRatio )
+void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding/*[ rectangle_t::MAX ]*/, color_t clrColor, color_t clrCenter, double dbRoundingRatio )
 {
 	color_t clrRectangle[ ] { clrColor, clrColor, clrColor, clrColor };
 
@@ -745,7 +749,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 	decltype( vecIndices ) vecProposedIndicies { };
 
 	if ( dbRoundingRatio < 0.0
-		 || dbRoundingRatio > 1.0 )
+		|| dbRoundingRatio > 1.0 )
 		return LOG( WARNING, DRAWING, "Invalid rounding ratio passed to RoundedRectangle( )." );
 
 	const auto dbRoundingWidth = std::min( recLocation.w, recLocation.h ) * dbRoundingRatio;
@@ -759,7 +763,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 		{
 			auto vecAddition = recLocation.vecLocation;
 
-			switch( i )
+			switch ( i )
 			{
 				case rectangle_t::TOP_LEFT:
 				{
@@ -792,11 +796,11 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 					break;
 			}
 
-			for ( auto& vecPoint : vecBase )
+			for ( auto &vecPoint: vecBase )
 			{
 				const auto vecFinalPoint = vecPoint + vecAddition;
 				vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecFinalPoint ),
-													{ ( vecFinalPoint.x - recLocation.x ) / recLocation.w, ( vecFinalPoint.y - recLocation.y ) / recLocation.h }, clrColor[ i ] ) );
+															{ ( vecFinalPoint.x - recLocation.x ) / recLocation.w, ( vecFinalPoint.y - recLocation.y ) / recLocation.h }, clrColor[ i ] ) );
 			}
 		}
 		else
@@ -836,7 +840,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 			vecProposedVertices.emplace_back( _New );
 		}
 
-		for ( auto& vecPoint : vecBase )
+		for ( auto &vecPoint: vecBase )
 			vecPoint.Rotate( 90.0, { 0.0, 0.0 } );
 	}
 
@@ -883,7 +887,7 @@ void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, c
 		{ vecStart.x, vecStart.y + dThickness / 2.0 }
 	};
 
-	for ( auto& vecPoint : vecTemp )
+	for ( auto &vecPoint: vecTemp )
 		vecPoint.Rotate( dRotation, vecStart );
 
 	vecProposedVertices = decltype( vecVertices )
@@ -903,7 +907,7 @@ void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, c
 	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
-void CDrawable::Circle( const vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
+void CDrawable::Circle( const vector2_t &vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
 {
 	decltype( vecVertices ) vecProposedVertices { };
 	decltype( vecIndices ) vecProposedIndicies { };
@@ -933,20 +937,20 @@ void CDrawable::Circle( const vector2_t& vecCenter, double dbRadius, color_t clr
 	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
-void CDrawable::Circle( const Utilities::vector2_t & vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution /*= 0*/ )
+void CDrawable::Circle( const Utilities::vector2_t &vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution /*= 0*/ )
 {
 	Circle( vecCenter, dbRadius, clrPerimeter, zResolution );
-	auto& _Vertex = vecVertices.front( );
+	auto &_Vertex = vecVertices.front( );
 	_Vertex = vertex_t( { _Vertex.x, _Vertex.y }, clrCenter );
 }
 
-void CDrawable::PostShapeChange( const decltype( vecVertices )& vecProposedVertices, const decltype( vecIndices )& vecProposedIndices )
+void CDrawable::PostShapeChange( const decltype( vecVertices ) &vecProposedVertices, const decltype( vecIndices ) &vecProposedIndices )
 {
 	const auto uNewVertexHash = CRYPTO.GenerateNumericHash( &vecProposedVertices[ 0 ], sizeof( vertex_t ) * vecProposedVertices.size( ) ),
-		uNewIndexHash = CRYPTO.GenerateNumericHash( &vecProposedIndices[ 0 ], sizeof( unsigned ) * vecProposedIndices.size( ) );
+			   uNewIndexHash = CRYPTO.GenerateNumericHash( &vecProposedIndices[ 0 ], sizeof( unsigned ) * vecProposedIndices.size( ) );
 
 	if ( uNewVertexHash == uVertexHash
-		 && uNewIndexHash == uIndexHash )
+		&& uNewIndexHash == uIndexHash )
 		return;
 
 	uVertexHash = uNewVertexHash, uIndexHash = uNewIndexHash;
@@ -973,7 +977,7 @@ void CDrawable::PostShapeChange( const decltype( vecVertices )& vecProposedVerti
 	bCreated = false;
 }
 
-ID3D11Texture2D* CDrawable::RenderToTexture( )
+ID3D11Texture2D *CDrawable::RenderToTexture( )
 {
 	if ( !Create( ) )
 		return LOG( WARNING, DRAWING, "Attempting to render to texture without creating shape beforehand." ), nullptr;
@@ -983,11 +987,11 @@ ID3D11Texture2D* CDrawable::RenderToTexture( )
 
 	vector2_t vecMin { DBL_MAX, DBL_MAX }, vecMax { };
 	D3D11_TEXTURE2D_DESC _TextureBufferDescription { }, _TextureDescription { };
-	ID3D11Texture2D* pRenderedTextureBuffer = nullptr;
+	ID3D11Texture2D *pRenderedTextureBuffer = nullptr;
 	D3D11_RENDER_TARGET_VIEW_DESC _RenderTargetViewDescription { };
-	ID3D11RenderTargetView* pNewRenderTarget = nullptr;
+	ID3D11RenderTargetView *pNewRenderTarget = nullptr;
 
-	for ( auto& _Vertex : vecVertices )
+	for ( auto &_Vertex: vecVertices )
 	{
 		const auto vecLocation = vertex_t::RatioToPixel( { double( _Vertex.x ), double( _Vertex.y ) } );
 
@@ -1047,7 +1051,7 @@ bool CDrawing::Initialize( )
 	RECT recWindowBoundsBuffer { };
 
 	if ( pTarget == nullptr
-		 || !pTarget->GetBounds( recWindowBoundsBuffer ) )
+		|| !pTarget->GetBounds( recWindowBoundsBuffer ) )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, ENC( "Invalid render target." ) );
 		return false;
@@ -1073,7 +1077,7 @@ bool CDrawing::Initialize( )
 	_SwapChainDescription.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 	if ( !SUCCEEDED( D3D11CreateDeviceAndSwapChain( nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, NULL, nullptr, NULL,
-													D3D11_SDK_VERSION, &_SwapChainDescription, &pSwapChain, &pDevice, nullptr, &pContext ) ) )
+						D3D11_SDK_VERSION, &_SwapChainDescription, &pSwapChain, &pDevice, nullptr, &pContext ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create swap chain." ), false;
 
 	return Create( ) && FONTS.Setup( );
@@ -1100,7 +1104,7 @@ void CDrawing::Uninitialize( )
 		pSwapChain = nullptr;
 	}
 
-	for ( auto& _Image : _Images )
+	for ( auto &_Image: _Images )
 		nsvgDelete( _Image.second );
 
 	_Images.clear( );
@@ -1113,7 +1117,7 @@ void CDrawing::SetDrawingSpace( const rectangle_t &recSpace )
 	pContext->RSSetScissorRects( 1, &recNewSpace );
 }
 
-NSVGimage* CDrawing::GetSVG( const std::string &strResourcePath )
+NSVGimage *CDrawing::GetSVG( const std::string &strResourcePath )
 {
 	const auto uHash = CRYPTO.GenerateNumericHash( strResourcePath );
 
@@ -1149,8 +1153,8 @@ void CDrawing::BeginFrame( )
 bool CDrawing::EndFrame( )
 {
 	if ( !SUCCEEDED( pSwapChain->Present( 0, 0 ) ) )
-		return LOG( WARNING, DRAWING, "Failed to present." ), false;	
-	
+		return LOG( WARNING, DRAWING, "Failed to present." ), false;
+
 	return true;
 }
 
@@ -1158,10 +1162,10 @@ bool CDrawing::BeginRenderingToTexture( )
 {
 	if ( pSecondaryRenderTargetView )
 		return false;
-	
+
 	D3D11_TEXTURE2D_DESC _TextureBufferDescription { };
 	D3D11_RENDER_TARGET_VIEW_DESC _RenderTargetViewDescription { };
-	
+
 	_TextureBufferDescription.Width = int( recRenderTarget.w );
 	_TextureBufferDescription.Height = int( recRenderTarget.h );
 	_TextureBufferDescription.MipLevels = 1;
@@ -1179,24 +1183,24 @@ bool CDrawing::BeginRenderingToTexture( )
 
 	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureBufferDescription, nullptr, &pRenderedTextureBuffer ) ) )
 		return LOG( WARNING, DRAWING, "Unable to create texture to render to." ), false;
-	
+
 	if ( !SUCCEEDED( _Drawing.pDevice->CreateRenderTargetView( pRenderedTextureBuffer, &_RenderTargetViewDescription, &pSecondaryRenderTargetView ) ) )
 		return LOG( WARNING, DRAWING, "Unable to create render target view for rendering to texture." ), pRenderedTextureBuffer->Release( ), false;
-	
+
 	_Drawing.pContext->OMSetRenderTargets( 1, &pSecondaryRenderTargetView, nullptr );
 	_Drawing.pContext->ClearRenderTargetView( pSecondaryRenderTargetView, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ) );
-	
+
 	return true;
 }
 
-ID3D11Texture2D * CDrawing::EndRenderingToTexture( )
+ID3D11Texture2D *CDrawing::EndRenderingToTexture( )
 {
 	if ( !pSecondaryRenderTargetView )
 		return nullptr;
 
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
-	ID3D11Texture2D* pRenderedTexture = nullptr;
-	
+	ID3D11Texture2D *pRenderedTexture = nullptr;
+
 	_TextureDescription.Width = int( recRenderTarget.w );
 	_TextureDescription.Height = int( recRenderTarget.h );
 	_TextureDescription.MipLevels = 1;
@@ -1207,40 +1211,40 @@ ID3D11Texture2D * CDrawing::EndRenderingToTexture( )
 	_TextureDescription.BindFlags = 0;
 	_TextureDescription.CPUAccessFlags = 0;
 	_TextureDescription.MiscFlags = 0;
-	
+
 	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pRenderedTexture ) ) )
 		return LOG( WARNING, DRAWING, "Unable to create texture to transfer render contents to." ), nullptr;
-	
+
 	_Drawing.pContext->CopyResource( pRenderedTexture, pRenderedTextureBuffer );
 	_Drawing.pContext->OMSetRenderTargets( 1, &pRenderTargetView, _Drawing.pDepthStencilView );
 	pSecondaryRenderTargetView->Release( );
 	pSecondaryRenderTargetView = nullptr;
-	
+
 	return pRenderedTexture;
 }
 
-bool CDrawing::ConvertTexture( IDirect3DDevice9* pD3D9Device, IDirect3DTexture9 **pDestination, ID3D11Texture2D *pSource )
+bool CDrawing::ConvertTexture( IDirect3DDevice9 *pD3D9Device, IDirect3DTexture9 **pDestination, ID3D11Texture2D *pSource )
 {
 	if ( pD3D9Device->CreateTexture( recRenderTarget.w, recRenderTarget.h, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, pDestination, nullptr ) != D3D_OK )
 		return LOG( WARNING, DRAWING, "Cannot create D3D9 texture." ), false;
 
 	const auto szBytes = GetTextureContents( pSource );
 	D3DLOCKED_RECT recLocked { };
-	
+
 	auto test = ( *pDestination )->LockRect( 0, &recLocked, nullptr, 0 );
 	memcpy( recLocked.pBits, szBytes, unsigned( recRenderTarget.w * recRenderTarget.h ) * sizeof( unsigned ) );
 	( *pDestination )->UnlockRect( 0 );
-	
+
 	delete[] szBytes;
 	return true;
 }
 
-const char * CDrawing::GetTextureContents( ID3D11Texture2D *pTexture )
+const char *CDrawing::GetTextureContents( ID3D11Texture2D *pTexture )
 {
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
-	ID3D11Texture2D* pCopiedTexture = nullptr;
+	ID3D11Texture2D *pCopiedTexture = nullptr;
 	D3D11_MAPPED_SUBRESOURCE _TextureData { };
-	
+
 	pTexture->GetDesc( &_TextureDescription );
 	_TextureDescription.BindFlags = 0;
 	_TextureDescription.Usage = D3D11_USAGE_STAGING;
@@ -1255,7 +1259,7 @@ const char * CDrawing::GetTextureContents( ID3D11Texture2D *pTexture )
 	const auto zSize = _TextureDescription.Height * _TextureDescription.Width * sizeof( unsigned );
 	const auto szReturn = new char[ zSize ];
 	memcpy( szReturn, _TextureData.pData, zSize );
-	
+
 	_Drawing.pContext->Unmap( pCopiedTexture, 0 );
 	pCopiedTexture->Release( );
 
@@ -1306,9 +1310,9 @@ bool CDrawing::Create( )
 
 	if ( !SUCCEEDED( pDevice->CreateRenderTargetView( pBackBufferTexture, nullptr, &pRenderTargetView ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create render target view." ), false;
-	
-	pBackBufferTexture->Release();
-	
+
+	pBackBufferTexture->Release( );
+
 	_DepthStencilTextureDescription.Width = unsigned( recRenderTarget.w );
 	_DepthStencilTextureDescription.Height = unsigned( recRenderTarget.h );
 	_DepthStencilTextureDescription.MipLevels = 1;
@@ -1377,13 +1381,13 @@ bool CDrawing::Create( )
 	pContext->OMSetBlendState( pBlendState, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ), 0xFFFFFFFF );
 
 	if ( !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardVertexShader" ), ENC( "vs_4_0" ), 0, 0, nullptr, &pVertexShaderBuffer, nullptr, nullptr ) )
-		 || !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pStandardPixelShaderBuffer, nullptr, nullptr ) )
-		 || !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "TexturedPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pTexturedPixelShaderBuffer, nullptr, nullptr ) ) )
+		|| !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pStandardPixelShaderBuffer, nullptr, nullptr ) )
+		|| !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "TexturedPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pTexturedPixelShaderBuffer, nullptr, nullptr ) ) )
 		return LOG( ERROR, DRAWING, "Unable to compile vertex or pixel shaders." ), false;
 
 	if ( !SUCCEEDED( pDevice->CreateVertexShader( pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), nullptr, &pVertexShader ) )
-		 || !SUCCEEDED( pDevice->CreatePixelShader( pStandardPixelShaderBuffer->GetBufferPointer( ), pStandardPixelShaderBuffer->GetBufferSize( ), nullptr, &pStandardPixelShader ) )
-		 || !SUCCEEDED( pDevice->CreatePixelShader( pTexturedPixelShaderBuffer->GetBufferPointer( ), pTexturedPixelShaderBuffer->GetBufferSize( ), nullptr, &pTexturedPixelShader ) ) )
+		|| !SUCCEEDED( pDevice->CreatePixelShader( pStandardPixelShaderBuffer->GetBufferPointer( ), pStandardPixelShaderBuffer->GetBufferSize( ), nullptr, &pStandardPixelShader ) )
+		|| !SUCCEEDED( pDevice->CreatePixelShader( pTexturedPixelShaderBuffer->GetBufferPointer( ), pTexturedPixelShaderBuffer->GetBufferSize( ), nullptr, &pTexturedPixelShader ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create vertex or pixel shaders." ), false;
 
 	pContext->VSSetShader( pVertexShader, nullptr, 0 );
@@ -1415,7 +1419,7 @@ bool CDrawing::Create( )
 
 	auto bReturn = true;
 
-	for ( auto& pDrawable : vecDrawables )
+	for ( auto &pDrawable: vecDrawables )
 		bReturn &= pDrawable->Create( );
 
 	return bReturn;
@@ -1483,11 +1487,11 @@ bool CDrawing::Destroy( )
 		pVertexLayout = nullptr;
 	}
 
-	for ( auto& pDrawable : vecDrawables )
+	for ( auto &pDrawable: vecDrawables )
 		pDrawable->Destroy( );
 
 	return true;
-}	
+}
 
 bool CDrawing::IsAreaVisible( const rectangle_t &recArea )
 {
@@ -1497,12 +1501,12 @@ bool CDrawing::IsAreaVisible( const rectangle_t &recArea )
 	return recArea.InRectangle( stkSource.top( ) );
 }
 
-bool CDrawing::RegisterDrawable( CDrawable*pDrawable )
+bool CDrawing::RegisterDrawable( CDrawable *pDrawable )
 {
 	if ( pDrawable == nullptr )
 		return false;
 
-	for ( auto& pIteration : vecDrawables )
+	for ( auto &pIteration: vecDrawables )
 		if ( pIteration == pDrawable )
 			return false;
 
@@ -1510,7 +1514,7 @@ bool CDrawing::RegisterDrawable( CDrawable*pDrawable )
 	return true;
 }
 
-bool CDrawing::UnregisterDrawable( CDrawable*pDrawable )
+bool CDrawing::UnregisterDrawable( CDrawable *pDrawable )
 {
 	for ( auto z = 0u; z < vecDrawables.size( ); z++ )
 		if ( vecDrawables[ z ] == pDrawable )
@@ -1537,7 +1541,7 @@ bool CDrawing::ValidLocation( const vector2_t &vecLocation )
 	return recRenderTarget.LocationInRectangle( vecLocation );
 }
 
-CApplicationWindow* CDrawing::GetTarget( )
+CApplicationWindow *CDrawing::GetTarget( )
 {
 	return pTarget;
 }

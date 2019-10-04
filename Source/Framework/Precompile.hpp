@@ -39,15 +39,15 @@
 extern "C"
 {
 	NTSYSAPI
-		NTSTATUS
-		NTAPI
-		RtlGetVersion(
-			_Out_
-			_At_( lpVersionInformation->dwOSVersionInfoSize, _Pre_ _Valid_ )
-			_When_( lpVersionInformation->dwOSVersionInfoSize == sizeof( RTL_OSVERSIONINFOEXW ),
-					_At_( ( PRTL_OSVERSIONINFOEXW )lpVersionInformation, _Out_ ) )
-			PRTL_OSVERSIONINFOW lpVersionInformation
-		);
+	NTSTATUS
+	NTAPI
+	RtlGetVersion(
+		_Out_
+		_At_( lpVersionInformation->dwOSVersionInfoSize, _Pre_ _Valid_ )
+		_When_( lpVersionInformation->dwOSVersionInfoSize == sizeof( RTL_OSVERSIONINFOEXW ),
+				_At_( ( PRTL_OSVERSIONINFOEXW )lpVersionInformation, _Out_ ) )
+		PRTL_OSVERSIONINFOW lpVersionInformation
+	);
 }
 #pragma comment( lib, "ntdll.lib" )
 

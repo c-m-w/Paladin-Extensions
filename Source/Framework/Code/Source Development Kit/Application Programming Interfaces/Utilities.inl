@@ -15,60 +15,66 @@ namespace Utilities
 	}
 
 	template< typename _From, typename _To > struct AStringTraits;
+
 	template< > struct AStringTraits< std::string, std::wstring >
 	{
 		using char_trait_t = wchar_t;
 
-		static int ConvertStringBytes( const char* szFromString, const int iFromStringLength, wchar_t* wszToString, const int iToStringLength )
+		static int ConvertStringBytes( const char *szFromString, const int iFromStringLength, wchar_t *wszToString, const int iToStringLength )
 		{
 			return MultiByteToWideChar( 0, 0, szFromString, iFromStringLength, wszToString, iToStringLength );
 		}
 	};
+
 	template< > struct AStringTraits< std::string, std::bstring >
 	{
 		using char_trait_t = unsigned char;
 
-		static int ConvertStringBytes( const char* szFromString, const int iFromStringLength, unsigned char* bszToString, const int iToStringLength )
+		static int ConvertStringBytes( const char *szFromString, const int iFromStringLength, unsigned char *bszToString, const int iToStringLength )
 		{
 			if ( bszToString )
 				memcpy( bszToString, szFromString, iFromStringLength < iToStringLength ? iFromStringLength : iToStringLength );
 			return iFromStringLength;
 		}
 	};
+
 	template< > struct AStringTraits< std::wstring, std::string >
 	{
 		using char_trait_t = char;
 
-		static int ConvertStringBytes( const wchar_t* wszFromString, const int iFromStringLength, char* szToString, const int iToStringLength )
+		static int ConvertStringBytes( const wchar_t *wszFromString, const int iFromStringLength, char *szToString, const int iToStringLength )
 		{
 			return WideCharToMultiByte( 0, 0, wszFromString, iFromStringLength, szToString, iToStringLength, nullptr, nullptr );
 		}
 	};
+
 	template< > struct AStringTraits< std::wstring, std::bstring >
 	{
 		using char_trait_t = unsigned char;
 
-		static int ConvertStringBytes( const wchar_t* wszFromString, const int iFromStringLength, unsigned char* bszToString, const int iToStringLength )
+		static int ConvertStringBytes( const wchar_t *wszFromString, const int iFromStringLength, unsigned char *bszToString, const int iToStringLength )
 		{
 			return WideCharToMultiByte( 0, 0, wszFromString, iFromStringLength, reinterpret_cast< char* >( bszToString ), iToStringLength, nullptr, nullptr );
 		}
 	};
+
 	template< > struct AStringTraits< std::bstring, std::string >
 	{
 		using char_trait_t = char;
 
-		static int ConvertStringBytes( const unsigned char* bszFromString, const int iFromStringLength, char* szToString, const int iToStringLength )
+		static int ConvertStringBytes( const unsigned char *bszFromString, const int iFromStringLength, char *szToString, const int iToStringLength )
 		{
 			if ( szToString )
 				memcpy( szToString, bszFromString, iFromStringLength < iToStringLength ? iFromStringLength : iToStringLength );
 			return iFromStringLength;
 		}
 	};
+
 	template< > struct AStringTraits< std::bstring, std::wstring >
 	{
 		using char_trait_t = wchar_t;
 
-		static int ConvertStringBytes( const unsigned char* bszFromString, const int iFromStringLength, wchar_t* wszToString, const int iToStringLength )
+		static int ConvertStringBytes( const unsigned char *bszFromString, const int iFromStringLength, wchar_t *wszToString, const int iToStringLength )
 		{
 			return MultiByteToWideChar( 0, 0, reinterpret_cast< const char* >( bszFromString ), iFromStringLength, wszToString, iToStringLength );
 		}
@@ -89,6 +95,7 @@ namespace Utilities
 			return _To( iCastBuffer.begin( ), iCastBuffer.end( ) );
 		}
 	};
+
 	template< typename _t > struct AStringCastImplementation< _t, _t >
 	{
 		static _t Cast( const _t &_strSource )
@@ -98,14 +105,17 @@ namespace Utilities
 	};
 
 	template< typename _t > struct ACharacterTraits;
+
 	template< > struct ACharacterTraits< const char * >
 	{
 		using string_trait_t = std::string;
 	};
+
 	template< > struct ACharacterTraits< const wchar_t * >
 	{
 		using string_trait_t = std::wstring;
 	};
+
 	template< > struct ACharacterTraits< const unsigned char * >
 	{
 		using string_trait_t = std::bstring;
@@ -115,6 +125,7 @@ namespace Utilities
 	{
 		return AStringCastImplementation< _To, _From >::Cast( _strSource );
 	}
+
 	template< typename _To, typename _From > _To string_cast( _From *_szSource )
 	{
 		return AStringCastImplementation< _To, typename ACharacterTraits< const _From* >::string_trait_t >::Cast( _szSource );

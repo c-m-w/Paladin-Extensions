@@ -94,7 +94,7 @@ void CScrollbar::SetType( EScrollbarType _NewType )
 void CScrollbar::Scroll( int iScrollAmount )
 {
 	const auto vecStart = pParent->vecScrollAmount;
-	auto& dbScroll = _Type == SCROLLBAR_VERTICAL ? pParent->vecScrollAmount.y : pParent->vecScrollAmount.x;
+	auto &dbScroll = _Type == SCROLLBAR_VERTICAL ? pParent->vecScrollAmount.y : pParent->vecScrollAmount.x;
 
 	dbScroll += double( iScrollAmount ) / -SCROLL_DELTA * SCROLL_AMOUNT;
 	pParent->ClampScroll( );
@@ -124,7 +124,7 @@ void CScrollbar::DecreaseScroll( )
 
 	if ( _Type == SCROLLBAR_VERTICAL )
 		pParent->vecScrollAmount.y -= SCROLL_AMOUNT;
-	else						   
+	else
 		pParent->vecScrollAmount.x -= SCROLL_AMOUNT;
 
 	pParent->ClampScroll( );
@@ -133,7 +133,7 @@ void CScrollbar::DecreaseScroll( )
 		UpdateContainerContents( pParent );
 }
 
-void CScrollbar::AppendScrollAmount( const vector2_t& vecAmount )
+void CScrollbar::AppendScrollAmount( const vector2_t &vecAmount )
 {
 	vecPendingScrollAmount += vecAmount;
 }
@@ -174,7 +174,6 @@ void CScrollbar::OnClick( CKeyState _State )
 				else
 					IncreaseScroll( );
 			}
-
 		}
 	}
 }

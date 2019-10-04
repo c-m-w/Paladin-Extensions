@@ -14,22 +14,22 @@ namespace Utilities
 		memcpy( &vmMatrix, &pEngineClient->WorldToScreenMatrix( ), sizeof( VMatrix ) );
 	}
 
-	CBasePlayer * GetLocalPlayer( )
+	CBasePlayer *GetLocalPlayer( )
 	{
 		return reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( pEngineClient->GetLocalPlayer( ) ) );
 	}
 
-	CUserCmd * GetUserCmd( int iSequenceNumber )
+	CUserCmd *GetUserCmd( int iSequenceNumber )
 	{
 		return &( cmdLast = pInput->m_pCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ] );
 	}
 
-	CVerifiedUserCmd * GetVerifiedUserCmd( int iSequenceNumber )
+	CVerifiedUserCmd *GetVerifiedUserCmd( int iSequenceNumber )
 	{
 		return &pInput->m_pVerifiedCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ];
 	}
 
-	CUserCmd & GetLastUserCmd( )
+	CUserCmd &GetLastUserCmd( )
 	{
 		return cmdLast;
 	}
@@ -96,12 +96,12 @@ namespace Utilities
 		return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( pPointers[ SIGNATURE_LINE_GOES_THROUGH_SMOKE ] )( vecStartPos, vecEndPos );
 		return false;
 	}
-	
+
 	void SetClantag( const char *szTag )
 	{
 		reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( pPointers[ SIGNATURE_SET_CLAN_TAG ] )( szTag, szTag );
 	}
-	
+
 	void RevealRanks( )
 	{
 		static int iBuffer[ ] { 0, 0, 0 };
@@ -138,7 +138,7 @@ namespace Utilities
 		vecAngles.z = std::clamp( vecAngles.z, MIN_ROLL, MAX_ROLL );
 	}
 
-	void HumanizeAngles( QAngle &qAngles, CBasePlayer* pLocalPlayer )
+	void HumanizeAngles( QAngle &qAngles, CBasePlayer *pLocalPlayer )
 	{
 		// test for input validity
 		if ( isnan( qAngles.pitch ) || isnan( qAngles.yaw ) || isnan( qAngles.roll )
@@ -173,7 +173,7 @@ namespace Utilities
 		return ( void )( qAngles = angView + angDelta, qAngles.roll = pClientState->viewangles.z );
 	}
 
-	void HumanizeAngles( Vector &vecAngles, CBasePlayer* pLocalPlayer )
+	void HumanizeAngles( Vector &vecAngles, CBasePlayer *pLocalPlayer )
 	{
 		if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
 			|| isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
@@ -551,7 +551,7 @@ namespace Utilities
 	Vector CBasePlayer::GetViewPosition( )
 	{
 		Vector vecReturn { };
-		return *( *reinterpret_cast< Vector*( __thiscall*** )( void*, Vector* ) >( this ) )[ GetFunctionIndex( FUNCTION_GET_VIEW_POSITION ) ]( this, &vecReturn );
+		return *( *reinterpret_cast< Vector*( __thiscall***)( void *, Vector * ) >( this ) )[ GetFunctionIndex( FUNCTION_GET_VIEW_POSITION ) ]( this, &vecReturn );
 	}
 
 	player_info_t CBasePlayer::GetPlayerInformation( )

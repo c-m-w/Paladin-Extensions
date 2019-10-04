@@ -223,7 +223,7 @@ typedef bool (*EndFramePriorToNextContextFunc_t)( void );
 typedef void (*OnLevelShutdownFunc_t)( void *pUserData );
 
 typedef unsigned short MaterialHandle_t;
-DECLARE_POINTER_HANDLE(MaterialLock_t);
+DECLARE_POINTER_HANDLE( MaterialLock_t );
 
 class IMaterialSystem: public IAppSystem
 {

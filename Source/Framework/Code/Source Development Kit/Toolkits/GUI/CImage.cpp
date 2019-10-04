@@ -14,6 +14,6 @@ void CImage::CreateDrawables( )
 	pDrawable->SetTexture( strResourceName );
 }
 
-CImage::CImage( const std::string& strResourceName ):
+CImage::CImage( const std::string &strResourceName ):
 	IWidget( WIDGET_IMAGE, CURSOR_ARROW ), strResourceName( strResourceName )
 { }

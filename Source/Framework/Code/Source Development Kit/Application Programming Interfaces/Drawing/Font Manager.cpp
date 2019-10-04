@@ -7,7 +7,7 @@
 #define USE_DEFINITIONS
 #include "../../../Framework.hpp"
 
-bitmap_t::bitmap_t( unsigned char* pData, const Utilities::vector2_t& vecSize ):
+bitmap_t::bitmap_t( unsigned char *pData, const Utilities::vector2_t &vecSize ):
 	vecSize( vecSize )
 {
 	const auto zData = std::size_t( vecSize.x * vecSize.y );
@@ -16,7 +16,7 @@ bitmap_t::bitmap_t( unsigned char* pData, const Utilities::vector2_t& vecSize ):
 	memcpy( &vecBytes[ 0 ], pData, zData );
 }
 
-bitmap_t::bitmap_t( const std::vector< unsigned char > & vecBytes, const Utilities::vector2_t & vecSize ):
+bitmap_t::bitmap_t( const std::vector< unsigned char > &vecBytes, const Utilities::vector2_t &vecSize ):
 	vecBytes( vecBytes ), vecSize( vecSize )
 {
 	if ( std::size_t( vecSize.x * vecSize.y ) != vecBytes.size( ) )
@@ -45,7 +45,7 @@ std::vector< DWORD > bitmap_t::GetColoredBitmapBytes( DWORD dwRBGA ) const
 		if ( bAlpha > 0 )
 			vecBitmap[ z ] = ( dwRBGA & 0x00FFFFFF ) | ( bAlpha << 24 );
 	}
-	
+
 	return vecBitmap;
 }
 
@@ -69,7 +69,7 @@ void bitmap_t::Insert( vector2_t vecLocation, const bitmap_t &_Other )
 	vector2_t vecDifference { vecSize.x - ( vecLocation.x + _Other.vecSize.x ), vecSize.y - ( vecLocation.y + _Other.vecSize.y ) };
 
 	if ( vecDifference.x < 0.0
-		 || vecDifference.y < 0.0 )
+		|| vecDifference.y < 0.0 )
 	{
 		if ( vecDifference.x > 0.0 )
 			vecDifference.x = 0.0;
@@ -90,12 +90,12 @@ void bitmap_t::Insert( vector2_t vecLocation, const bitmap_t &_Other )
 				vecBytes[ GetBitIndex( x + std::size_t( vecLocation.x ), y + std::size_t( vecLocation.y ) ) ] |= _Other.vecBytes[ _Other.GetBitIndex( x, y ) ];
 }
 
-void bitmap_t::ConcatenateHorizontal( const bitmap_t& _Other )
+void bitmap_t::ConcatenateHorizontal( const bitmap_t &_Other )
 {
 	Insert( { vecSize.x, 0.0 }, _Other );
 }
 
-void bitmap_t::ConcatenateVertical( const bitmap_t & _Other )
+void bitmap_t::ConcatenateVertical( const bitmap_t &_Other )
 {
 	Insert( { 0.0, vecSize.y }, _Other );
 }
@@ -116,7 +116,7 @@ void bitmap_t::ShiftUpward( unsigned uMagnitude )
 void bitmap_t::ShiftDownward( unsigned uMagnitude )
 {
 	if ( uMagnitude >= std::size_t( vecSize.y )
-		 || uMagnitude == 0 )
+		|| uMagnitude == 0 )
 		return;
 
 	const auto _OldBitmap = *this;
@@ -188,7 +188,7 @@ void bitmap_t::Clip( )
 	while ( VerticalRowEmpty( 0 ) )
 		ShiftLeftward( 1 ), uHorizontalClipping++;
 
-	while ( VerticalRowEmpty( std::size_t( vecSize.x ) - uHorizontalClipping - 1) )
+	while ( VerticalRowEmpty( std::size_t( vecSize.x ) - uHorizontalClipping - 1 ) )
 		uHorizontalClipping++;
 
 	while ( HorizontalRowEmpty( 0 ) )
@@ -215,7 +215,7 @@ bool CFontManager::Initialize( )
 					strFontDirectory += strItalicizedSuffix;
 
 				strFontDirectory += strFontFileExtension;
-				const auto& strData = RESOURCES.GetResource( strFontDirectory );
+				const auto &strData = RESOURCES.GetResource( strFontDirectory );
 
 				if ( strData.empty( ) )
 					return LOG( ERROR, DRAWING, "Unable to get font %s. Italicized: %i.", ( strFontDirectories[ i ] + strWeightTitles[ u ] ).c_str( ), b ), false;
@@ -229,15 +229,15 @@ bool CFontManager::Initialize( )
 
 void CFontManager::Uninitialize( )
 {
-	for ( auto& _Font : _Fonts )
-		for ( auto& _Weights : _Font )
-			for ( auto& _Face : _Weights )
+	for ( auto &_Font: _Fonts )
+		for ( auto &_Weights: _Font )
+			for ( auto &_Face: _Weights )
 				FT_Done_Face( _Face );
 
 	FT_Done_FreeType( _Instance );
 }
 
-char* CFontManager::RenderGlyph( char* szText )
+char *CFontManager::RenderGlyph( char *szText )
 {
 	const auto uCharacterIndex = FT_Get_Char_Index( _CurrentFont, *szText );
 
@@ -246,7 +246,7 @@ char* CFontManager::RenderGlyph( char* szText )
 	return szText + 1;
 }
 
-bitmap_t CFontManager::CreateBitmap( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize )
+bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize )
 {
 	const auto vecDPI = GetScreenDPI( );
 	bitmap_t _Return { };
@@ -277,7 +277,7 @@ bitmap_t CFontManager::CreateBitmap( char* szText, EFont _Font, EFontWeight _Wei
 				dbHorizontalLocation *= -1.0;
 				uAdvance += dbHorizontalLocation * 2.0;
 			}
-			
+
 			if ( dbCurrentVerticalOffset < 0.0 )
 			{
 				dbCurrentVerticalOffset *= -1.0;
@@ -298,7 +298,7 @@ bitmap_t CFontManager::CreateBitmap( char* szText, EFont _Font, EFontWeight _Wei
 	return _Return;
 }
 
-vector2_t CFontManager::CalculateTextSize( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize )
+vector2_t CFontManager::CalculateTextSize( char *szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize )
 {
 	return CreateBitmap( szText, _Font, _Weight, bItalic, dbSize ).vecSize;
 }

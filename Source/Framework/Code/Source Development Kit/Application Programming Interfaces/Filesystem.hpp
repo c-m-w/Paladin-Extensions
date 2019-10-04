@@ -34,11 +34,11 @@ public:
 	/** \return Whether or not the file exists. */
 	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string &strFile );
 	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string &strFile );
-	[ [ nodiscard ] ] static std::string PathToFile( const std::string& strPath );
+	[ [ nodiscard ] ] static std::string PathToFile( const std::string &strPath );
 	[ [ nodiscard ] ] static std::string PathToDirectory( const std::string &strPath );
 	static void CloseAllFileHandles( );
 	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath );
-	[ [ nodiscard ] ] static bool EnsureAbsoluteDirectoryExists( const std::string& strDirectory );
+	[ [ nodiscard ] ] static bool EnsureAbsoluteDirectoryExists( const std::string &strDirectory );
 	[ [ nodiscard ] ] static bool GetAbsolutePathVisibility( const std::string &strPath );
 	static bool GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
 	static bool GetFoldersInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
@@ -63,8 +63,8 @@ public:
 				encoded when written. */
 	/** \return Whether or not reading and writing to the file was successful. */
 	static bool AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt );
-	static bool EncryptAbsoluteFile( const std::string& strFilename );
-	static bool DecryptAbsoluteFile( const std::string& strFilename );
+	static bool EncryptAbsoluteFile( const std::string &strFilename );
+	static bool DecryptAbsoluteFile( const std::string &strFilename );
 	static bool SetAbsolutePathVisibility( const std::string &strPath, bool bVisible );
 	/** \brief Ensures that a directory has proper slashes to be concatenated. */
 	/** \param strDirectory Directory string to be formatted. */
@@ -76,7 +76,7 @@ public:
 	/** \return Current executable directory. */
 	[ [ nodiscard ] ] static std::string GetExecutableDirectory( bool bIncludeExecutableInPath = false );
 
-	[ [ nodiscard ] ] std::string GetEncryptedFilename( const std::string& strFile );
+	[ [ nodiscard ] ] std::string GetEncryptedFilename( const std::string &strFile );
 	/** \brief Checks whether or not a directory exists. */
 	/** \param strDirectory Directory name, relative to current working directory. */
 	/** \return Whether or not the directory exists. */
@@ -121,15 +121,15 @@ public:
 						when written back to the file. */
 	/** \return Whether or not reading and writing to the specified file was successful. */
 	bool AddToFile( const std::string &strFilename, const std::string &strData, bool bEncode );
-	bool EncryptFile( const std::string& strFilename );
-	bool DecryptFile( const std::string& strFilename );
-	[ [ nodiscard ] ] bool EnsureFileDirectoryExists( const std::string& strFile );
-	[ [ nodiscard ] ] bool EnsureDirectoryExists( const std::string& strDirectory );
+	bool EncryptFile( const std::string &strFilename );
+	bool DecryptFile( const std::string &strFilename );
+	[ [ nodiscard ] ] bool EnsureFileDirectoryExists( const std::string &strFile );
+	[ [ nodiscard ] ] bool EnsureDirectoryExists( const std::string &strDirectory );
 	bool GetDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
 	bool GetFoldersInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
 	bool GetFilesInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
 	bool DeleteCurrentDirectory( );
-	bool DeletePath( const std::string& strRelativePath );
+	bool DeletePath( const std::string &strRelativePath );
 	bool SetPathVisibility( const std::string &strPath, bool bVisible );
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */

@@ -27,7 +27,7 @@ color_t::color_t( std::initializer_list< unsigned char > initData )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	auto u = COLOR_MAX - 1;
-	for ( const auto& bData : initData )
+	for ( const auto &bData: initData )
 		_Data.b[ u-- ] = bData;
 
 	for ( ; u >= 0; u-- )
@@ -45,7 +45,7 @@ color_t::color_t( std::initializer_list< int > initData )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	auto u = COLOR_MAX - 1;
-	for ( const auto& iData: initData )
+	for ( const auto &iData: initData )
 		_Data.b[ u-- ] = unsigned char( iData );
 
 	for ( ; u >= 0; u-- )
@@ -204,17 +204,17 @@ float color_t::PutRedFraction( float flData )
 
 float color_t::PutGreenFraction( float flData )
 {
-	return (_Data.b[ COLOR_GREEN ] = unsigned char( flData * 255.f ) ) /255.f;
+	return ( _Data.b[ COLOR_GREEN ] = unsigned char( flData * 255.f ) ) / 255.f;
 }
 
 float color_t::PutBlueFraction( float flData )
 {
-	return (_Data.b[ COLOR_BLUE ] = unsigned char( flData * 255.f )) / 255.f;
+	return ( _Data.b[ COLOR_BLUE ] = unsigned char( flData * 255.f ) ) / 255.f;
 }
 
 float color_t::PutAlphaFraction( float flData )
 {
-	return (_Data.b[ COLOR_ALPHA ] = unsigned char( flData * 255.f )) / 255.f;
+	return ( _Data.b[ COLOR_ALPHA ] = unsigned char( flData * 255.f ) ) / 255.f;
 }
 
 void *color_t::GetDataPointer( ) const

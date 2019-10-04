@@ -25,13 +25,12 @@ LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wP
 		{
 			_Input.HandleEvent( uMessage, wParam, lParam );
 		}
-			break;
+		break;
 	}
 
 	const auto pSearch = CApplicationWindow::_HookedWindowProcessors.find( wnd );
-	
-	return pSearch == CApplicationWindow::_HookedWindowProcessors.end( )
-			? DefWindowProc( wnd, uMessage, wParam, lParam ) : CallWindowProc( reinterpret_cast< WNDPROC >( pSearch->second ), wnd, uMessage, wParam, lParam );
+
+	return pSearch == CApplicationWindow::_HookedWindowProcessors.end( ) ? DefWindowProc( wnd, uMessage, wParam, lParam ) : CallWindowProc( reinterpret_cast< WNDPROC >( pSearch->second ), wnd, uMessage, wParam, lParam );
 }
 
 CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
@@ -61,7 +60,7 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 CApplicationWindow::CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): hwHandle( hwWindow )
 {
 	if ( _WindowInputProcessor != nullptr
-		 && nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
+		&& nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Failed to set the new window input processor." ) );
 	else
 		_HookedWindowProcessors.insert( { hwWindow, pOldWindowInputProcessor } );
@@ -98,7 +97,7 @@ HWND CApplicationWindow::GetWindowHandle( )
 	return hwHandle;
 }
 
-bool CApplicationWindow::GetBounds( RECT& recOut )
+bool CApplicationWindow::GetBounds( RECT &recOut )
 {
 	return GetClientRect( hwHandle, &recOut ) != FALSE;
 }
@@ -145,7 +144,6 @@ void CApplicationWindow::Show( )
 	lCurrent |= WS_VISIBLE;
 	if ( !SetWindowLong( hwHandle, GWL_STYLE, lCurrent ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, ENC( "Error setting window long to show window." ) );
-	
 }
 
 void CApplicationWindow::Destroy( )
@@ -163,7 +161,7 @@ bool CApplicationWindow::CursorOnWindow( )
 	POINT pntCursor { };
 
 	if ( GetWindowRect( hwHandle, &recCurrent ) == FALSE
-		 || GetCursorPos( &pntCursor ) == FALSE )
+		|| GetCursorPos( &pntCursor ) == FALSE )
 		return false;
 
 	const rectangle_t recBounds { recCurrent };

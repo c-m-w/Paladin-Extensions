@@ -36,8 +36,8 @@ public:
 	virtual ~IRow( ) = default;
 
 	void SetAlignmentGap( double dbNewAlignmentGap );
-	virtual void AddWidget( IWidget* pWidget ) = 0;
-	virtual void RemoveWidget( IWidget* pWidget ) = 0;
+	virtual void AddWidget( IWidget *pWidget ) = 0;
+	virtual void RemoveWidget( IWidget *pWidget ) = 0;
 	virtual bool Overfilled( ) = 0;
 	virtual void Clamp( ) = 0;
 };
@@ -58,8 +58,8 @@ public:
 
 	CHorizontalRow( ) = default;
 
-	void AddWidget( IWidget* pWidget ) override;
-	void RemoveWidget( IWidget* pWidget ) override;
+	void AddWidget( IWidget *pWidget ) override;
+	void RemoveWidget( IWidget *pWidget ) override;
 	bool Overfilled( ) override;
 	void Clamp( ) override;
 
@@ -81,8 +81,8 @@ public:
 
 	CVerticalRow( ) = default;
 
-	void AddWidget( IWidget* pWidget ) override;
-	void RemoveWidget( IWidget* pWidget ) override;
+	void AddWidget( IWidget *pWidget ) override;
+	void RemoveWidget( IWidget *pWidget ) override;
 	bool Overfilled( ) override;
 	void Clamp( ) override;
 

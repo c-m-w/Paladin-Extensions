@@ -63,18 +63,18 @@ void OnLaunch( )
 	std::string strArguments[ ] { ENC( "-shutdown" ), ENC( "-login gaben@valvesoftware.com moolyftw" ) };
 	auto strBuffer = GetSteamExecutablePath( false );
 	int a[ ] { strBuffer.size( ) + 1, 0 };
-	const char* strSteamPath = new char[ a[0] ];
-	for ( int i = 0; i < a[0]; i++ ) // this cancer code is brought to you buy C++ automatic string copy destruction.
+	const char *strSteamPath = new char[ a[ 0 ] ];
+	for ( int i = 0; i < a[ 0 ]; i++ ) // this cancer code is brought to you buy C++ automatic string copy destruction.
 		const_cast< char* >( strSteamPath )[ i ] = strBuffer[ i ];
 	a[ 1 ] = std::string( strSteamPath ).find_last_of( "\\" ) + 1;
-	const char* strSteamDirectory = new char[ a[1] ];
-	for ( int i = 0; i < a[1]; i++ )
+	const char *strSteamDirectory = new char[ a[ 1 ] ];
+	for ( int i = 0; i < a[ 1 ]; i++ )
 		const_cast< char* >( strSteamDirectory )[ i ] = strSteamPath[ i ];
 	const_cast< char* >( strSteamDirectory )[ a[ 1 ] ] = 0;
 
 	STARTUPINFO si { sizeof( STARTUPINFO ) };
 	PROCESS_INFORMATION pi { };
-	if ( 0 == CreateProcess( strSteamPath, &strArguments[ 0 ][1], nullptr, nullptr, FALSE, 0u, nullptr, strSteamDirectory, &si, &pi ) )
+	if ( 0 == CreateProcess( strSteamPath, &strArguments[ 0 ][ 1 ], nullptr, nullptr, FALSE, 0u, nullptr, strSteamDirectory, &si, &pi ) )
 		MessageBox( 0, std::to_string( GetLastError( ) ).c_str( ), 0, 0 );
 	CloseHandle( pi.hProcess );
 	CloseHandle( pi.hThread );
@@ -84,8 +84,6 @@ void OnLaunch( )
 		delete[ ] strSteamDirectory;
 		delete[ ] strSteamPath;
 	}
-	catch(... )
-	{
-		
-	}
+	catch ( ... )
+	{ }
 }

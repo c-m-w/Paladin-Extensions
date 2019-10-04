@@ -149,8 +149,7 @@ class stamina_bug inherits feature_base< fn_create_move >
 */
 
 // done
-template < EFunctions enumHook, typename _tContext >
-class IFeatureBase
+template< EFunctions enumHook, typename _tContext > class IFeatureBase
 {
 public:
 	enum
@@ -162,19 +161,20 @@ public:
 		SET_TO_ACTIVE,
 		SET_TO_INACTIVE
 	};
+
 protected:
 	using keybind_t = std::pair< key_t, decltype( ACTIVE ) >;
 	using keybinds_t = std::vector< keybind_t >;
 public:
 	keybinds_t _Keys; // todo: this should be feature-based. not all features need a keybind.
 protected:
-	virtual void __cdecl Begin( _tContext* _Context ) = 0;
-	virtual void __cdecl End( _tContext* _Context ) = 0;
+	virtual void __cdecl Begin( _tContext *_Context ) = 0;
+	virtual void __cdecl End( _tContext *_Context ) = 0;
 public:
-	static bool KeybindActiveState( const keybinds_t& _Keys )
+	static bool KeybindActiveState( const keybinds_t &_Keys )
 	{
 		bool bKeyActive = false;
-		for ( auto& _Key: _Keys )
+		for ( auto &_Key: _Keys )
 		{
 			switch ( _Key.second )
 			{
@@ -194,7 +194,7 @@ public:
 				}
 				case HOLD_TO_ACTIVATE:
 				{
-					if (  _Input.GetKeyState( _Key.first ) )
+					if ( _Input.GetKeyState( _Key.first ) )
 						bKeyActive = true;
 					else
 						bKeyActive = false;
@@ -202,7 +202,7 @@ public:
 				}
 				case HOLD_TO_DEACTIVATE:
 				{
-					if (  _Input.GetKeyState( _Key.first ) )
+					if ( _Input.GetKeyState( _Key.first ) )
 						bKeyActive = false;
 					else
 						bKeyActive = true;
@@ -210,50 +210,52 @@ public:
 				}
 				case SET_TO_ACTIVE:
 				{
-					if (  _Input.GetKeyState( _Key.first ) )
+					if ( _Input.GetKeyState( _Key.first ) )
 						bKeyActive = true;
 					break;
 				}
 				case SET_TO_INACTIVE:
 				{
-					if (  _Input.GetKeyState( _Key.first ) )
+					if ( _Input.GetKeyState( _Key.first ) )
 						bKeyActive = false;
 					break;
 				}
 				default:
-				{
-				}
+				{ }
 			}
 		}
 		return bKeyActive;
 	}
-	static bool AddKeybind( const keybind_t _NewKey, keybinds_t& _Keys )
+
+	static bool AddKeybind( const keybind_t _NewKey, keybinds_t &_Keys )
 	{
-		for ( auto& _Key: _Keys )
+		for ( auto &_Key: _Keys )
 		{
 			if ( _Key.first != key_t( 0ui8 )
-				 && _Key.first == _NewKey.first )
+				&& _Key.first == _NewKey.first )
 				return false;
 		}
 		return _Keys.emplace_back( _NewKey ), true;
 	}
+
 protected:
 	IFeatureBase( )
 	{
 		vecBeginHook[ enumHook ].emplace_back( this, 0 );
 		vecEndHook[ enumHook ].emplace_back( this, 1 );
 	}
+
 	~IFeatureBase( )
-	{		
+	{
 		for ( std::size_t z = 0u; z < vecBeginHook[ enumHook ].size( ); z++ )
-		{			
+		{
 			if ( **reinterpret_cast< void*** >( this ) == vecBeginHook[ enumHook ][ z ].first )
 			{
 				vecBeginHook[ enumHook ].erase( vecBeginHook[ enumHook ].begin( ) + z );
 				z--;
 			}
 		}
-		
+
 		for ( std::size_t z = 0u; z < vecEndHook[ enumHook ].size( ); z++ )
 		{
 			if ( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ) == vecEndHook[ enumHook ][ z ].first )
@@ -266,9 +268,7 @@ protected:
 };
 
 struct SDrawContext
-{
-	
-};
+{ };
 
 struct STargetEntityFilter
 {
@@ -280,7 +280,8 @@ struct STargetEntityFilter
 		weapon,
 		projectile
 	} entity_type = unfiltered;
-	int get_entity_type( CBaseEntity& entity )
+
+	int get_entity_type( CBaseEntity &entity )
 	{
 		if ( entity.IsPlayer( ) )
 			return player;
@@ -292,7 +293,7 @@ struct STargetEntityFilter
 			return projectile;
 		return unfiltered;
 	}
-	
+
 	enum // player filter
 	{
 		teamless = -1,
@@ -300,7 +301,8 @@ struct STargetEntityFilter
 		counter_terrorists,
 		other
 	} team = teamless;
-	int get_team( CBasePlayer& entity )
+
+	int get_team( CBasePlayer &entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return teamless;
@@ -328,27 +330,29 @@ struct STargetEntityFilter
 		autosniper,
 		gear
 	} weapon_group = groupless;
-	int get_weapon_group( CBaseCombatWeapon& entity )
+
+	int get_weapon_group( CBaseCombatWeapon &entity )
 	{
 		if ( get_entity_type( entity ) != weapon )
 			return groupless;
 		return groupless;
 		/* todo */
 	}
-	
+
 	enum // guns + players
 	{
 		uncounted = -1,
 		minority, // < 50
 		majority // > 50
 	} ammo = uncounted, armor = uncounted;
-	int get_ammo( CBaseEntity& entity )
+
+	int get_ammo( CBaseEntity &entity )
 	{
 		switch ( get_entity_type( entity ) )
 		{
 			case player:
 			{
-				auto& wep = reinterpret_cast< CBasePlayer* >( &entity )->m_hActiveWeapon( );
+				auto &wep = reinterpret_cast< CBasePlayer* >( &entity )->m_hActiveWeapon( );
 				if ( wep == nullptr )
 					return uncounted;
 				return wep->m_iClip1( ) > 50 ? majority : minority;
@@ -363,7 +367,8 @@ struct STargetEntityFilter
 		}
 		return uncounted;
 	}
-	int get_armor( CBasePlayer& entity )
+
+	int get_armor( CBasePlayer &entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return uncounted;
@@ -377,29 +382,29 @@ struct STargetEntityFilter
 		half_armor,
 		head_plus_armor
 	} armor_type = unknown;
-	int get_armor_type( CBasePlayer& entity )
+
+	int get_armor_type( CBasePlayer &entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return unknown;
 		return unknown;
 		//??? todo
 	}
-	
+
 	enum // players
 	{
 		every = -1,
 		away, // we're at least 90 degrees away
 		toward // we're at most 90 degrees away
 	} direction = every;
-	int get_direction( CBasePlayer& local, CBasePlayer& entity )
+
+	int get_direction( CBasePlayer &local, CBasePlayer &entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return every;
-		return 90.f < ( CalculateAngle( local.GetViewPosition( ), entity.GetHitboxPosition( HITBOX_HEAD ) ) - entity.m_angEyeAngles( ) ).Length( )
-			? away
-			: toward;
+		return 90.f < ( CalculateAngle( local.GetViewPosition( ), entity.GetHitboxPosition( HITBOX_HEAD ) ) - entity.m_angEyeAngles( ) ).Length( ) ? away : toward;
 	}
-	
+
 	enum // players
 	{
 		indifferent = -1,
@@ -407,7 +412,8 @@ struct STargetEntityFilter
 		vulnerable, // reloading, weaponless, flashed
 		unaware // fully flashed
 	} vulnerability = indifferent;
-	int get_vulnerability( CBasePlayer& entity )
+
+	int get_vulnerability( CBasePlayer &entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return indifferent;
@@ -419,18 +425,18 @@ struct STargetEntityFilter
 			if ( !hActiveWeapon->HasBullets( ) )
 				return vulnerable;
 			const auto iWeaponType = hActiveWeapon->GetCSWeaponData( )->WeaponType;
-			if ( (iWeaponType == ITEM_WEAPON_SSG08
-				 || iWeaponType == ITEM_WEAPON_AWP ) && !hActiveWeapon->CanFire( ))
+			if ( ( iWeaponType == ITEM_WEAPON_SSG08
+				|| iWeaponType == ITEM_WEAPON_AWP ) && !hActiveWeapon->CanFire( ) )
 				return vulnerable;
 			if ( iWeaponType == ITEM_NONE // no weapon (tpose)
-					|| iWeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
-					&& iWeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
-					|| iWeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ) // knife/glove/other
+				|| iWeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
+				&& iWeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
+				|| iWeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ) // knife/glove/other
 				return vulnerable;
 		}
 		return invulnerable;
 	}
-	
+
 	enum // players
 	{
 		all = -1,
@@ -438,7 +444,8 @@ struct STargetEntityFilter
 		sound, // any sound
 		loud // shooting
 	} noise = all;
-	int get_noise( CBasePlayer& entity )
+
+	int get_noise( CBasePlayer &entity )
 	{
 		// todo no idea
 		return all;
@@ -451,11 +458,12 @@ struct STargetEntityFilter
 		quick_regain, // moving
 		inaccurate // in air
 	} accuracy = any;
-	int get_accuracy( CBasePlayer& entity )
+
+	int get_accuracy( CBasePlayer &entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return any;
-		
+
 		if ( !( entity.m_fFlags( ) & FL_ONGROUND ) )
 			return inaccurate;
 
@@ -465,55 +473,56 @@ struct STargetEntityFilter
 		return full;
 	}
 
-	bool operator==( CBaseEntity& pEntity )
+	bool operator==( CBaseEntity &pEntity )
 	{
 		// NO DATA VALIDATION OR SANITY CHECKS.
 		// YOU COULD PUT A COUNTER TERRORIST CHICKEN AND THIS FUNCTION DOESN'T CARE
 		// SANITY MUST BE DONE IN THE GUI
-		
+
 		if ( entity_type != unfiltered )
 			if ( entity_type != get_entity_type( pEntity ) )
 				return false;
 
 		if ( team != teamless )
-			if ( team != get_team( *reinterpret_cast<CBasePlayer*>(&pEntity) ) )
+			if ( team != get_team( *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
-		
+
 		if ( weapon_group != groupless )
-			if ( weapon_group != get_weapon_group( *reinterpret_cast<CBaseCombatWeapon*>(&pEntity) ) )
+			if ( weapon_group != get_weapon_group( *reinterpret_cast< CBaseCombatWeapon* >( &pEntity ) ) )
 				return false;
-		
+
 		if ( ammo != uncounted )
 			if ( ammo != get_ammo( pEntity ) )
 				return false;
-		
+
 		if ( armor != uncounted )
-			if ( armor != get_armor(  *reinterpret_cast<CBasePlayer*>(&pEntity) ) )
+			if ( armor != get_armor( *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
 
 		if ( armor_type != unknown )
-			if ( armor_type != get_armor_type(  *reinterpret_cast<CBasePlayer*>(&pEntity)))
+			if ( armor_type != get_armor_type( *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
-		
+
 		if ( direction != every )
-			if ( direction != get_direction( *GetLocalPlayer( ), *reinterpret_cast<CBasePlayer*>(&pEntity) ))
+			if ( direction != get_direction( *GetLocalPlayer( ), *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
-		
+
 		if ( vulnerability != indifferent )
-			if ( vulnerability != get_vulnerability(  *reinterpret_cast<CBasePlayer*>(&pEntity) ))
+			if ( vulnerability != get_vulnerability( *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
-		
+
 		if ( noise != all )
-			if ( noise != get_noise(  *reinterpret_cast<CBasePlayer*>(&pEntity) ))
+			if ( noise != get_noise( *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
-		
+
 		if ( accuracy != any )
-			if ( accuracy != get_accuracy(  *reinterpret_cast<CBasePlayer*>(&pEntity) ) )
+			if ( accuracy != get_accuracy( *reinterpret_cast< CBasePlayer* >( &pEntity ) ) )
 				return false;
 
 		return true;
 	}
-	bool operator!=( CBaseEntity& pEntity )
+
+	bool operator!=( CBaseEntity &pEntity )
 	{
 		return !( *this == pEntity );
 	}
@@ -522,12 +531,12 @@ struct STargetEntityFilter
 // todo https://www.unknowncheats.me/forum/1960243-post4.html
 class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
-	void __cdecl Begin( SDrawContext* _Context ) override
-	{
-		
-	}
-	void __cdecl End( SDrawContext* _Context ) override
+	void __cdecl Begin( SDrawContext *_Context ) override
 	{ }
+
+	void __cdecl End( SDrawContext *_Context ) override
+	{ }
+
 public:
 	CColor clr;
 	STargetEntityFilter preference;
@@ -536,9 +545,9 @@ public:
 // todo https://www.unknowncheats.me/forum/2197432-post19.html
 class CGlow final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
-	void __cdecl Begin( SDrawContext* _Context ) override
+	void __cdecl Begin( SDrawContext *_Context ) override
 	{
-		for ( int i = 1; i < pGlobalVariables->m_iMaxClients;i++)
+		for ( int i = 1; i < pGlobalVariables->m_iMaxClients; i++ )
 		{
 			auto ent = pEntityList->GetClientEntity( i );
 			if ( preference == *static_cast< CBasePlayer* >( ent ) )
@@ -547,80 +556,75 @@ class CGlow final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 				{
 					if ( !pGlowObjectManager->m_GlowObjectDefinitions[ i ].IsUnused( ) && pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_pEntity == ent )
 					{
-						auto color = clr.GetColor(  );
+						auto color = clr.GetColor( );
 						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flRed = color.rfl;
 						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flGreen = color.gfl;
 						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flBlue = color.bfl;
 						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flAlpha = color.afl;
-						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flFullBloomAmount =     flFullBloomAmount;
-						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bRenderWhenOccluded =   bRenderWhenOccluded;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flFullBloomAmount = flFullBloomAmount;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bRenderWhenOccluded = bRenderWhenOccluded;
 						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bRenderWhenUnoccluded = bRenderWhenUnoccluded;
-						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bFullBloomRender =	   bFullBloomRender;
-						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_nGlowStyle =			   nGlowStyle;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bFullBloomRender = bFullBloomRender;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_nGlowStyle = nGlowStyle;
 					}
 				}
 			}
 		}
 	}
-	void __cdecl End( SDrawContext* _Context ) override
+
+	void __cdecl End( SDrawContext *_Context ) override
 	{ }
+
 public:
 	CColor clr;
 	float flFullBloomAmount;
-	bool  bRenderWhenOccluded;
-	bool  bRenderWhenUnoccluded;
-	bool  bFullBloomRender;
-	int   nGlowStyle;
+	bool bRenderWhenOccluded;
+	bool bRenderWhenUnoccluded;
+	bool bFullBloomRender;
+	int nGlowStyle;
 	STargetEntityFilter preference;
 };
 
 struct SPresentContext
-{
-	
-};
+{ };
 
 class CDrawTextures final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
 {
-	void __cdecl Begin( SPresentContext* _Context ) override
-	{
-		
-	}
-	void __cdecl End( SPresentContext* _Context ) override
+	void __cdecl Begin( SPresentContext *_Context ) override
+	{ }
+
+	void __cdecl End( SPresentContext *_Context ) override
 	{ }
 };
 
 // done
 struct SCreateMoveContext
 {
-	/*CCSPlayer*/CBasePlayer* pLocalPlayer;
-	CUserCmd* pCommand;
-	CVerifiedUserCmd* pVerifiedCommand;
+	/*CCSPlayer*/
+	CBasePlayer *pLocalPlayer;
+	CUserCmd *pCommand;
+	CVerifiedUserCmd *pVerifiedCommand;
 };
 
 class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
 {
-	
-	void __cdecl Begin( SPresentContext* _Context ) override
+	void __cdecl Begin( SPresentContext *_Context ) override
 	{
 		collect.notif_category = notif_category;
 		collect.strNotifMessageFormat = strNotifMessageFormat;
+	}
 
-		
-	}
-	
-	void __cdecl End( SPresentContext* _Context ) override
-	{
-		
-	}
-	
+	void __cdecl End( SPresentContext *_Context ) override
+	{ }
+
 	class CCollectInformation final: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
-	{		
-		void __cdecl Begin( SCreateMoveContext* _Context ) override
+	{
+		void __cdecl Begin( SCreateMoveContext *_Context ) override
 		{
 			static bool bDontCheck = false;
 			if ( !Notification.empty( ) || bDontCheck )
 				return; // we haven't pushed our last notification yet, let's wait a bit so we dont rape with notifications!
-			
+
 			switch ( notif_category )
 			{
 				case notif_message:
@@ -662,9 +666,9 @@ class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresent
 					static auto pGameType = pConVar->FindCommand( ENC( "game_type" ) );
 					static auto pGameMode = pConVar->FindCommand( ENC( "game_mode" ) );
 					if ( ( pGameType->GetValueAsInteger( ) == 0 && pGameMode->GetValueAsInteger( ) == 1 ) // Competitive
-						 || ( pGameType->GetValueAsInteger( ) == 0 && pGameMode->GetValueAsInteger( ) == 2 ) // Wingman
-						 || ( pGameType->GetValueAsInteger( ) == 6 && pGameMode->GetValueAsInteger( ) == 0 ) // Danger Zone
-						 )
+						|| ( pGameType->GetValueAsInteger( ) == 0 && pGameMode->GetValueAsInteger( ) == 2 ) // Wingman
+						|| ( pGameType->GetValueAsInteger( ) == 6 && pGameMode->GetValueAsInteger( ) == 0 ) // Danger Zone
+					)
 						Notification = "Overwatched game modes are unsafe with this config!";
 					break;
 				}
@@ -683,7 +687,7 @@ class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresent
 						Notification = "A user has either connected or disconnected.";
 					break;
 				}
-				// good enough for now lol
+					// good enough for now lol
 				case notif_special_item:
 				{
 					break;
@@ -701,31 +705,31 @@ class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresent
 			if ( !Notification.empty( ) && bOneTimeCheck )
 				bDontCheck = true;
 		}
-		void __cdecl End( SCreateMoveContext* _Context ) override
-		{
-			
-		}
+
+		void __cdecl End( SCreateMoveContext *_Context ) override
+		{ }
+
 	public:
 		bool bOneTimeCheck;
 		int notif_category;
 		std::string strNotifMessageFormat;
 
 		std::string Notification;
-	}
-	collect; // this might fuck with our shit... class within class. how the vtables are gonna get fukt is unknown
-	
+	} collect; // this might fuck with our shit... class within class. how the vtables are gonna get fukt is unknown
+
 public:
 	enum
 	{
 		notif_message, // missed shot due to spread
 		notif_warning, // this feature is using up a lot of resources! consider turning it off for better performance
 		notif_errror, // this config contains features that could cause you to be overwatch banned!
-		              // that config is outdated!
+		// that config is outdated!
 		notif_special_player, // someone left!
 		notif_special_item, // there is an awp near you!
 		notif_special_object, // bomb is planted at B!
 		notif_special_economy, // someone purhcased something!
 	} volatile notif_category;
+
 	std::string strNotifTitle; // = "Item Purchase"
 	std::string strNotifMessageFormat; // = "%player purchased %item!"
 };
@@ -733,7 +737,10 @@ public:
 class ICombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
 {
 protected:
-	virtual int BezierStuff( int time ) { return 0; }; // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
+	virtual int BezierStuff( int time )
+	{
+		return 0;
+	}; // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
 	// here we put the context for shit that'll go between each instance of a combat feature. maybe even some functions
 };
 
@@ -747,61 +754,66 @@ protected:
 		NEAREST_BY_DISTANCE,
 		PRIORITY_MAX
 	};
-	virtual bool MeetsActivationRequirements( SCreateMoveContext &_Context, CBaseEntity& _Entity ) = 0;
+
+	virtual bool MeetsActivationRequirements( SCreateMoveContext &_Context, CBaseEntity &_Entity ) = 0;
+
 	virtual int GetPriorityEntityID( SCreateMoveContext &_Context, decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
 	{
 		std::vector< int > vecPossibleEntities;
 		for ( int i = 0; i < pGlobalVariables->m_iMaxClients; i++ )
-			if ( MeetsActivationRequirements( _Context, *(CBaseEntity*)pEntityList->GetClientEntity( i ) ) )
+			if ( MeetsActivationRequirements( _Context, *( CBaseEntity* )pEntityList->GetClientEntity( i ) ) )
 				vecPossibleEntities.emplace_back( i );
 
 		if ( vecPossibleEntities.size( ) == 0 )
 			return 0;
-		
-		switch( enumPriorityType )
+
+		switch ( enumPriorityType )
 		{
 			case FIRST_IN_LIST:
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ) ), vecPossibleEntities[ 0 ];
+				return MeetsActivationRequirements( _Context, *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ) ), vecPossibleEntities[ 0 ];
 			case NEAREST_TO_CROSSHAIR:
 			{
-				auto& _LocalPlayer = *_Context.pLocalPlayer;
+				auto &_LocalPlayer = *_Context.pLocalPlayer;
 
 				struct
-				{ int first; EHitbox second; float third; }
-				flFavoriteEntity { -1, HITBOX_MAX, FLT_MAX };
-				for ( auto& i: vecPossibleEntities )
 				{
-					auto& _Entity = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) );
+					int first;
+					EHitbox second;
+					float third;
+				}
+						flFavoriteEntity { -1, HITBOX_MAX, FLT_MAX };
+				for ( auto &i: vecPossibleEntities )
+				{
+					auto &_Entity = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) );
 					for_enum( EHitbox, enumHitbox, EHitbox( 0 ), HITBOX_MAX )
 					{
-						auto fl=CalculateCrosshairDistance( _Context.pLocalPlayer, &_Entity, enumHitbox, _Context.pCommand, false );
+						auto fl = CalculateCrosshairDistance( _Context.pLocalPlayer, &_Entity, enumHitbox, _Context.pCommand, false );
 						if ( fl < flFieldOfView && flFavoriteEntity.third > fl )
 							flFavoriteEntity = { i, enumHitbox, fl };
 					}
 				}
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flFavoriteEntity.first ) ) ), flFavoriteEntity.first;
+				return MeetsActivationRequirements( _Context, *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flFavoriteEntity.first ) ) ), flFavoriteEntity.first;
 			}
 			case NEAREST_BY_DISTANCE:
 			{
-				auto& _LocalPlayer = *_Context.pLocalPlayer;
-				
+				auto &_LocalPlayer = *_Context.pLocalPlayer;
+
 				std::pair< int, float > flNearest { 0, FLT_MAX };
-				for ( auto& i: vecPossibleEntities )
+				for ( auto &i: vecPossibleEntities )
 				{
-					auto& _Entity = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) );
+					auto &_Entity = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) );
 					auto flDelta = _LocalPlayer.m_vecOrigin( ).DistTo( _Entity.m_vecOrigin( ) );
 					if ( flNearest.second > flDelta )
 						flNearest = { i, flDelta };
 				}
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flNearest.first ) ) ), flNearest.first;
+				return MeetsActivationRequirements( _Context, *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flNearest.first ) ) ), flNearest.first;
 			}
 		}
 	}
 	// todo https://www.unknowncheats.me/forum/cs-go-releases/276638-backtrack-triggerbot.html
 	virtual void Backtrack( )
-	{
-		
-	}
+	{ }
+
 public:
 	float flFieldOfView; // in degrees
 	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; //{ NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
@@ -809,12 +821,12 @@ public:
 };
 
 class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous trigger should really be merged with Aimbot and just have an auto-shoot option
-// todo hitboxes activation
+		// todo hitboxes activation
 {
-	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity ) override
+	bool MeetsActivationRequirements( SCreateMoveContext &_Context, CBaseEntity &_Entity ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
-		volatile auto sz = _Player.GetPlayerInformation(  ).szName;
+		volatile auto sz = _Player.GetPlayerInformation( ).szName;
 		if ( !_Player.IsPlayer( )
 			|| !_Player.IsAlive( ) )
 			return false;
@@ -823,28 +835,30 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox
 		return true;
 	}
+
 	bool bFired;
-	void __cdecl Begin( SCreateMoveContext* _Context ) override
+
+	void __cdecl Begin( SCreateMoveContext *_Context ) override
 	{
-		auto& pLocalPlayer = _Context->pLocalPlayer;
-		auto& pCommand = _Context->pCommand;
+		auto &pLocalPlayer = _Context->pLocalPlayer;
+		auto &pCommand = _Context->pCommand;
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
 
 		if ( pCommand->buttons & IN_ATTACK
-			 || !KeybindActiveState( _Keys ) )
+			|| !KeybindActiveState( _Keys ) )
 			return;
 
 		const auto old_angles = _Context->pCommand->viewangles;
 		_Context->pCommand->viewangles -= pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( );
 		auto &_Trace = pLocalPlayer->TraceRayFromView( _Context->pCommand );
 		_Context->pCommand->viewangles = old_angles;
-		
+
 		if ( !_Trace.DidHit( )
-			 || _Trace.hit_entity == nullptr )
+			|| _Trace.hit_entity == nullptr )
 			return;
-		
+
 		if ( !MeetsActivationRequirements( *_Context, *reinterpret_cast< CBaseEntity* >( _Trace.hit_entity ) ) )
 			return;
 
@@ -852,14 +866,15 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 			pCommand->buttons |= IN_ATTACK;
 		bFired = true;
 	}
-	void __cdecl End( SCreateMoveContext* _Context ) override
+
+	void __cdecl End( SCreateMoveContext *_Context ) override
 	{
 		if ( !bFired || !bSetSensToZeroOnFire )
 			return;
 
 		static auto pVarSensitivity = pConVar->FindCommand( ENC( "sensitivity" ) );
 		static auto flSensitivity = pVarSensitivity->GetValueAsFloat( );
-		
+
 		if ( KeybindActiveState( _Keys ) )
 		{
 			pVarSensitivity.SetValueAsFloat( flSensitivity / 2 );
@@ -870,6 +885,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 			bFired = false;
 		}
 	}
+
 public:
 	bool bSetSensToZeroOnFire = true;
 	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
@@ -878,7 +894,8 @@ public:
 class CAimAssistance final: public AAimAssistanceBase
 {
 	int iTargetHitbox = 0;
-	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity ) override
+
+	bool MeetsActivationRequirements( SCreateMoveContext &_Context, CBaseEntity &_Entity ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
 		if ( nullptr == &_Entity )
@@ -896,15 +913,17 @@ class CAimAssistance final: public AAimAssistanceBase
 			if ( /*flSmallestDelta > flFOVDelta &&*/ flFOVDelta < flFieldOfView )
 				return iTargetHitbox = enumHitbox, /*flSmallestDelta = flFOVDelta,*/ true; // if we want hitbox priorities, DO NOT RETURN HERE
 		}
-		
+
 		return iTargetHitbox = -1, false;
 	}
+
 	QAngle old_viewangles { 0.f, 0.f, 0.f };
-	void __cdecl Begin( SCreateMoveContext* _Context ) override // psilent
+
+	void __cdecl Begin( SCreateMoveContext *_Context ) override // psilent
 	{
 		// shorten reference to context variables
-		auto& pLocalPlayer = _Context->pLocalPlayer;
-		auto& pCommand = _Context->pCommand;
+		auto &pLocalPlayer = _Context->pLocalPlayer;
+		auto &pCommand = _Context->pCommand;
 
 		// check setup
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
@@ -917,10 +936,10 @@ class CAimAssistance final: public AAimAssistanceBase
 		// check for aimbot key
 		if ( !KeybindActiveState( _Keys ) )
 			return;
-		
+
 		{
 			// validate weapon can fire this tick so we aren't just randomly snapping
-			auto& wep = pLocalPlayer->m_hActiveWeapon( );
+			auto &wep = pLocalPlayer->m_hActiveWeapon( );
 			if ( nullptr == wep )
 				return;
 			
@@ -935,52 +954,50 @@ class CAimAssistance final: public AAimAssistanceBase
 			iEntityID = GetPriorityEntityID( *_Context, enumPriorities[ i ] );
 		if ( iEntityID == 0 )
 			return;
-		
-		auto& _Target = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( iEntityID ) );
+
+		auto &_Target = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( iEntityID ) );
 
 		// compensate for recoil because calculate angle doesn't consider it
 		// this is intentional in case we want to change recoil control based on user settings
 		QAngle angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ); // note: pcmd is not used. dunno why its a param
 		ClampAngles( angAtHitbox ); // safety
-		
+
 		old_viewangles = pCommand->viewangles; // save for restore
 		pCommand->viewangles = angAtHitbox;
 
 		if ( bAutofire )
 			pCommand->buttons |= IN_ATTACK;
 	}
-	void __cdecl End( SCreateMoveContext* _Context ) override
+
+	void __cdecl End( SCreateMoveContext *_Context ) override
 	{
 		if ( !old_viewangles.IsZero( ) )
-			return ( void )( _Context->pCommand->viewangles = old_viewangles ); 
+			return ( void )( _Context->pCommand->viewangles = old_viewangles );
 	}
+
 public:
 	bool bAutofire = false;
 };
 
 class IMiscellaneousFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
-{
-	
-};
+{ };
 
 class AEnvironmentFeatureBase: public IMiscellaneousFeatureBase
-{
-
-};
+{};
 
 class CFlashUtility final: public AEnvironmentFeatureBase
 {
-	void __cdecl Begin( SCreateMoveContext* _Context ) override
+	void __cdecl Begin( SCreateMoveContext *_Context ) override
 	{
-		auto& pLocalPlayer = _Context->pLocalPlayer;
-		auto& pCommand = _Context->pCommand;
+		auto &pLocalPlayer = _Context->pLocalPlayer;
+		auto &pCommand = _Context->pCommand;
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
 
 		if ( !KeybindActiveState( _Keys ) )
 			return;
-		
+
 		auto &flFlashDuration = pLocalPlayer->m_flFlashDuration( );
 
 		static auto flFullFlashTime = 0.f, flFlashTime = 0.f;
@@ -997,26 +1014,24 @@ class CFlashUtility final: public AEnvironmentFeatureBase
 
 		pLocalPlayer->m_flFlashMaxAlpha( ) = 255.f * ( flFlashDuration - ( flFlashTime - flFullFlashTime ) > 0.f ? flFullFlashMaximum : flPartialFlashMaximum );
 	}
-	void __cdecl End( SCreateMoveContext* _Context ) override
-	{
-		
-	}
+
+	void __cdecl End( SCreateMoveContext *_Context ) override
+	{ }
+
 public:
 	float flFullFlashMaximum;
 	float flPartialFlashMaximum;
 };
 
 class AMovementFeatureBase: public IMiscellaneousFeatureBase
-{
-
-};
+{};
 
 class CTriggerAutomation final: public AMovementFeatureBase
 {
-	void __cdecl Begin( SCreateMoveContext* _Context ) override
+	void __cdecl Begin( SCreateMoveContext *_Context ) override
 	{
-		auto& pLocalPlayer = _Context->pLocalPlayer;
-		auto& pCommand = _Context->pCommand;
+		auto &pLocalPlayer = _Context->pLocalPlayer;
+		auto &pCommand = _Context->pCommand;
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
@@ -1024,16 +1039,15 @@ class CTriggerAutomation final: public AMovementFeatureBase
 		if ( !KeybindActiveState( _Keys ) )
 			return;
 
-		auto& hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
+		auto &hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
 		if ( nullptr == &hActiveWeapon )
 			return;
-		
+
 		pCommand->buttons = hActiveWeapon->CanFire( ) ? ( pCommand->buttons | IN_ATTACK ) : ( pCommand->buttons & ~IN_ATTACK );
 	}
-	void __cdecl End( SCreateMoveContext* _Context ) override
-	{
-		
-	}
+
+	void __cdecl End( SCreateMoveContext *_Context ) override
+	{ }
 };
 
 class CJumpAutomation final: public AMovementFeatureBase
@@ -1046,37 +1060,35 @@ public:
 	bool bJumpBeforeHopping;
 	bool bJumpAfterHopping;
 private:
-	void __cdecl Begin( SCreateMoveContext* _Context ) override
+	void __cdecl Begin( SCreateMoveContext *_Context ) override
 	{
-		auto& pLocalPlayer = _Context->pLocalPlayer;
-		auto& pCommand = _Context->pCommand;
+		auto &pLocalPlayer = _Context->pLocalPlayer;
+		auto &pCommand = _Context->pCommand;
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
-		
+
 		if ( !( ( bUseJumpButton && pCommand->buttons & IN_JUMP )
-				|| ( KeybindActiveState( _Keys ) ) ) )
+			|| ( KeybindActiveState( _Keys ) ) ) )
 			return;
 
 		{
-			const auto& movetype = pLocalPlayer->movetype( );
+			const auto &movetype = pLocalPlayer->movetype( );
 			if ( movetype == MOVETYPE_NOCLIP || movetype == MOVETYPE_LADDER ) // don't change anything in these states
 				return; // do not unset +jump because they may want to jump off a ladder or smth.
 		}
 
 		if ( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-			return ( void )( pCommand->buttons = 
-				( pGlobalVariables->m_iTickCount % 100 < u8JumpChance ) 
-					? ( pCommand->buttons | IN_JUMP ) 
-					: ( pCommand->buttons & ~IN_JUMP ) );
+			return ( void )( pCommand->buttons =
+				( pGlobalVariables->m_iTickCount % 100 < u8JumpChance ) ? ( pCommand->buttons | IN_JUMP ) : ( pCommand->buttons & ~IN_JUMP ) );
 
 		static auto u8ExtraJumps = 0ui8;
-		const auto& zvel = pLocalPlayer->m_vecVelocity( ).z;
+		const auto &zvel = pLocalPlayer->m_vecVelocity( ).z;
 		
 		// it would be better to see if the ground is getting closer with a trace ray rather than checking zvelocity
 		// this way we can still do a bhop before jumping if the user is bhopping up hill
 		if ( ( ( zvel < 0.f && bJumpBeforeHopping ) && u8ExtraJumps < u8MaximumExtraJumps / 2 ) // we want to split the number of extra jumps to before and after the jump for extra legit
-			 || ( ( zvel > 0.f && bJumpAfterHopping ) && u8ExtraJumps <= u8MaximumExtraJumps ) )
+			|| ( ( zvel > 0.f && bJumpAfterHopping ) && u8ExtraJumps <= u8MaximumExtraJumps ) )
 		{
 			Ray_t rRay;
 			const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
@@ -1098,31 +1110,29 @@ private:
 			u8ExtraJumps = 0ui8;
 		pCommand->buttons &= ~IN_JUMP;
 	}
-	void __cdecl End( SCreateMoveContext* _Context ) override
-	{
-		
-	}
+
+	void __cdecl End( SCreateMoveContext *_Context ) override
+	{ }
 };
 
 class CStaminaBugAutomation final: public AMovementFeatureBase
 {
-	void __cdecl Begin( SCreateMoveContext* _Context ) override
+	void __cdecl Begin( SCreateMoveContext *_Context ) override
+	{ }
+
+	void __cdecl End( SCreateMoveContext *_Context ) override
 	{
-		
-	}
-	void __cdecl End( SCreateMoveContext* _Context ) override
-	{
-		auto& pLocalPlayer = _Context->pLocalPlayer;
-		auto& pCommand = _Context->pCommand;
+		auto &pLocalPlayer = _Context->pLocalPlayer;
+		auto &pCommand = _Context->pCommand;
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
 
 		if ( bDisableWhenManuallyDucking && pCommand->buttons & IN_DUCK )
 			return;
-		
+
 		if ( !( ( bUseDuckButton && pCommand->buttons & IN_DUCK )
-				|| ( KeybindActiveState( _Keys ) ) ) )
+			|| ( KeybindActiveState( _Keys ) ) ) )
 			return;
 
 		//Prediction::Start( pLocalPlayer, pCommand );
@@ -1134,6 +1144,7 @@ class CStaminaBugAutomation final: public AMovementFeatureBase
 		//Prediction::End( pLocalPlayer );
 		//Prediction::End( pLocalPlayer );
 	}
+
 public:
 	bool bUseDuckButton;
 	bool bDisableWhenManuallyDucking;
@@ -1141,8 +1152,9 @@ public:
 
 struct SFrameStageNotifyContext
 {
-	/*CCSPlayer*/CBasePlayer* pLocalPlayer;
-	CUserCmd* pCommand;
+	/*CCSPlayer*/
+	CBasePlayer *pLocalPlayer;
+	CUserCmd *pCommand;
 	ClientFrameStage_t _FrameStage;
 };
 
@@ -1154,7 +1166,7 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 	int kills_to_save = 0;
 	static CPlayerInventory *pInventory;
 	CEconItem *pThisItem;
-	
+
 	void __cdecl Begin( SFrameStageNotifyContext *_Context ) override
 	{
 		if ( !bEquipped )
@@ -1218,8 +1230,9 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 		}
 	}
 
-	void __cdecl End( SFrameStageNotifyContext* _Context ) override
+	void __cdecl End( SFrameStageNotifyContext *_Context ) override
 	{ }
+
 public:
 	bool bEquipped;
 	int iSkin;
@@ -1230,11 +1243,10 @@ public:
 	std::string strNametag; // empty string indicates disabled
 	std::pair< bool /*bLiveTracking*/, int /*iStatTrakCount*/ > iStatTrak; // -1 indicates disabled
 	std::vector< int > vecStickers;
+
 	void UpdateInventory( ) // must be called after modifying the config
-	{
-		
-	}
-	
+	{ }
+
 	CInventoryManager( )
 	{
 		// note PASTIN BOIS
@@ -1267,6 +1279,7 @@ public:
 		////
 		////pInventory->AddEconItem( pThisItem, 1, 0, 1 );
 	}
+
 	~CInventoryManager( )
 	{
 		if ( iStatTrak.first )

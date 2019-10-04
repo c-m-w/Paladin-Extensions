@@ -9,11 +9,11 @@ namespace Memory
 {
 	nlohmann::json jsMemory { };
 
-	bool GetMemoryValue( std::initializer_list< std::string > initLevels, std::string& strOut )
+	bool GetMemoryValue( std::initializer_list< std::string > initLevels, std::string &strOut )
 	{
 		auto jsSearch = jsMemory;
 
-		for ( auto& strLevel : initLevels )	
+		for ( auto &strLevel: initLevels )
 			jsSearch = jsSearch[ _Cryptography.GenerateHash( strLevel ) ];
 
 		try
@@ -21,7 +21,7 @@ namespace Memory
 			if ( !_Cryptography.Decrypt( jsSearch.get< std::string >( ), strOut, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return false;
 		}
-		catch( nlohmann::json::type_error& e )
+		catch ( nlohmann::json::type_error &e )
 		{
 			return false;
 		}
@@ -54,7 +54,7 @@ namespace Memory
 
 	bool FindNetworkedVariables( )
 	{
-		std::function< networked_variable_table_t( RecvTable * pTable ) > fnParseTable = [ & ]( RecvTable* pTable )
+		std::function< networked_variable_table_t( RecvTable *pTable ) > fnParseTable = [ & ]( RecvTable *pTable )
 		{
 			networked_variable_table_t _Current( pTable->m_pNetTableName );
 
@@ -62,8 +62,8 @@ namespace Memory
 			{
 				const auto pProp = &pTable->m_pProps[ i ];
 				if ( nullptr == pProp
-					 || std::isdigit( pProp->m_pVarName[ 0 ] )
-					 || !strcmp( pProp->m_pVarName, ENC( "baseclass" ) ) )
+					|| std::isdigit( pProp->m_pVarName[ 0 ] )
+					|| !strcmp( pProp->m_pVarName, ENC( "baseclass" ) ) )
 					continue;
 				if ( pProp->m_RecvType == DPT_DataTable && pProp->m_pDataTable != nullptr )
 				{
@@ -128,13 +128,13 @@ namespace Memory
 			std::string strModule { }, strSignature { }, strOffset { };
 
 			if ( !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
-				 || !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
-				 || !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
+				|| !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
+				|| !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
 			{
 				std::string strVersion { };
 
 				if ( !GetMemoryValue( { strVersionIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
-					 || !GetMemoryValue( { strVersionIdentifier, std::to_string( i ), strVersionIdentifier }, strVersion ) )
+					|| !GetMemoryValue( { strVersionIdentifier, std::to_string( i ), strVersionIdentifier }, strVersion ) )
 					return false;
 
 				if ( !_Modules[ std::stoi( strModule ) ]( strVersion.c_str( ), &pInterfaces[ i ] ) )
@@ -155,8 +155,8 @@ namespace Memory
 			std::string strModule { }, strSignature { }, strOffset { };
 
 			if ( !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
-				 || !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
-				 || !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
+				|| !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
+				|| !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
 				return false;
 
 			const auto _Module = _Modules[ std::stoi( strModule ) ];
@@ -214,32 +214,32 @@ namespace Memory
 		return uFunctionIndices[ _Function ];
 	}
 
-	void * GetSignaturePointer( ESignatures _Signature )
+	void *GetSignaturePointer( ESignatures _Signature )
 	{
 		return pPointers[ _Signature ];
 	}
 
-	std::uintptr_t FindOffset( networked_variable_table_t& _Table, const char* szVariable )
+	std::uintptr_t FindOffset( networked_variable_table_t &_Table, const char *szVariable )
 	{
-		for ( auto& pProp : _Table.vecChildProps )
+		for ( auto &pProp: _Table.vecChildProps )
 			if ( !strcmp( pProp->m_pVarName, szVariable ) )
 				return _Table.ptrOffset + pProp->m_Offset;
 
-		for ( networked_variable_table_t pChild : _Table.vecChildTables )
+		for ( networked_variable_table_t pChild: _Table.vecChildTables )
 		{
 			auto ptrPropOffset = FindOffset( pChild, szVariable );
 			if ( ptrPropOffset != 0 )
 				return _Table.ptrOffset + ptrPropOffset;
 		}
 
-		for ( auto& pChild : _Table.vecChildTables )
+		for ( auto &pChild: _Table.vecChildTables )
 			if ( !strcmp( pChild.pProp->m_pVarName, szVariable ) )
 				return _Table.ptrOffset + pChild.ptrOffset;
 
 		return 0u;
 	}
 
-	std::uintptr_t FindOffset( const char* szTable, const char* szVariable )
+	std::uintptr_t FindOffset( const char *szTable, const char *szVariable )
 	{
 		for each ( auto pTable in vecNetworkedVariables )
 			if ( !strcmp( pTable.szName, szTable ) )
@@ -274,51 +274,51 @@ namespace Memory
 			jsData[ _Cryptography.GenerateHash( strModuleIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( i ) ) ] = strEncryptedModuleName;
 		}
 
-		for ( auto& _Pattern : vecInterfacePatterns )
+		for ( auto &_Pattern: vecInterfacePatterns )
 		{
 			std::string strEncryptedModule { }, strEncryptedSignature { }, strEncryptedOffset { };
 
 			if ( !_Cryptography.Encrypt( std::to_string( _Pattern._Module ), strEncryptedModule, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
-				 || !_Cryptography.Encrypt( _Pattern.strPattern, strEncryptedSignature, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
-				 || !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
+				|| !_Cryptography.Encrypt( _Pattern.strPattern, strEncryptedSignature, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
+				|| !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return { };
 
-			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strInterfacePatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
+			auto &jsPatternInfo = jsData[ _Cryptography.GenerateHash( strInterfacePatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
 
 			jsPatternInfo[ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureIdentifier ) ] = strEncryptedSignature;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureOffsetIdentifier ) ] = strEncryptedOffset;
 		}
 
-		for ( auto& _Pattern : vecPointerPatterns )
+		for ( auto &_Pattern: vecPointerPatterns )
 		{
 			std::string strEncryptedModule { }, strEncryptedSignature { }, strEncryptedOffset { };
 
 			if ( !_Cryptography.Encrypt( std::to_string( _Pattern._Module ), strEncryptedModule, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
-				 || !_Cryptography.Encrypt( _Pattern.strPattern, strEncryptedSignature, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
-				 || !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
+				|| !_Cryptography.Encrypt( _Pattern.strPattern, strEncryptedSignature, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
+				|| !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return { };
 
-			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPointerPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
+			auto &jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPointerPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
 
 			jsPatternInfo[ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureIdentifier ) ] = strEncryptedSignature;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureOffsetIdentifier ) ] = strEncryptedOffset;
 		}
 
-		for ( auto& _Version : vecVersions )
+		for ( auto &_Version: vecVersions )
 		{
 			std::string strEncryptedModule { }, strEncryptedVersion { };
 
 			if ( !_Cryptography.Encrypt( std::to_string( _Version._Module ), strEncryptedModule, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
-				 || !_Cryptography.Encrypt( _Version.strVersion, strEncryptedVersion, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
+				|| !_Cryptography.Encrypt( _Version.strVersion, strEncryptedVersion, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return { };
 
 			jsData[ _Cryptography.GenerateHash( strVersionIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Version._Interface ) ) ][ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
 			jsData[ _Cryptography.GenerateHash( strVersionIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Version._Interface ) ) ][ _Cryptography.GenerateHash( strVersionIdentifier ) ] = strEncryptedVersion;
 		}
 
-		for ( auto& _FunctionIndex : vecFunctionIndices )
+		for ( auto &_FunctionIndex: vecFunctionIndices )
 		{
 			std::string strEncryptedIndex { };
 

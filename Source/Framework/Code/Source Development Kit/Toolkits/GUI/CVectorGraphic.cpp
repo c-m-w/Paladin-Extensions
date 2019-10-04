@@ -13,7 +13,7 @@ void CVectorGraphic::CreateDrawables( )
 
 	pDrawable->Rectangle( recLocation, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 	if ( !bImageData
-		 || recLocation.vecSize != vecStoredImageSize )
+		|| recLocation.vecSize != vecStoredImageSize )
 		pDrawable->SetTexture( strResourceName, recLocation.vecSize, &bImageData ), vecStoredImageSize = recLocation.vecSize;
 	else
 		pDrawable->SetTexture( bImageData, recLocation.vecSize );

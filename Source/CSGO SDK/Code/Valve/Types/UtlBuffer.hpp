@@ -137,7 +137,7 @@ public:
 		if ( output == nativeConstant )
 			return 0;
 
-		assert(0);		// if we Get here, input is neither a swapped nor unswapped version of nativeConstant.
+		assert( 0 );		// if we Get here, input is neither a swapped nor unswapped version of nativeConstant.
 		return -1;
 	}
 
@@ -150,8 +150,8 @@ public:
 	//-----------------------------------------------------------------------------
 	template< typename T > inline void SwapBuffer( T *outputBuffer, T *inputBuffer = NULL, int count = 1 )
 	{
-		assert(count >= 0);
-		assert(outputBuffer);
+		assert( count >= 0 );
+		assert( outputBuffer );
 
 		// Fail gracefully in release:
 		if ( count <= 0 || !outputBuffer )
@@ -179,8 +179,8 @@ public:
 	//-----------------------------------------------------------------------------
 	template< typename T > inline void SwapBufferToTargetEndian( T *outputBuffer, T *inputBuffer = NULL, int count = 1 )
 	{
-		assert(count >= 0);
-		assert(outputBuffer);
+		assert( count >= 0 );
+		assert( outputBuffer );
 
 		// Fail gracefully in release:
 		if ( count <= 0 || !outputBuffer )
@@ -379,7 +379,7 @@ public:
 
 	__forceinline void ActivateByteSwappingIfBigEndian( void )
 	{
-		if ( IsX360() )
+		if ( IsX360( ) )
 			ActivateByteSwapping( true );
 	}
 
@@ -848,7 +848,7 @@ template< > inline void CUtlBuffer::GetTypeBin< float >( float &dest )
 	if ( CheckGet( sizeof( float ) ) )
 	{
 		unsigned int pData = ( unsigned int )PeekGet( );
-		if ( IsX360() && ( pData & 0x03 ) )
+		if ( IsX360( ) && ( pData & 0x03 ) )
 		{
 			// handle unaligned read
 			( ( unsigned char* )&dest )[ 0 ] = ( ( unsigned char* )pData )[ 0 ];

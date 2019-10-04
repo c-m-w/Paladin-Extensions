@@ -85,7 +85,7 @@ bool CResourceManager::Initialize( )
 				_Filesystem.StoreCurrentWorkingDirectory( );
 
 				const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( ),
-					strData = _File[ ENC( "Data" ) ].get< std::string >( );
+						   strData = _File[ ENC( "Data" ) ].get< std::string >( );
 				std::string strRawData { };
 
 				_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), { _Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
@@ -93,7 +93,7 @@ bool CResourceManager::Initialize( )
 				if ( strData.empty( ) )
 				{
 					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "File %s is empty. If you uploaded a config file to the server, please remove it. They are automatically created." ), strFile.c_str( ) );
-					_Filesystem.RestoreWorkingDirectory( ); 
+					_Filesystem.RestoreWorkingDirectory( );
 					return false;
 				}
 
@@ -126,7 +126,7 @@ bool CResourceManager::Initialize( )
 void CResourceManager::Uninitialize( )
 { }
 
-std::string& CResourceManager::GetResource( const std::string &strRelativePath )
+std::string &CResourceManager::GetResource( const std::string &strRelativePath )
 {
 	const auto pSearch = _LoadedResources.find( strRelativePath );
 	if ( pSearch != _LoadedResources.end( ) )

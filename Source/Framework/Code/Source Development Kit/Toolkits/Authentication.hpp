@@ -128,7 +128,7 @@ public:
 	/** \param strOut Raw data output for the library. */
 	/** \return Whether or not requesting and obtaining the library was successful. */
 	bool RequestLibrary( ELibrary _Library, std::string &strOut );
-	bool RequestLibraryData( ELibrary _Library, std::string& strOut );
+	bool RequestLibraryData( ELibrary _Library, std::string &strOut );
 	/** \brief Compares the hash of an executable to one that is obtained from the server. */
 	/** \param _ExecutableHash Enumeration of the library which the hash belongs to. */
 	/** \param strCurrent Current hash that is to be compared. */

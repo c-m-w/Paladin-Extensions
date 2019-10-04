@@ -6,12 +6,12 @@ class CCheckbox: public CContainer
 {
 private:
 
-	CVectorGraphic* pIcon = nullptr;
-	animated_value_t< Utilities::vector2_t >* _LocationAnimation = nullptr;
-	animated_value_t< Utilities::vector2_t >* _SizeAnimation = nullptr;
+	CVectorGraphic *pIcon = nullptr;
+	animated_value_t< Utilities::vector2_t > *_LocationAnimation = nullptr;
+	animated_value_t< Utilities::vector2_t > *_SizeAnimation = nullptr;
 	std::string strSubject = ENC( "Subject" );
-	CText* pSubject = nullptr;
-	bool* pEnabled = nullptr;
+	CText *pSubject = nullptr;
+	bool *pEnabled = nullptr;
 
 public:
 
@@ -25,7 +25,7 @@ public:
 	CCheckbox( ) = default;
 
 	void Initialize( ) override;
-	void SetSubject( const std::string& strNewSubject );
-	void SetVariable( bool* pNewEnabled );
+	void SetSubject( const std::string &strNewSubject );
+	void SetVariable( bool *pNewEnabled );
 	Utilities::vector2_t CalculateRequiredSpace( );
 };

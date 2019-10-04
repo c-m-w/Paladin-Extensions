@@ -22,7 +22,7 @@ void CInputBox::CreateDrawables( )
 
 CInputBox::CInputBox( ) :
 	IWidget( WIDGET_BUTTON, CURSOR_IBEAM )
-{ 
+{
 	SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_DARK );
 	SetColor( COLOR_INDEX_PRIMARY, STATE_ACTIVATED, TEXT_NORMAL );
 	SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, TEXT_NORMAL );
@@ -74,18 +74,16 @@ std::string CInputBox::GetBuffer( )
 void CInputBox::OnKeyTyped( char chCharacter )
 {
 	if ( _CurrentFilter & FILTER_LETTERS && FILTERS[ int( log( double( FILTER_LETTERS ) ) / log( 2.0 ) ) ]( chCharacter )
-		 || _CurrentFilter & FILTER_NUMERIC && FILTERS[ int( log( double( FILTER_NUMERIC ) / log( 2.0 ) ) ) ]( chCharacter )
-		 || _CurrentFilter & FILTER_SPECIAL_CHARACTERS && FILTERS[ int( log( double( FILTER_SPECIAL_CHARACTERS ) ) / log( 2.0 ) ) ]( chCharacter )
-		 || _CurrentFilter & FILTER_SPECIAL_CHARACTERS && FILTERS[ int( log( double( FILTER_SPACE ) ) / log( 2.0 ) ) ]( chCharacter ) )
+		|| _CurrentFilter & FILTER_NUMERIC && FILTERS[ int( log( double( FILTER_NUMERIC ) / log( 2.0 ) ) ) ]( chCharacter )
+		|| _CurrentFilter & FILTER_SPECIAL_CHARACTERS && FILTERS[ int( log( double( FILTER_SPECIAL_CHARACTERS ) ) / log( 2.0 ) ) ]( chCharacter )
+		|| _CurrentFilter & FILTER_SPECIAL_CHARACTERS && FILTERS[ int( log( double( FILTER_SPACE ) ) / log( 2.0 ) ) ]( chCharacter ) )
 		NewCharacter( chCharacter );
 }
 
 void CInputBox::OnCopy( )
 {
-	MessageBox( nullptr, strBuffer.c_str( ), "menfuck", 0);
+	MessageBox( nullptr, strBuffer.c_str( ), "menfuck", 0 );
 }
 
 void CInputBox::OnPaste( )
-{
-	
-}
+{ }

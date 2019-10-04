@@ -12,8 +12,8 @@ private:
 
 	std::string strText = ENC( "Button" );
 	bitmap_t _TextBitmap { };
-	animated_value_t< Utilities::vector2_t >* _SizeAnimation = new animated_value_t< Utilities::vector2_t >( &vecRelativeSize );
-	animated_value_t< Utilities::vector2_t >* _LocationAnimation = new animated_value_t< Utilities::vector2_t >( &vecRelativeLocation );
+	animated_value_t< Utilities::vector2_t > *_SizeAnimation = new animated_value_t< Utilities::vector2_t >( &vecRelativeSize );
+	animated_value_t< Utilities::vector2_t > *_LocationAnimation = new animated_value_t< Utilities::vector2_t >( &vecRelativeLocation );
 
 public:
 
@@ -26,5 +26,5 @@ public:
 
 	CButton( );
 
-	void SetText( const std::string& strNewText );
+	void SetText( const std::string &strNewText );
 };

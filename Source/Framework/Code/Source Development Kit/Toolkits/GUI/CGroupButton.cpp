@@ -49,7 +49,7 @@ CGroupButton::CGroupButton( ) :
 	AddAnimatedValue( _SizeAnimation );
 }
 
-void CGroupButton::SetText( const std::string& strNewText )
+void CGroupButton::SetText( const std::string &strNewText )
 {
 	strText = strNewText;
 	CreateTextBitmap( );

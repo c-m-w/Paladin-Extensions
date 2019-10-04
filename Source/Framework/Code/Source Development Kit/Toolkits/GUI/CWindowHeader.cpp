@@ -18,7 +18,7 @@ void CWindowHeader::CreateDrawables( )
 	pLine->SetDrawingType( D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP );
 }
 
-CWindowHeader::CWindowHeader( bool bUseIcon, const std::string& strTitle, const std::string& strSubtitle, const callback_t& _OnMinimize, const callback_t& _OnClose ) :
+CWindowHeader::CWindowHeader( bool bUseIcon, const std::string &strTitle, const std::string &strSubtitle, const callback_t &_OnMinimize, const callback_t &_OnClose ) :
 	bUseIcon( bUseIcon ), strTitle( strTitle ), strSubtitle( strSubtitle ), _OnMinimize( _OnMinimize ), _OnClose( _OnClose )
 {
 	SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BACKGROUND_DARK );
@@ -90,7 +90,7 @@ void CWindowHeader::Initialize( )
 	if ( _OnMinimize )
 	{
 		const auto pMinimize = new CVectorGraphic( );
-		
+
 		pMinimizeSizeAnimation = new animated_value_t< vector2_t >( &pMinimize->GetRelativeSize( ) );
 		pMinimizeSizeAnimation->SetStateValue( STATE_HOVERING, { 0.0625, 0.0625 } );
 		pMinimizeSizeAnimation->SetStateValue( STATE_CLICKING, { 0.0625, 0.0625 } );
@@ -113,7 +113,6 @@ void CWindowHeader::Initialize( )
 
 	if ( _OnClose )
 	{
-
 		const auto pClose = new CVectorGraphic( );
 
 		pCloseSizeAnimation = new animated_value_t< vector2_t >( &pClose->GetRelativeSize( ) );

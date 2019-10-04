@@ -28,22 +28,22 @@ bool CConnectivity::Initialize( )
 
 	if ( ( hInstance = curl_easy_init( ) ) != nullptr )
 	{
-		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY,	ENC( "Initialized cURL successfully." ) );
-		strScriptLocator						=				ENC( "https://www.paladin-extensions.com/Run.php" );
-		vecIllegalCharacters.emplace_back( '&',					ENC( "AMP" ) );
-		vecIllegalCharacters.emplace_back( '=',					ENC( "EQUAL" ) );
-		vecIllegalCharacters.emplace_back( '<',					ENC( "LESS" ) );
-		vecIllegalCharacters.emplace_back( '>',					ENC( "GREATER" ) );
-		vecIllegalCharacters.emplace_back( '\'',				ENC( "QUOTE" ) );
-		vecIllegalCharacters.emplace_back( '+',					ENC( "PLUS" ) );
-		strPostDataIdentifiers[ PURCHASE_KEY ]	=				ENC( "key" );
-		strPostDataIdentifiers[ HARDWARE ]		=				ENC( "hw" );
-		strPostDataIdentifiers[ LIBRARY ]		=				ENC( "library" );
-		strPostDataIdentifiers[ BAN_REASON ]	=				ENC( "reason" );
-		strPostDataIdentifiers[ PROCESS_LIST ]	=				ENC( "process_list" );
-		strPostDataIdentifiers[ INSTALLED_PROGRAMS ] =			ENC( "installed_programs" );
-		strPostDataIdentifiers[ OPEN_WINDOWS ]	=				ENC( "open_windows" );
-		strPostDataIdentifiers[ ACTION ]		=				ENC( "action" );
+		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY, ENC( "Initialized cURL successfully." ) );
+		strScriptLocator = ENC( "https://www.paladin-extensions.com/Run.php" );
+		vecIllegalCharacters.emplace_back( '&', ENC( "AMP" ) );
+		vecIllegalCharacters.emplace_back( '=', ENC( "EQUAL" ) );
+		vecIllegalCharacters.emplace_back( '<', ENC( "LESS" ) );
+		vecIllegalCharacters.emplace_back( '>', ENC( "GREATER" ) );
+		vecIllegalCharacters.emplace_back( '\'', ENC( "QUOTE" ) );
+		vecIllegalCharacters.emplace_back( '+', ENC( "PLUS" ) );
+		strPostDataIdentifiers[ PURCHASE_KEY ] = ENC( "key" );
+		strPostDataIdentifiers[ HARDWARE ] = ENC( "hw" );
+		strPostDataIdentifiers[ LIBRARY ] = ENC( "library" );
+		strPostDataIdentifiers[ BAN_REASON ] = ENC( "reason" );
+		strPostDataIdentifiers[ PROCESS_LIST ] = ENC( "process_list" );
+		strPostDataIdentifiers[ INSTALLED_PROGRAMS ] = ENC( "installed_programs" );
+		strPostDataIdentifiers[ OPEN_WINDOWS ] = ENC( "open_windows" );
+		strPostDataIdentifiers[ ACTION ] = ENC( "action" );
 		memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 		return true;
 	}
@@ -149,7 +149,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		{
 			ENSURE_DATA_SET( LIBRARY )
 		}
-		break;
+			break;
 
 		case BAN:
 		{

@@ -36,10 +36,10 @@ public:
 	void Scroll( int iScrollAmount );
 	void IncreaseScroll( );
 	void DecreaseScroll( );
-	void AppendScrollAmount( const Utilities::vector2_t& vecAmount );
+	void AppendScrollAmount( const Utilities::vector2_t &vecAmount );
 	void NewFrame( ) override;
 	void OnClick( CKeyState _State ) override;
-	void OnMouseMove( const Utilities::vector2_t& vecMouseLocation ) override;
+	void OnMouseMove( const Utilities::vector2_t &vecMouseLocation ) override;
 
 	friend class CContainer;
 };

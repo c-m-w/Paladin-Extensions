@@ -31,12 +31,12 @@ private:
 	/** \param dwProcessID Process identifier to retrieve threads of */
 	/** \param _Out Thread list */
 	/** \return Success of thread retrieval */
-	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, thread_list_t& _Out );
+	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, thread_list_t &_Out );
 	/** \brief Retrieves process identifier */
 	/** \param strExecutableName Executable to search snapshot for */
 	/** \param dwOut Process ID */
 	/** \return Success of process identifier retrieval */
-	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD& dwOut );
+	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD &dwOut );
 	static bool GetExecutableByProcessID( DWORD dwProcessID, std::string &strOut );
 	/** \brief Elevates a process to administrator if not already */
 	/** \param hProcess Process to elevate */
@@ -108,19 +108,19 @@ public:
 	Utilities::vector2_t GetScreenSize( );
 	/** \brief Opens link with main browser */
 	/** \param strLink Link to pass to browser */
-	void OpenLink( const std::string& strLink );
+	void OpenLink( const std::string &strLink );
 	/** \brief Gets the data currently stored in clipboard */
 	/** \param strOut Clipboard data */
 	/** \return Success of retrieval */
-	bool GetClipboardData( std::string& strOut );
+	bool GetClipboardData( std::string &strOut );
 	/** \brief Sets the data in clipboard */
 	/** \param strIn Clipboard data */
 	/** \return Success of assignment */
-	bool SetClipboardData( const std::string& strIn );
+	bool SetClipboardData( const std::string &strIn );
 
 	/** \brief Adds device to queue to process for query of device information */
 	/** \param _DeviceInfo Device to add */
-	void AddDeviceToQueue( const device_info_t& _DeviceInfo );
+	void AddDeviceToQueue( const device_info_t &_DeviceInfo );
 	/** \brief Processes queue of devices to retrieve information for */
 	/** \return Success of queue process */
 	bool ProcessQueue( );

@@ -2,7 +2,7 @@
 
 #pragma once
 
-template< typename _t /*= CryptoPP::SHA1*/ > std::string CCryptography::GenerateHash( const std::string& strBytes )
+template< typename _t /*= CryptoPP::SHA1*/ > std::string CCryptography::GenerateHash( const std::string &strBytes )
 {
 	unsigned char bOutput[ CryptoPP::SHA1::DIGESTSIZE ] { };
 	std::string strOutput { };

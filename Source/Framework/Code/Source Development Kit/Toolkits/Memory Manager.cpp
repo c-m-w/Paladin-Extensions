@@ -11,23 +11,21 @@ worker_t::worker_t( DWORD dwThreadID, DWORD dwNewAccess ): dwThreadID( dwThreadI
 {
 	if ( dwThreadID == 0 )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid thread ID passed to worker_t constructor." ) );
-	
+
 	if ( dwNewAccess == 0 )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid thread access passed to worker_t constructor." ) );
 
 	hThread = OpenThread( dwNewAccess, FALSE, dwThreadID );
 	if ( hThread == nullptr
-		 || hThread == INVALID_HANDLE_VALUE )
+		|| hThread == INVALID_HANDLE_VALUE )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to open thread with id %08X and access %08X." ), dwThreadID, dwNewAccess );
-	
 }
 
 worker_t::worker_t( HANDLE hThread, DWORD dwAccess ): hThread( hThread ), dwCurrentAccess( dwAccess )
 {
 	if ( hThread == nullptr
-		 || hThread == INVALID_HANDLE_VALUE )
+		|| hThread == INVALID_HANDLE_VALUE )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid thread handle passed to worker_t constructor." ) );
-
 
 	dwThreadID = GetThreadId( hThread );
 	if ( dwThreadID == 0 )
@@ -41,7 +39,8 @@ bool worker_t::GetContext( CONTEXT &_Out )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to get context of thread with insufficient handle privileges." ) );
 
 	return GetThreadContext( hThread, &_Out ) == FALSE ?
-		( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get context of thread." ) ), false ) : true;
+			   ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get context of thread." ) ), false ) :
+			   true;
 }
 
 bool worker_t::SetContext( CONTEXT &_New )
@@ -51,25 +50,27 @@ bool worker_t::SetContext( CONTEXT &_New )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to set context of thread with insufficient handle privileges." ) );
 
 	return SetThreadContext( hThread, &_New ) == FALSE ?
-		( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to set context of thread." ) ), false ) : true;
+			   ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to set context of thread." ) ), false ) :
+			   true;
 }
 
 bool worker_t::Valid( )
 {
 	return dwThreadID != 0
-		&& hThread != nullptr
-		&& hThread != INVALID_HANDLE_VALUE
-		&& dwCurrentAccess != 0;
+			&& hThread != nullptr
+			&& hThread != INVALID_HANDLE_VALUE
+			&& dwCurrentAccess != 0;
 }
 
 bool worker_t::Close( )
 {
 	if ( hThread == nullptr
-		 || hThread == INVALID_HANDLE_VALUE )
+		|| hThread == INVALID_HANDLE_VALUE )
 		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to close an invalid thread handle." ) ), false;
 
 	return CloseHandle( hThread ) == FALSE ?
-		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to close thread handle %08X." ), hThread ), false : hThread = nullptr, true;
+			   _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to close thread handle %08X." ), hThread ), false :
+			   hThread = nullptr, true;
 }
 
 bool worker_t::Suspend( )
@@ -92,7 +93,8 @@ bool worker_t::Resume( )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to resume a thread without sufficient handle privileges." ) );
 
 	return ResumeThread( hThread ) == UINT_MAX ?
-		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to resume thread." ) ), false : bSuspended = false, true;
+			   _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to resume thread." ) ), false :
+			   bSuspended = false, true;
 }
 
 bool worker_t::Terminate( DWORD dwExitCode /*= EXIT_SUCCESS*/ )
@@ -100,8 +102,7 @@ bool worker_t::Terminate( DWORD dwExitCode /*= EXIT_SUCCESS*/ )
 	if ( !( dwCurrentAccess & THREAD_TERMINATE ) )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to terminate a thread without sufficient handle privileges." ) );
 
-	return TerminateThread( hThread, dwExitCode ) == FALSE ? _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to terminate thread." ) ), false
-		: Close( ), true;
+	return TerminateThread( hThread, dwExitCode ) == FALSE ? _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to terminate thread." ) ), false : Close( ), true;
 }
 
 bool worker_t::GetInstructionPointer( void *&pOut )
@@ -122,9 +123,9 @@ bool worker_t::SimulateFunctionCall( void *pFunction )
 	CONTEXT _ThreadContext;
 
 	if ( !bSuspended && !Suspend( )
-		 || !GetInstructionPointer( pInstructionPointer )
-		 || !Push( pInstructionPointer )
-		 || !GetContext( _ThreadContext ) )
+		|| !GetInstructionPointer( pInstructionPointer )
+		|| !Push( pInstructionPointer )
+		|| !GetContext( _ThreadContext ) )
 		return Resume( ), false;
 
 	_ThreadContext.Eip = DWORD( pFunction );
@@ -138,7 +139,7 @@ bool worker_t::ExecutingFunction( void *pFunction, std::size_t zFunctionSize )
 		return false;
 
 	return _ThreadContext.Eip >= std::uintptr_t( pFunction )
-		&& _ThreadContext.Eip < std::uintptr_t( pFunction ) + zFunctionSize;
+			&& _ThreadContext.Eip < std::uintptr_t( pFunction ) + zFunctionSize;
 }
 
 bool worker_t::WaitForExecutionFinish( DWORD dwTime )
@@ -162,7 +163,7 @@ image_info_t::operator bool( ) const
 bool image_info_t::ValidImage( ) const
 {
 	return GetOperatingSystemHeader( )->e_magic == IMAGE_DOS_SIGNATURE
-		&& GetNewTechnologyHeaders( )->Signature == IMAGE_NT_SIGNATURE;
+			&& GetNewTechnologyHeaders( )->Signature == IMAGE_NT_SIGNATURE;
 }
 
 std::size_t image_info_t::GetImageSize( ) const
@@ -225,11 +226,10 @@ IMAGE_EXPORT_DIRECTORY *image_info_t::GetExports( ) const
 
 bool image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut ) const
 {
-	const auto szImport = reinterpret_cast< const char * >( ( pImportData->u1.Ordinal & IMAGE_ORDINAL_FLAG ) > 0 ? reinterpret_cast< void * >( pImportData->u1.Ordinal & 0xFFFF )
-															: reinterpret_cast< IMAGE_IMPORT_BY_NAME * >( std::uintptr_t( pData ) + pImportData->u1.AddressOfData )->Name );
+	const auto szImport = reinterpret_cast< const char * >( ( pImportData->u1.Ordinal & IMAGE_ORDINAL_FLAG ) > 0 ? reinterpret_cast< void * >( pImportData->u1.Ordinal & 0xFFFF ) : reinterpret_cast< IMAGE_IMPORT_BY_NAME * >( std::uintptr_t( pData ) + pImportData->u1.AddressOfData )->Name );
 	if ( std::uintptr_t( szImport ) >= std::uintptr_t( pData )
-		 && std::uintptr_t( szImport ) <= std::uintptr_t( pData ) + GetImageSize( ) )
-		 return strOut = szImport, true;
+		&& std::uintptr_t( szImport ) <= std::uintptr_t( pData ) + GetImageSize( ) )
+		return strOut = szImport, true;
 
 	return false;
 }
@@ -256,7 +256,7 @@ IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string
 		return nullptr;
 
 	for ( auto p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->FirstThunk ),
-		  _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->OriginalFirstThunk );
+			   _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->OriginalFirstThunk );
 		  p != nullptr && p->u1.AddressOfData != NULL && _p != nullptr && _p->u1.AddressOfData != NULL;
 		  p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( p ) + sizeof( IMAGE_THUNK_DATA ) ),
 		  _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( _p ) + sizeof( IMAGE_THUNK_DATA ) ) )
@@ -278,19 +278,19 @@ std::string image_info_t::GenerateUniqueHash( ) const
 	const auto pNewTechnologyHeaders = GetNewTechnologyHeaders( );
 	nlohmann::json _Information { };
 
-	_Information[ ENC( "Header Size" ) ]			= GetHeaderSize( );
-	_Information[ ENC( "Section Count" ) ]			= zSections;
-	_Information[ ENC( "Symbol Count" ) ]			= pNewTechnologyHeaders->FileHeader.NumberOfSymbols;
-	_Information[ ENC( "PE Offset" ) ]				= GetOperatingSystemHeader( )->e_lfanew;
-	_Information[ ENC( "Magic" ) ]					= pNewTechnologyHeaders->OptionalHeader.Magic;
-	_Information[ ENC( "Major Linker Version" ) ]	= pNewTechnologyHeaders->OptionalHeader.MajorLinkerVersion;
-	_Information[ ENC( "Minor Linker Version" ) ]	= pNewTechnologyHeaders->OptionalHeader.MinorLinkerVersion;
-	_Information[ ENC( "Entry Point RVA" ) ]		= pNewTechnologyHeaders->OptionalHeader.AddressOfEntryPoint;
-	_Information[ ENC( "Code RVA" ) ]				= pNewTechnologyHeaders->OptionalHeader.BaseOfCode;
-	_Information[ ENC( "Data RVA" ) ]				= pNewTechnologyHeaders->OptionalHeader.BaseOfData;
-	_Information[ ENC( "Major OS Version" ) ]		= pNewTechnologyHeaders->OptionalHeader.MajorOperatingSystemVersion;
-	_Information[ ENC( "Minor OS Version" ) ]		= pNewTechnologyHeaders->OptionalHeader.MinorOperatingSystemVersion;
-	_Information[ ENC( "Subsystem" ) ]				= pNewTechnologyHeaders->OptionalHeader.Subsystem;
+	_Information[ ENC( "Header Size" ) ] = GetHeaderSize( );
+	_Information[ ENC( "Section Count" ) ] = zSections;
+	_Information[ ENC( "Symbol Count" ) ] = pNewTechnologyHeaders->FileHeader.NumberOfSymbols;
+	_Information[ ENC( "PE Offset" ) ] = GetOperatingSystemHeader( )->e_lfanew;
+	_Information[ ENC( "Magic" ) ] = pNewTechnologyHeaders->OptionalHeader.Magic;
+	_Information[ ENC( "Major Linker Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MajorLinkerVersion;
+	_Information[ ENC( "Minor Linker Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MinorLinkerVersion;
+	_Information[ ENC( "Entry Point RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.AddressOfEntryPoint;
+	_Information[ ENC( "Code RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.BaseOfCode;
+	_Information[ ENC( "Data RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.BaseOfData;
+	_Information[ ENC( "Major OS Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MajorOperatingSystemVersion;
+	_Information[ ENC( "Minor OS Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MinorOperatingSystemVersion;
+	_Information[ ENC( "Subsystem" ) ] = pNewTechnologyHeaders->OptionalHeader.Subsystem;
 
 	for ( auto z = 0u; z < zSections; z++ )
 	{
@@ -329,7 +329,7 @@ std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::strin
 
 	do
 	{
-		auto& _Byte = vecReturn.emplace_back( );
+		auto &_Byte = vecReturn.emplace_back( );
 
 		if ( *pEnd == ' ' )
 			pEnd++;
@@ -338,7 +338,8 @@ std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::strin
 			_Byte = UNKNOWN_BYTE, pEnd++;
 		else
 			_Byte = strtoul( pEnd, &pEnd, 16 );
-	} while ( pEnd != pLast );
+	}
+	while ( pEnd != pLast );
 
 	return vecReturn;
 }
@@ -351,7 +352,7 @@ CMemoryManager::pattern_t::pattern_t( const nlohmann::json &_Data, void **pOutpu
 		vecPattern = ParsePattern( _Data[ ENC( "Pattern" ) ].get< std::string >( ) );
 		ptrOffset = _Data[ ENC( "Offset" ) ].get< std::ptrdiff_t >( );
 	}
-	catch( nlohmann::json::type_error &e )
+	catch ( nlohmann::json::type_error &e )
 	{
 		LOG( ERROR, MEMORY_MANAGER, "Unable to parse pattern data. Message: %s.", e.what( ) );
 	}
@@ -389,22 +390,22 @@ void CMemoryManager::Uninitialize( )
 bool CMemoryManager::EnsureDataValidity( )
 {
 	if ( pInsertInvertedFunctionTable != nullptr
-		 && pInvertedFunctionTable != nullptr )
+		&& pInvertedFunctionTable != nullptr )
 		return true;
 
 	if ( strNewestInsertInvertedFunctionTable.empty( )
-		 || ptrNewestInsertInvertedFunctionTable == 0
-		 || strNewestInvertedFunctionTable.empty( )
-		 || ptrNewestInvertedFunctionTable == 0
-		 || strBackupInsertInvertedFunctionTable.empty( )
-		 || ptrBackupInsertInvertedFunctionTable == 0
-		 || ptrBackupInvertedFunctionTable == 0
-		 || strResortInsertInvertedFunctionTable.empty( )
-		 || ptrResortInsertInvertedFunctionTable == 0
-		 || ptrResortWindows10InvertedFunctionTable == 0
-		 || ptrResortPreviousWindowsInvertedFunctionTable == 0 )
+		|| ptrNewestInsertInvertedFunctionTable == 0
+		|| strNewestInvertedFunctionTable.empty( )
+		|| ptrNewestInvertedFunctionTable == 0
+		|| strBackupInsertInvertedFunctionTable.empty( )
+		|| ptrBackupInsertInvertedFunctionTable == 0
+		|| ptrBackupInvertedFunctionTable == 0
+		|| strResortInsertInvertedFunctionTable.empty( )
+		|| ptrResortInsertInvertedFunctionTable == 0
+		|| ptrResortWindows10InvertedFunctionTable == 0
+		|| ptrResortPreviousWindowsInvertedFunctionTable == 0 )
 		if ( !AUTH.RequestData( &strNewestInsertInvertedFunctionTable, &ptrNewestInsertInvertedFunctionTable, &strNewestInvertedFunctionTable, &ptrNewestInvertedFunctionTable,
-								&strBackupInsertInvertedFunctionTable, &ptrBackupInsertInvertedFunctionTable, &ptrBackupInvertedFunctionTable , &strResortInsertInvertedFunctionTable, 
+								&strBackupInsertInvertedFunctionTable, &ptrBackupInsertInvertedFunctionTable, &ptrBackupInvertedFunctionTable, &strResortInsertInvertedFunctionTable,
 								&ptrResortInsertInvertedFunctionTable, &ptrResortWindows10InvertedFunctionTable, &ptrResortPreviousWindowsInvertedFunctionTable ) )
 			return false;
 
@@ -416,30 +417,32 @@ bool CMemoryManager::EnsureDataValidity( )
 	auto bInitializedData = false;
 
 	if ( _Version == ESystemVersion::W10_PREVIEW
-		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
-		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
-		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
+		|| _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
+		|| _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
+		|| _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
 		bInitializedData = AddPattern( hNewTechnologyModule, pattern_t( strNewestInsertInvertedFunctionTable, &pInsertInvertedFunctionTable, ptrNewestInsertInvertedFunctionTable ) )
-		&& AddPattern( hNewTechnologyModule, pattern_t( strNewestInvertedFunctionTable, &pInvertedFunctionTable, ptrNewestInvertedFunctionTable, [ ]( )
-	{
-		pInvertedFunctionTable = *reinterpret_cast< void ** >( pInvertedFunctionTable );
-	} ) )
-		&& FindPatterns( );
+				&& AddPattern( hNewTechnologyModule, pattern_t( strNewestInvertedFunctionTable, &pInvertedFunctionTable, ptrNewestInvertedFunctionTable, [ ]( )
+				{
+					pInvertedFunctionTable = *reinterpret_cast< void ** >( pInvertedFunctionTable );
+				} ) )
+				&& FindPatterns( );
 	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
 		bInitializedData = AddPattern( hNewTechnologyModule, pattern_t( strBackupInsertInvertedFunctionTable, &pInsertInvertedFunctionTable, ptrBackupInsertInvertedFunctionTable, [ ]( )
-	{
-		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + ptrBackupInvertedFunctionTable );
-	} ) )
-		&& FindPatterns( );
+				{
+					pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + ptrBackupInvertedFunctionTable );
+				} ) )
+				&& FindPatterns( );
 	else
 		bInitializedData = AddPattern( hNewTechnologyModule, pattern_t( strResortInsertInvertedFunctionTable, &pInsertInvertedFunctionTable, ptrResortInsertInvertedFunctionTable, [ _Version ]( )
-	{
-		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
-			( _Version == ESystemVersion::W10_INITIAL_1507
-			  || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
-			  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? ptrResortWindows10InvertedFunctionTable : ptrResortPreviousWindowsInvertedFunctionTable ) );
-	} ) )
-		&& FindPatterns( );
+				{
+					pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
+						( _Version == ESystemVersion::W10_INITIAL_1507
+						  || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
+						  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ?
+							  ptrResortWindows10InvertedFunctionTable :
+							  ptrResortPreviousWindowsInvertedFunctionTable ) );
+				} ) )
+				&& FindPatterns( );
 
 	if ( !bInitializedData )
 		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find patterns required." ) );
@@ -463,9 +466,9 @@ bool CMemoryManager::EnsureDataValidity( )
 bool CMemoryManager::EnsureShellcodeValidity( )
 {
 	if ( bThreadEnvironment == nullptr
-		 || bLoadLibraryExWrapper == nullptr
-		 || bRelocateImageBase == nullptr
-		 || bLoadDependencies == nullptr )
+		|| bLoadLibraryExWrapper == nullptr
+		|| bRelocateImageBase == nullptr
+		|| bLoadDependencies == nullptr )
 		if ( !AUTH.RequestShellcode( reinterpret_cast< unsigned char ** >( &bThreadEnvironment ), reinterpret_cast< unsigned char ** >( &bLoadLibraryExWrapper ),
 									 reinterpret_cast< unsigned char ** >( &bRelocateImageBase ), reinterpret_cast< unsigned char ** >( &bLoadDependencies ),
 									 &zThreadEnvironment, &zLoadLibraryExWrapper, &zRelocateImageBase, &zLoadDependencies ) )
@@ -478,10 +481,10 @@ bool CMemoryManager::EnsureShellcodePresence( )
 {
 	if ( pShellcode == nullptr )
 		if ( !AllocateMemory( pShellcode, zThreadEnvironment + zLoadLibraryExWrapper + zRelocateImageBase + zLoadDependencies, PAGE_EXECUTE_READWRITE )
-			 || !Write( pThreadEnvironment, bThreadEnvironment, zThreadEnvironment )
-			 || !Write( pLoadLibraryExWrapper, bLoadLibraryExWrapper, zLoadLibraryExWrapper )
-			 || !Write( pRelocateImageBase, bRelocateImageBase, zRelocateImageBase )
-			 || !Write( pLoadDependencies, bLoadDependencies, zLoadDependencies ) )
+			|| !Write( pThreadEnvironment, bThreadEnvironment, zThreadEnvironment )
+			|| !Write( pLoadLibraryExWrapper, bLoadLibraryExWrapper, zLoadLibraryExWrapper )
+			|| !Write( pRelocateImageBase, bRelocateImageBase, zRelocateImageBase )
+			|| !Write( pLoadDependencies, bLoadDependencies, zLoadDependencies ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to allocate and write shellcode to memory." ) ), false;
 
 	return true;
@@ -492,7 +495,7 @@ void *CMemoryManager::GetShellcodeLocation( EShellcode _Shellcode )
 	if ( pShellcode == nullptr )
 		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to get shellcode location of %i without initializing it." ), _Shellcode ), nullptr;
 
-	switch( _Shellcode )
+	switch ( _Shellcode )
 	{
 		case THREAD_ENVIRONMENT:
 			return pShellcode;
@@ -510,7 +513,6 @@ void *CMemoryManager::GetShellcodeLocation( EShellcode _Shellcode )
 			return nullptr;
 	}
 }
-
 
 bool CMemoryManager::SetProcess( DWORD dwNewProcessID, DWORD dwAccess )
 {
@@ -540,7 +542,7 @@ bool CMemoryManager::SetProcess( DWORD dwNewProcessID, DWORD dwAccess )
 
 	hProcess = OpenProcess( dwAccess, FALSE, dwProcessID );
 	if ( hProcess == nullptr
-		 || hProcess == INVALID_HANDLE_VALUE )
+		|| hProcess == INVALID_HANDLE_VALUE )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to open process handle of executable." ) ), false;
 
 	dwCurrentAccess = dwAccess;
@@ -559,7 +561,7 @@ bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAcces
 bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 {
 	if ( !EnsureShellcodeValidity( )
-		 || !EnsureShellcodePresence( ) )
+		|| !EnsureShellcodePresence( ) )
 		return false;
 
 	if ( !( dwCurrentAccess & PROCESS_CREATE_THREAD ) )
@@ -579,7 +581,7 @@ bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit )
 {
 	if ( !EnsureShellcodeValidity( )
-		 || !EnsureShellcodePresence( ) )
+		|| !EnsureShellcodePresence( ) )
 		return false;
 
 	CSystemInformation::thread_list_t _Threads { };
@@ -587,7 +589,7 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 		return false;
 
 	auto dwThreadID = _Threads.front( ).first, dwPriority = _Threads.front( ).second;
-	for ( auto &_Thread : _Threads )
+	for ( auto &_Thread: _Threads )
 		if ( _Thread.second > dwPriority )
 			dwThreadID = _Thread.first, dwPriority = _Thread.second;
 
@@ -595,10 +597,10 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 	return _Worker.Valid( ) && _Worker.Suspend( ) && _Worker.Push( pExit ) && _Worker.SimulateFunctionCall( pThreadEnvironment ) && _Worker.Resume( );
 }
 
-bool CMemoryManager::Read( void* pAddress, void* pOut, std::size_t zSize )
+bool CMemoryManager::Read( void *pAddress, void *pOut, std::size_t zSize )
 {
 	if ( hProcess == nullptr
-		 || hProcess == INVALID_HANDLE_VALUE )
+		|| hProcess == INVALID_HANDLE_VALUE )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Handle for process is invalid, unable to read memory." ) ), false;
 
 	if ( pAddress == nullptr )
@@ -617,10 +619,10 @@ bool CMemoryManager::Read( void* pAddress, void* pOut, std::size_t zSize )
 	return zBytesRead != zSize ? _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Number of bytes read was not equal to the size passed." ) ), false : true;
 }
 
-bool CMemoryManager::Write( void* pAddress, void* pValue, std::size_t zSize )
+bool CMemoryManager::Write( void *pAddress, void *pValue, std::size_t zSize )
 {
 	if ( hProcess == nullptr
-		 || hProcess == INVALID_HANDLE_VALUE )
+		|| hProcess == INVALID_HANDLE_VALUE )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Handle for process is invalid, unable to write memory." ) ), false;
 
 	if ( pAddress == nullptr )
@@ -670,7 +672,7 @@ bool CMemoryManager::FreeMemory( void *pAddress )
 bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/ )
 {
 	if ( !EnsureShellcodeValidity( )
-		 || !EnsureShellcodePresence( ) )
+		|| !EnsureShellcodePresence( ) )
 		return false;
 
 	worker_t _Worker;
@@ -683,16 +685,16 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	if ( !AllocateMemory( pLibraryName, strPath.length( ) * sizeof( char ), PAGE_READWRITE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for library name." ) ), FreeMemory( pExit ), false;
 
-	if( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
+	if ( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), FreeMemory( pExit ), FreeMemory( pLibraryName ), false;
 
 	if ( !Write( pLibraryName, const_cast< char * >( &strPath[ 0 ] ), strPath.length( ) ) )
 		return FreeMemory( pExit ), false;
 
-	if ( !_Worker.Suspend( ) 
-		 || !_Worker.Push( LoadLibraryA )
-		 || !_Worker.Push( pLibraryName )
-		 || !_Worker.SimulateFunctionCall( pLoadLibraryExWrapper ) )
+	if ( !_Worker.Suspend( )
+		|| !_Worker.Push( LoadLibraryA )
+		|| !_Worker.Push( pLibraryName )
+		|| !_Worker.SimulateFunctionCall( pLoadLibraryExWrapper ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), FreeMemory( pExit ), FreeMemory( pLibraryName ), false;
 
 	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
@@ -728,9 +730,9 @@ bool CMemoryManager::IsExecutableCode( void *pAddress )
 
 	MEMORY_BASIC_INFORMATION _Memory;
 	return VirtualQuery( pAddress, &_Memory, sizeof( MEMORY_BASIC_INFORMATION ) ) > 0
-		&& _Memory.RegionSize > 0
-		&& ( _Memory.Protect & PAGE_EXECUTE_READ ) > 0
-		&& ( _Memory.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ) == 0;
+			&& _Memory.RegionSize > 0
+			&& ( _Memory.Protect & PAGE_EXECUTE_READ ) > 0
+			&& ( _Memory.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ) == 0;
 }
 
 void *CMemoryManager::FindFreeMemory( HMODULE hModule, std::size_t zMinimumSize, DWORD dwAccess, void *pStart /*= nullptr*/ )
@@ -755,13 +757,14 @@ void *CMemoryManager::FindFreeMemory( HMODULE hModule, std::size_t zMinimumSize,
 			do
 			{
 				if ( VirtualQuery( p, &_Region, sizeof( MEMORY_BASIC_INFORMATION ) ) == 0
-					 || _Region.RegionSize < zMinimumSize
-					 || ( _Region.Protect & dwAccess ) == 0
-					 || ( _Region.Protect & ~dwAccess ) != 0 )
+					|| _Region.RegionSize < zMinimumSize
+					|| ( _Region.Protect & dwAccess ) == 0
+					|| ( _Region.Protect & ~dwAccess ) != 0 )
 					p += _Region.RegionSize, zCurrentSize = 0;
 				else
 					zRegionSize = _Region.RegionSize;
-			} while ( zRegionSize == 0 );
+			}
+			while ( zRegionSize == 0 );
 		}
 
 		if ( *p == NULL )
@@ -788,7 +791,7 @@ HMODULE CMemoryManager::GetOrigin( void *pAddress )
 		auto _Info = image_info_t( hModule );
 
 		if ( std::uintptr_t( pAddress ) >= std::uintptr_t( hModule )
-			 && std::uintptr_t( pAddress ) <= std::uintptr_t( hModule ) + _Info.GetImageSize( ) )
+			&& std::uintptr_t( pAddress ) <= std::uintptr_t( hModule ) + _Info.GetImageSize( ) )
 			return hModule;
 	}
 
@@ -821,8 +824,8 @@ bool CMemoryManager::AddPattern( const std::string &strModule, const pattern_t &
 bool CMemoryManager::AddPattern( HMODULE hModule, const pattern_t &_Pattern )
 {
 	if ( hModule == nullptr
-		 || !image_info_t( hModule ).ValidImage( )
-		 || !_Pattern.Valid( ) )
+		|| !image_info_t( hModule ).ValidImage( )
+		|| !_Pattern.Valid( ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid module passed to AddPattern." ) ), false;
 
 	const auto pInstance = _PatternsToFind.find( hModule );
@@ -844,11 +847,11 @@ bool CMemoryManager::FindPatterns( )
 		{
 			const auto _Header = _Module.GetSectionHeader( i );
 			if ( ( _Header->Characteristics & ( IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ ) ) > 0
-				 && ( _Header->Characteristics & IMAGE_SCN_MEM_WRITE ) == 0 )
+				&& ( _Header->Characteristics & IMAGE_SCN_MEM_WRITE ) == 0 )
 				vecSectionsToScan.emplace_back( std::pair< unsigned char*, std::size_t >( reinterpret_cast< unsigned char* >( std::uintptr_t( _Patterns.first ) + _Header->VirtualAddress ),
 																						  _Header->SizeOfRawData ) );
 		}
-		
+
 		if ( vecSectionsToScan.empty( ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find sections to pattern scan." ) ), false;
 
@@ -862,14 +865,14 @@ bool CMemoryManager::FindPatterns( )
 					do
 					{
 						if ( _Current.vecPattern[ _Current.uProgress ] == pattern_t::UNKNOWN_BYTE
-							 || _Current.vecPattern[ _Current.uProgress ] == *( p + _Current.iRelative ) )
+							|| _Current.vecPattern[ _Current.uProgress ] == *( p + _Current.iRelative ) )
 						{
 							if ( ++_Current.uProgress > 1
-								 && _Current.ptrFirstByte == 0
-								 && *( p + _Current.iRelative ) == _Current.vecPattern.front( ) )
+								&& _Current.ptrFirstByte == 0
+								&& *( p + _Current.iRelative ) == _Current.vecPattern.front( ) )
 								_Current.ptrFirstByte = decltype( _Current.ptrFirstByte )( p );
-							else if ( _Current.ptrFirstByte != 0 
-									  && _Current.vecPattern[ std::uintptr_t( p ) - _Current.ptrFirstByte ] != *( p + _Current.iRelative ) )
+							else if ( _Current.ptrFirstByte != 0
+								&& _Current.vecPattern[ std::uintptr_t( p ) - _Current.ptrFirstByte ] != *( p + _Current.iRelative ) )
 								_Current.ptrFirstByte = 0;
 						}
 						else
@@ -892,8 +895,8 @@ bool CMemoryManager::FindPatterns( )
 
 						if ( _Current.iRelative < 0 )
 							_Current.iRelative++;
-
-					} while ( p == f - 1 && _Current.iRelative < 0 );
+					}
+					while ( p == f - 1 && _Current.iRelative < 0 );
 				}
 			}
 
@@ -904,7 +907,7 @@ bool CMemoryManager::FindPatterns( )
 	return true;
 }
 
-bool CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern, std::ptrdiff_t ptrOffset, void*& pOutput )
+bool CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern, std::ptrdiff_t ptrOffset, void *&pOutput )
 {
 	auto _Pattern = pattern_t::ParsePattern( strPattern );
 	auto _Image = image_info_t( hLocation );
@@ -918,7 +921,7 @@ bool CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatte
 			return pOutput = reinterpret_cast< void * >( u - uSequence + ptrOffset ), true;
 
 		if ( _Pattern[ uSequence ] == pattern_t::UNKNOWN_BYTE
-			 || _Pattern[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
+			|| _Pattern[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
 			uSequence++;
 		else
 			u -= uSequence, uSequence = 0;
@@ -927,10 +930,10 @@ bool CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatte
 	return false;
 }
 
-bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
+bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/ )
 {
 	if ( !EnsureShellcodeValidity( )
-		 || !EnsureShellcodePresence( ) )
+		|| !EnsureShellcodePresence( ) )
 		return false;
 
 	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
@@ -966,9 +969,9 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
 	{
 		auto pSectionHeader = _Image.GetSectionHeader( i );
-		if ( pSectionHeader->SizeOfRawData != 0 
-			 && !Write( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ), 
-					 reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData ) )
+		if ( pSectionHeader->SizeOfRawData != 0
+			&& !Write( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ),
+					   reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write section %i into memory." ), i ), fnCleanup( ), false;
 	}
 
@@ -976,18 +979,18 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), fnCleanup( ), false;
 
 	if ( !_Worker.Suspend( )
-		 || !_Worker.Push( pImage )
-		 || !_Worker.SimulateFunctionCall( pRelocateImageBase ) )
+		|| !_Worker.Push( pImage )
+		|| !_Worker.SimulateFunctionCall( pRelocateImageBase ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call RelocateImageBase." ) ), fnCleanup( ), false;
 
 	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 50ui64 );
 
 	if ( !_Worker.Suspend( )
-		 || !_Worker.Push( LoadLibraryA )
-		 || !_Worker.Push( GetProcAddress )
-		 || !_Worker.Push( pImage )
-		 || !_Worker.SimulateFunctionCall( pLoadDependencies ) )
+		|| !_Worker.Push( LoadLibraryA )
+		|| !_Worker.Push( GetProcAddress )
+		|| !_Worker.Push( pImage )
+		|| !_Worker.SimulateFunctionCall( pLoadDependencies ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call LoadDependencies." ) ), fnCleanup( ), false;
 
 	while ( _Worker.ExecutingFunction( pLoadDependencies, zLoadDependencies ) )
@@ -995,12 +998,11 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 	CONTEXT _ThreadContext;
 	if ( !_Worker.GetContext( _ThreadContext )
-		 || _ThreadContext.Eax != TRUE )
+		|| _ThreadContext.Eax != TRUE )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to load dependencies." ) ), fnCleanup( ), false;
 
 	if ( bEnableExceptions )
 	{
-
 		CONTEXT _Context;
 		auto _Table = _RTL_INVERTED_FUNCTION_TABLE< DWORD >( );
 		auto bFoundHandler = false;
@@ -1011,20 +1013,20 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 		for ( auto i = 0; i < _Table.Count && bCustomHandler; i++ )
 			if ( _Table.Entries[ i ].ImageBase == std::uintptr_t( pImage )
-				 && _Table.Entries[ i ].SizeOfTable > 0 )
+				&& _Table.Entries[ i ].SizeOfTable > 0 )
 				bFoundHandler = true;
 
 		if ( !bFoundHandler )
 		{
 			if ( !_Worker.Suspend( )
-				 || !_Worker.GetContext( _Context ) )
+				|| !_Worker.GetContext( _Context ) )
 				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to suspend thread and get context." ) ), fnCleanup( ), false;
 
 			_Context.Ecx = std::uintptr_t( pImage );
 			_Context.Edx = _Image.GetImageSize( );
 
 			if ( !_Worker.SetContext( _Context )
-				 || !_Worker.SimulateFunctionCall( pInsertInvertedFunctionTable ) )
+				|| !_Worker.SimulateFunctionCall( pInsertInvertedFunctionTable ) )
 				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to call RtlInsertInvertedFunctionTable." ) ), fnCleanup( ), false;
 
 			while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
@@ -1035,7 +1037,7 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 			for ( auto i = 0; i < _Table.Count && bCustomHandler; i++ )
 				if ( _Table.Entries[ i ].ImageBase == std::uintptr_t( pImage )
-					 && _Table.Entries[ i ].SizeOfTable > 0 )
+					&& _Table.Entries[ i ].SizeOfTable > 0 )
 					bCustomHandler = false;
 
 			if ( bCustomHandler )
@@ -1044,10 +1046,10 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	}
 
 	if ( !_Worker.Suspend( )
-		 || !_Worker.Push( nullptr )
-		 || !_Worker.Push( DLL_PROCESS_ATTACH )
-		 || !_Worker.Push( pImage )
-		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
+		|| !_Worker.Push( nullptr )
+		|| !_Worker.Push( DLL_PROCESS_ATTACH )
+		|| !_Worker.Push( pImage )
+		|| !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call entry point with message DLL_PROCESS_ATTACH." ) ), fnCleanup( ), false;
 
 	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
@@ -1070,9 +1072,8 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			if ( !_Worker.Close( ) )
 				_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to close worker." ) );
 	}
-	else
-		if ( !_Worker.WaitForExecutionFinish( INFINITE ) )
-			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wait for worker to close." ) );
+	else if ( !_Worker.WaitForExecutionFinish( INFINITE ) )
+		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wait for worker to close." ) );
 
 	if ( bReturn )
 	{
@@ -1088,9 +1089,8 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 						_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wipe section %i." ), i );
 			}
 	}
-	else
-		if ( !WipeMemory( pImage, _Image.GetImageSize( ) ) )
-			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to wipe image from memory after entry point returned false." ) );
+	else if ( !WipeMemory( pImage, _Image.GetImageSize( ) ) )
+		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to wipe image from memory after entry point returned false." ) );
 
 	fnCleanup( );
 	return bReturn;

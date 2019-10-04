@@ -25,7 +25,7 @@ padding_t::padding_t( double dbTop, double d ) :
 	vecData( dbTop, d )
 { }
 
-padding_t::padding_t( vector2_t& vecPadding ) :
+padding_t::padding_t( vector2_t &vecPadding ) :
 	vecData( vecPadding )
 { }
 
@@ -51,10 +51,10 @@ void padding_t::PutVerticalPadding( double dbVertical )
 
 void IInteractable::UpdateAnimatedValues( )
 {
-	for ( auto& pAnimatedVector : vecAnimatedVectors )
+	for ( auto &pAnimatedVector: vecAnimatedVectors )
 		bCreateDrawables |= pAnimatedVector->Update( );
 
-	for ( auto& pAnimatedDouble : vecAnimatedDoubles )
+	for ( auto &pAnimatedDouble: vecAnimatedDoubles )
 		bCreateDrawables |= pAnimatedDouble->Update( );
 }
 
@@ -74,7 +74,7 @@ double IInteractable::CalculateAlphaRatio( )
 
 void IInteractable::UpdateContainerContents( CContainer *pContainer )
 {
-	for ( auto& pInteractable : pContainer->GetContainedInteractables(  ) )
+	for ( auto &pInteractable: pContainer->GetContainedInteractables( ) )
 	{
 		pInteractable->PreCreateDrawables( );
 		if ( pInteractable->IsInteractableType( INTERACTABLE_CONTAINER ) )
@@ -100,7 +100,7 @@ void IInteractable::SetParent( CContainer *pNewParent )
 	pParent = pNewParent;
 }
 
-CContainer* IInteractable::GetParent( )
+CContainer *IInteractable::GetParent( )
 {
 	return reinterpret_cast< CContainer* >( pParent );
 }
@@ -154,13 +154,13 @@ rectangle_t IInteractable::GetLocation( )
 {
 	auto vecRoundedRelativeSize = InchesToPixels( vecRelativeSize ) / 2.0;
 	rectangle_t recReturn { };
-	
+
 	vecRoundedRelativeSize.Round( );
 	vecRoundedRelativeSize = PixelsToInches( vecRoundedRelativeSize );
 	recReturn = rectangle_t { recLocation.x + vecRelativeLocation.x - vecRoundedRelativeSize.x, recLocation.y + vecRelativeLocation.y - vecRoundedRelativeSize.y, recLocation.w + vecRoundedRelativeSize.x * 2.0, recLocation.h + vecRoundedRelativeSize.y * 2.0 };
 
 	if ( pParent != nullptr
-		 && !GetScrollImmune( ) )
+		&& !GetScrollImmune( ) )
 	{
 		const auto vecScrollLocationOffset = reinterpret_cast< CContainer* >( pParent )->GetScrollOffset( );
 
@@ -184,12 +184,12 @@ vector2_t IInteractable::GetSize( )
 	return recLocation.vecSize + vecRelativeSize;
 }
 
-vector2_t& IInteractable::GetRelativeSize( )
+vector2_t &IInteractable::GetRelativeSize( )
 {
 	return vecRelativeSize;
 }
 
-vector2_t& IInteractable::GetRelativeLocation( )
+vector2_t &IInteractable::GetRelativeLocation( )
 {
 	return vecRelativeLocation;
 }
@@ -207,13 +207,13 @@ void IInteractable::PreCreateDrawables( )
 	if ( !bInitialized )
 		Initialize( ), bInitialized = true;
 
-	for ( auto& pDrawable : vecDrawables )
+	for ( auto &pDrawable: vecDrawables )
 		if ( !_Drawing.UnregisterDrawable( pDrawable ) )
 			throw std::runtime_error( ENC( "Unable to unregister drawables." ) );
 
 	vecDrawables.clear( );
 	CreateDrawables( );
-	for ( auto& pDrawable : vecDrawables )
+	for ( auto &pDrawable: vecDrawables )
 		if ( !_Drawing.RegisterDrawable( pDrawable ) )
 			throw std::runtime_error( ENC( "Unable to register drawables." ) );
 }
@@ -250,7 +250,7 @@ void IInteractable::PreDraw( )
 	_Drawing.PopDrawingSpace( );
 }
 
-void IInteractable::SetLocation( const vector2_t& vecNew )
+void IInteractable::SetLocation( const vector2_t &vecNew )
 {
 	recLocation.vecLocation = vecNew;
 	if ( bInitialized )
@@ -294,7 +294,7 @@ void IInteractable::SetColor( EColorIndex _ColorIndex, EState _ColorState, const
 
 void IInteractable::SetColor( EColorIndex _ColorIndex, std::initializer_list< EState > _ColorStates, const color_t &clrState )
 {
-	for ( auto _ColorState : _ColorStates )
+	for ( auto _ColorState: _ColorStates )
 		SetColor( _ColorIndex, _ColorState, clrState );
 }
 
@@ -319,10 +319,10 @@ void IInteractable::DoColorAnimations( )
 
 void IInteractable::DoStateAnimations( )
 {
-	for ( auto& pAnimatedVector : vecAnimatedVectors )
+	for ( auto &pAnimatedVector: vecAnimatedVectors )
 		pAnimatedVector->OnStateChange( _State );
 
-	for ( auto& pAnimatedDouble : vecAnimatedDoubles )
+	for ( auto &pAnimatedDouble: vecAnimatedDoubles )
 		pAnimatedDouble->OnStateChange( _State );
 }
 
@@ -396,7 +396,7 @@ std::pair< std::vector< animated_value_t< vector2_t >* >, std::vector< animated_
 	return { vecAnimatedVectors, vecAnimatedDoubles };
 }
 
-callbacks_t & IInteractable::GetCallbacks( )
+callbacks_t &IInteractable::GetCallbacks( )
 {
 	return _Callbacks;
 }
@@ -415,7 +415,7 @@ void IInteractable::CreateDrawables( )
 
 void IInteractable::Draw( )
 {
-	for ( auto& pDrawable : vecDrawables )
+	for ( auto &pDrawable: vecDrawables )
 		pDrawable->Draw( );
 }
 

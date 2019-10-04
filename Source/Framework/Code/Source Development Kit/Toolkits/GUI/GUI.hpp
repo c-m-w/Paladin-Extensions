@@ -24,19 +24,19 @@ private:
 	bool bSetup = false;
 	bool bActive = true;
 	std::deque< CWindow* > vecWindows { };
-	IInteractable* pActiveInteractable = nullptr;
-	IInteractable* pHoveredInteractable = nullptr;
-	CDrawable* pCursors[ CURSOR_MAX ] { };
+	IInteractable *pActiveInteractable = nullptr;
+	IInteractable *pHoveredInteractable = nullptr;
+	CDrawable *pCursors[ CURSOR_MAX ] { };
 	ECursorType _CurrentCursor = CURSOR_NONE;
 	ECursorType _NextCursor = CURSOR_NONE;
 	Utilities::timer_t _CursorFade = Utilities::timer_t( DEFAULT_CURSOR_FADE_TIME );
 
-	IInteractable* GetHoveredInteractable( CContainer* pContainer = nullptr );
+	IInteractable *GetHoveredInteractable( CContainer *pContainer = nullptr );
 	void FindHoveredInteractable( );
 	void ResetActiveInteractable( );
 	void DrawCursor( ECursorType _Cursor, double dAlpha );
 	void DrawCursor( ECursorType _Cursor );
-	void NotifyContainer( CContainer* pContainer );
+	void NotifyContainer( CContainer *pContainer );
 
 public:
 
@@ -44,12 +44,12 @@ public:
 
 	void Setup( );
 	void Shutdown( );
-	void AddWindow( CWindow* pWindow );
-	void RemoveWindow( CWindow* pWindow );
+	void AddWindow( CWindow *pWindow );
+	void RemoveWindow( CWindow *pWindow );
 	void Draw( );
 	void Deactivate( );
 	void Activate( );
-	void FreeInteractable( IInteractable* pInteractable );
+	void FreeInteractable( IInteractable *pInteractable );
 
 	friend class IInteractable;
 } inline _GUI;

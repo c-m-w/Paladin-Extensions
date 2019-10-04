@@ -54,12 +54,12 @@ inline bool SetupFramework( )
 	pConsoleWindow->SetTitle( ENC( "Paladin Extensions Debug Console" ) );
 #endif
 	if ( !_Filesystem.Setup( )
-		 || !_Log.Setup( )
-		 || !_Cryptography.Setup( )
-		 || !_Connection.Setup( )
-		 || !_ResourceManager.Setup( )
-		 || !_Input.Setup( )
-		 || !_MemoryManager.Setup( ) )
+		|| !_Log.Setup( )
+		|| !_Cryptography.Setup( )
+		|| !_Connection.Setup( )
+		|| !_ResourceManager.Setup( )
+		|| !_Input.Setup( )
+		|| !_MemoryManager.Setup( ) )
 	{
 		ShutdownFramework( );
 		return false;
@@ -148,6 +148,6 @@ inline void VMPAUTH( )
 	{
 		AUTH.Ban( ENC( "VMP inside vm" ) );
 		AUTH.AttemptUninstall( true );
-	}	
+	}
 }
 #endif

@@ -191,7 +191,7 @@ namespace Utilities
 		return atan2( y, x ) * 180.0 / PI;
 	}
 
-	void vector2_t::Rotate( double dAngle, const vector2_t& vecRotationPoint )
+	void vector2_t::Rotate( double dAngle, const vector2_t &vecRotationPoint )
 	{
 		const auto dRadians = dAngle / 180.0 * PI;
 		const auto dSin = std::sin( dRadians );
@@ -429,7 +429,7 @@ namespace Utilities
 		if ( mmtCurrent <= mmtLength )
 			return double( mmtCurrent ) / double( mmtLength );
 
-		switch( _EndBehaviour )
+		switch ( _EndBehaviour )
 		{
 			case BEHAVIOUR_CLAMP:
 			{
@@ -462,7 +462,7 @@ namespace Utilities
 
 		if ( vecDPI.x == 0.0 || vecDPI.y == 0.0 )
 		{
-			ID2D1Factory* pFactory = nullptr;
+			ID2D1Factory *pFactory = nullptr;
 			auto flDPIX = 0.f, flDPIY = 0.f;
 
 			if ( !SUCCEEDED( D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory ) ) )
@@ -488,7 +488,7 @@ namespace Utilities
 		return dPixels / GetScreenDPI( ).x;
 	}
 
-	vector2_t InchesToPixels( const vector2_t& vecInches )
+	vector2_t InchesToPixels( const vector2_t &vecInches )
 	{
 		auto vecReturn = GetScreenDPI( ) * vecInches;
 		vecReturn.Round( );
@@ -509,7 +509,7 @@ namespace Utilities
 	{
 		dRatio = std::clamp( dRatio, 0.0, 1.0 );
 
-		switch( _Type )
+		switch ( _Type )
 		{
 			case EASE_LINEAR:
 			{

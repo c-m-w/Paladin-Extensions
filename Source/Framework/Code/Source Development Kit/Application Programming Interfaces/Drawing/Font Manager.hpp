@@ -26,16 +26,16 @@ struct bitmap_t
 	Utilities::vector2_t vecSize { };
 
 	bitmap_t( ) = default;
-	bitmap_t( unsigned char* pData, const Utilities::vector2_t& vecSize );
-	bitmap_t( const std::vector< unsigned char >& vecBytes, const Utilities::vector2_t& vecSize );
-	bitmap_t( const Utilities::vector2_t& vecSize );
+	bitmap_t( unsigned char *pData, const Utilities::vector2_t &vecSize );
+	bitmap_t( const std::vector< unsigned char > &vecBytes, const Utilities::vector2_t &vecSize );
+	bitmap_t( const Utilities::vector2_t &vecSize );
 
 	[ [ nodiscard ] ] std::size_t GetBitIndex( unsigned x, unsigned y ) const;
 	[ [ nodiscard ] ] std::vector< DWORD > GetColoredBitmapBytes( DWORD dwRBGA ) const;
-	void Resize( const Utilities::vector2_t& vecNewSize );
-	void Insert( Utilities::vector2_t vecLocation, const bitmap_t& _Other );
-	void ConcatenateHorizontal( const bitmap_t& _Other );
-	void ConcatenateVertical( const bitmap_t& _Other );
+	void Resize( const Utilities::vector2_t &vecNewSize );
+	void Insert( Utilities::vector2_t vecLocation, const bitmap_t &_Other );
+	void ConcatenateHorizontal( const bitmap_t &_Other );
+	void ConcatenateVertical( const bitmap_t &_Other );
 	void ShiftUpward( unsigned uMagnitude );
 	void ShiftDownward( unsigned uMagnitude );
 	void ShiftLeftward( unsigned uMagnitude );
@@ -52,7 +52,7 @@ private:
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
-	char* RenderGlyph( char* szText );
+	char *RenderGlyph( char *szText );
 
 	const std::string strRelativeFontDirectory = ENC( "Fonts\\" );
 	const std::string strFontDirectories[ FONT_MAX ]
@@ -76,6 +76,6 @@ private:
 
 public:
 
-	bitmap_t CreateBitmap( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize );
-	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize );
+	bitmap_t CreateBitmap( char *szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize );
+	Utilities::vector2_t CalculateTextSize( char *szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize );
 } inline _FontManager;

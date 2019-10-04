@@ -47,7 +47,7 @@ void CCheckbox::Initialize( )
 	AddObject( pIcon, { } );
 }
 
-void CCheckbox::SetSubject( const std::string& strNewSubject )
+void CCheckbox::SetSubject( const std::string &strNewSubject )
 {
 	strSubject = strNewSubject;
 	bCreateDrawables = true;
@@ -56,7 +56,7 @@ void CCheckbox::SetSubject( const std::string& strNewSubject )
 		pSubject->SetText( strSubject );
 }
 
-void CCheckbox::SetVariable( bool* pNewEnabled )
+void CCheckbox::SetVariable( bool *pNewEnabled )
 {
 	pEnabled = pNewEnabled;
 }
@@ -65,4 +65,3 @@ vector2_t CCheckbox::CalculateRequiredSpace( )
 {
 	return { ICON_HEIGHT + SPACING + PixelsToInches( _FontManager.CreateBitmap( &strSubject[ 0 ], FONT, WEIGHT_REGULAR, false, TEXT_HEIGHT ).vecSize.x ), ICON_HEIGHT };
 }
-

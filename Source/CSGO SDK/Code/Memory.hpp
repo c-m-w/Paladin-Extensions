@@ -10,7 +10,7 @@ namespace Memory
 		CreateInterfaceFn _CreateInterface = nullptr;
 
 		operator HMODULE( ) const;
-		template< typename _t > bool operator( )( const char* szInterface, _t* pOutput ) const;
+		template< typename _t > bool operator( )( const char *szInterface, _t *pOutput ) const;
 
 		bool Valid( );
 	};
@@ -28,14 +28,15 @@ namespace Memory
 
 	struct networked_variable_table_t
 	{
-		const char* szName = nullptr;
-		RecvProp* pProp = nullptr;
+		const char *szName = nullptr;
+		RecvProp *pProp = nullptr;
 		std::uintptr_t ptrOffset = 0;
 		std::vector< RecvProp* > vecChildProps;
 		std::vector< networked_variable_table_t > vecChildTables;
 
 		networked_variable_table_t( ) = default;
-		networked_variable_table_t( const char* szName, RecvProp* _pProp = nullptr, std::uintptr_t ptrOffset = 0u ):
+
+		networked_variable_table_t( const char *szName, RecvProp *_pProp = nullptr, std::uintptr_t ptrOffset = 0u ):
 			szName( szName ), pProp( pProp ), ptrOffset( ptrOffset )
 		{ }
 	};
@@ -126,47 +127,47 @@ namespace Memory
 	};
 
 	inline module_info_t _Modules[ MODULE_MAX ] { };
-	inline module_info_t& mEngine = _Modules[ MODULE_ENGINE ];
-	inline module_info_t& mClient = _Modules[ MODULE_CLIENT ];
-	inline module_info_t& mDirectX = _Modules[ MODULE_D3D9 ];
-	inline module_info_t& mOverlay = _Modules[ MODULE_OVERLAY ];
-	inline module_info_t& mVGUI = _Modules[ MODULE_VGUI ];
-	inline module_info_t& mVGUI2 = _Modules[ MODULE_VGUI2 ];
-	inline module_info_t& mInput = _Modules[ MODULE_INPUT ];
-	inline module_info_t& mMaterialSystem = _Modules[ MODULE_MATERIAL_SYSTEM ];
-	inline module_info_t& mValveStandardLibrary = _Modules[ MODULE_VSTD ];
-	inline module_info_t& mLocalize = _Modules[ MODULE_LOCALIZE ];
-	inline module_info_t& mFileSystem = _Modules[ MODULE_FILESYSTEM ];
+	inline module_info_t &mEngine = _Modules[ MODULE_ENGINE ];
+	inline module_info_t &mClient = _Modules[ MODULE_CLIENT ];
+	inline module_info_t &mDirectX = _Modules[ MODULE_D3D9 ];
+	inline module_info_t &mOverlay = _Modules[ MODULE_OVERLAY ];
+	inline module_info_t &mVGUI = _Modules[ MODULE_VGUI ];
+	inline module_info_t &mVGUI2 = _Modules[ MODULE_VGUI2 ];
+	inline module_info_t &mInput = _Modules[ MODULE_INPUT ];
+	inline module_info_t &mMaterialSystem = _Modules[ MODULE_MATERIAL_SYSTEM ];
+	inline module_info_t &mValveStandardLibrary = _Modules[ MODULE_VSTD ];
+	inline module_info_t &mLocalize = _Modules[ MODULE_LOCALIZE ];
+	inline module_info_t &mFileSystem = _Modules[ MODULE_FILESYSTEM ];
 
-	inline void* pInterfaces[ INTERFACE_MAX ] { };
-	inline CGlobalVarsBase*		pGlobalVariables	= nullptr;
-	inline CClientState*		pClientState		= nullptr;
-	inline IDirect3DDevice9*	pDevice				= nullptr;
-	inline IBaseClientDLL*		pClientBase			= nullptr;
-	inline IClientMode*			pClientMode			= nullptr;
-	inline CGlowObjectManager*	pGlowObjectManager	= nullptr;
-	inline IInputSystem*		pInputSystem		= nullptr;
-	inline IVEngineClient*		pEngineClient		= nullptr;
-	inline ISurface*			pSurface			= nullptr;
-	inline IPanel*				pPanel				= nullptr;
-	inline IClientEntityList*	pEntityList			= nullptr;
-	inline IEngineTrace*		pEngineTrace		= nullptr;
-	inline IVModelInfoClient*	pModelInfo			= nullptr;
-	inline CInput*				pInput				= nullptr;
-	inline IVModelRender*		pModelRender		= nullptr;
-	inline IMaterialSystem*		pMaterialSystem		= nullptr;
-	inline IVRenderView*		pEngineRenderView	= nullptr;
-	inline ICvar*				pConVar				= nullptr;
-	inline ILocalize*			pLocalize			= nullptr;
-	inline IGameEventManager2*	pEvents				= nullptr;
-	inline IMoveHelperServer*	pMoveHelper			= nullptr;
-	inline IGameMovement*		pGameMovement		= nullptr;
-	inline IPrediction*			pPrediction			= nullptr;
-	inline IEngineSound*		pEngineSound		= nullptr;
-	inline IViewRenderBeams*	pRenderBeams		= nullptr;
-	inline IFileSystem*			pFileSystem			= nullptr;
+	inline void *pInterfaces[ INTERFACE_MAX ] { };
+	inline CGlobalVarsBase *pGlobalVariables = nullptr;
+	inline CClientState *pClientState = nullptr;
+	inline IDirect3DDevice9 *pDevice = nullptr;
+	inline IBaseClientDLL *pClientBase = nullptr;
+	inline IClientMode *pClientMode = nullptr;
+	inline CGlowObjectManager *pGlowObjectManager = nullptr;
+	inline IInputSystem *pInputSystem = nullptr;
+	inline IVEngineClient *pEngineClient = nullptr;
+	inline ISurface *pSurface = nullptr;
+	inline IPanel *pPanel = nullptr;
+	inline IClientEntityList *pEntityList = nullptr;
+	inline IEngineTrace *pEngineTrace = nullptr;
+	inline IVModelInfoClient *pModelInfo = nullptr;
+	inline CInput *pInput = nullptr;
+	inline IVModelRender *pModelRender = nullptr;
+	inline IMaterialSystem *pMaterialSystem = nullptr;
+	inline IVRenderView *pEngineRenderView = nullptr;
+	inline ICvar *pConVar = nullptr;
+	inline ILocalize *pLocalize = nullptr;
+	inline IGameEventManager2 *pEvents = nullptr;
+	inline IMoveHelperServer *pMoveHelper = nullptr;
+	inline IGameMovement *pGameMovement = nullptr;
+	inline IPrediction *pPrediction = nullptr;
+	inline IEngineSound *pEngineSound = nullptr;
+	inline IViewRenderBeams *pRenderBeams = nullptr;
+	inline IFileSystem *pFileSystem = nullptr;
 
-	inline void* pPointers[ SIGNATURE_MAX ];
+	inline void *pPointers[ SIGNATURE_MAX ];
 
 	inline unsigned uFunctionIndices[ FUNCTION_MAX ] { };
 
@@ -183,8 +184,7 @@ namespace Memory
 
 #if defined _DEBUG
 
-	template< typename _t >
-	struct pattern_info_t
+	template< typename _t > struct pattern_info_t
 	{
 		_t _Owner { };
 		EModules _Module = MODULE_ENGINE;
@@ -288,7 +288,7 @@ namespace Memory
 
 	bool InitializeMemory( );
 	unsigned GetFunctionIndex( EFunctions _Function );
-	void* GetSignaturePointer( ESignatures _Signature );
-	std::uintptr_t FindOffset( networked_variable_table_t& _Table, const char* szVariable );
-	std::uintptr_t FindOffset( const char* szTable, const char* szVariable );
+	void *GetSignaturePointer( ESignatures _Signature );
+	std::uintptr_t FindOffset( networked_variable_table_t &_Table, const char *szVariable );
+	std::uintptr_t FindOffset( const char *szTable, const char *szVariable );
 }

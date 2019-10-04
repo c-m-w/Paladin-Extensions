@@ -58,7 +58,7 @@ bool CSystemInformation::ProcessQueue( )
 							  ENC( "Couldn't set authentication information on proxy for device information retrieval. Error %i." ), hrReturn ), false;
 	}
 
-	for ( auto& _DeviceInformation : vecInformation )
+	for ( auto &_DeviceInformation: vecInformation )
 	{
 		_DeviceInformation.pValue->clear( );
 
@@ -68,8 +68,8 @@ bool CSystemInformation::ProcessQueue( )
 														WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 			if ( hrReturn != S_OK || pEnumerator == nullptr )
 				return pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
-				_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
-						  ENC( "Couldn't set authentication information on proxy for device information retrieval. Error %i." ), hrReturn ), false;
+						_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
+								  ENC( "Couldn't set authentication information on proxy for device information retrieval. Error %i." ), hrReturn ), false;
 		}
 
 		while ( pEnumerator )
@@ -83,8 +83,8 @@ bool CSystemInformation::ProcessQueue( )
 			if ( hrReturn != S_OK )
 			{
 				pEnumerator->Release( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
-							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
+						_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
+								  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
 
@@ -93,15 +93,15 @@ bool CSystemInformation::ProcessQueue( )
 			if ( hrReturn != S_OK )
 			{
 				pClassObject->Release( ), pEnumerator->Release( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
-							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
+						_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
+								  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
 			if ( vtProp.bstrVal == nullptr || reinterpret_cast< std::uintptr_t >( vtProp.bstrVal ) == 0x5 )
 			{
 				pClassObject->Release( ),
-					_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES,
-							  ENC( "Prop didn't exist." ), hrReturn );
+						_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES,
+								  ENC( "Prop didn't exist." ), hrReturn );
 				continue;
 			}
 
@@ -114,8 +114,8 @@ bool CSystemInformation::ProcessQueue( )
 			if ( hrReturn != S_OK )
 			{
 				pClassObject->Release( ), pEnumerator->Release( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
-							  ENC( "Couldn't clear device information prop. Error %i." ), hrReturn );
+						_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
+								  ENC( "Couldn't clear device information prop. Error %i." ), hrReturn );
 				break;
 			}
 			pClassObject->Release( );
@@ -150,17 +150,17 @@ std::string CSystemInformation::GetHardwareHash( )
 	return CRYPTO.GenerateHash( strReturn );
 }
 
-bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, thread_list_t& _Out )
+bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, thread_list_t &_Out )
 {
 	if ( dwProcessID == 0
-		 || dwProcessID == UINT_MAX )
+		|| dwProcessID == UINT_MAX )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Invalid process ID passed to GetProcessThreads( )." ) ), false;
 
 	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
 	_Out.clear( );
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
-		 || hSnapshot == nullptr )
+		|| hSnapshot == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get system threads." ) ), false;
 
 	auto bReturn = true;
@@ -176,8 +176,8 @@ bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, thread_list_t& _O
 		{
 			if ( _CurrentThread.th32OwnerProcessID == dwProcessID )
 				_Out.emplace_back( std::pair< DWORD, DWORD >( _CurrentThread.th32ThreadID, _CurrentThread.tpBasePri ) );
-
-		} while ( Thread32Next( hSnapshot, &_CurrentThread ) == TRUE );
+		}
+		while ( Thread32Next( hSnapshot, &_CurrentThread ) == TRUE );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
@@ -185,13 +185,13 @@ bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, thread_list_t& _O
 	return bReturn && !_Out.empty( );
 }
 
-bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWORD& dwOut )
+bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWORD &dwOut )
 {
 	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 	dwOut = 0;
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
-		 || hSnapshot == nullptr )
+		|| hSnapshot == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get processes." ) ), false;
 
 	auto bReturn = true;
@@ -206,8 +206,9 @@ bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWO
 		{
 			if ( _CurrentProcess.szExeFile == strExecutableName )
 				dwOut = _CurrentProcess.th32ProcessID;
-		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
-				  && dwOut == 0 );
+		}
+		while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
+			&& dwOut == 0 );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
@@ -221,7 +222,7 @@ bool CSystemInformation::GetExecutableByProcessID( DWORD dwProcessID, std::strin
 	strOut.clear( );
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
-		 || hSnapshot == nullptr )
+		|| hSnapshot == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get processes." ) ), false;
 
 	auto bReturn = true;
@@ -236,9 +237,9 @@ bool CSystemInformation::GetExecutableByProcessID( DWORD dwProcessID, std::strin
 		{
 			if ( _CurrentProcess.th32ProcessID == dwProcessID )
 				strOut = _CurrentProcess.szExeFile;
-
-		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
-				  && strOut.empty( ) );
+		}
+		while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
+			&& strOut.empty( ) );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
@@ -247,16 +248,14 @@ bool CSystemInformation::GetExecutableByProcessID( DWORD dwProcessID, std::strin
 }
 
 void CSystemInformation::TerminateProcessByID( DWORD dwProcessID )
-{
-	
-}
+{ }
 
 bool CSystemInformation::GetProcesses( std::vector< std::string > &vecOut )
 {
 	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
-		 || hSnapshot == nullptr )
+		|| hSnapshot == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get processes." ) ), false;
 
 	auto bReturn = true;
@@ -270,7 +269,8 @@ bool CSystemInformation::GetProcesses( std::vector< std::string > &vecOut )
 		do
 		{
 			vecOut.emplace_back( _CurrentProcess.szExeFile );
-		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE );
+		}
+		while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process process snapshot properly." ) );
@@ -292,7 +292,7 @@ bool CSystemInformation::GetExecutablePath( const std::string &strExecutableName
 	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE, dwProcessID );
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
-		 || hSnapshot == nullptr )
+		|| hSnapshot == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get modules." ) ), false;
 
 	strOut.clear( );
@@ -308,7 +308,8 @@ bool CSystemInformation::GetExecutablePath( const std::string &strExecutableName
 		{
 			if ( _Module.szModule == strExecutableName )
 				strOut = FS.PathToDirectory( _Module.szExePath );
-		} while ( Module32Next( hSnapshot, &_Module ) == TRUE && strOut.empty( ) );
+		}
+		while ( Module32Next( hSnapshot, &_Module ) == TRUE && strOut.empty( ) );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process module snapshot properly." ) );
@@ -317,8 +318,8 @@ bool CSystemInformation::GetExecutablePath( const std::string &strExecutableName
 }
 
 BOOL CALLBACK EnumWindowsProc(
-	_In_		 HWND hwnd,
-	_In_		 LPARAM lParam
+	_In_ HWND hwnd,
+	_In_ LPARAM lParam
 )
 {
 	const auto lStyle = GetWindowLong( hwnd, GWL_STYLE );
@@ -383,7 +384,7 @@ bool CSystemInformation::GetModules( DWORD dwProcessID, std::vector< HMODULE > &
 
 	vecOut.clear( );
 	if ( hSnapshot == INVALID_HANDLE_VALUE
-		 || hSnapshot == nullptr )
+		|| hSnapshot == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get modules." ) ), false;
 
 	auto bReturn = true;
@@ -397,7 +398,8 @@ bool CSystemInformation::GetModules( DWORD dwProcessID, std::vector< HMODULE > &
 		do
 		{
 			vecOut.emplace_back( _Module.hModule );
-		} while ( Module32Next( hSnapshot, &_Module ) == TRUE );
+		}
+		while ( Module32Next( hSnapshot, &_Module ) == TRUE );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process module snapshot properly." ) );
@@ -412,8 +414,8 @@ bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( 
 	DWORD dwReturnLength;
 
 	if ( FALSE == OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
-		 || !hTokenSelf
-		 || FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
+		|| !hTokenSelf
+		|| FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
 		return hTokenSelf && CloseHandle( hTokenSelf ), false;
 
 	TOKEN_PRIVILEGES tpNewDebug { };
@@ -426,13 +428,13 @@ bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( 
 	tpNewShutdown.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
 
 	if ( FALSE == LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpNewDebug.Privileges[ 0 ].Luid )
-		 || FALSE == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
-		 || FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
-		 || FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
-		return hTokenSelf&& CloseHandle( hTokenSelf ), false;
+		|| FALSE == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
+		|| FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
+		|| FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
+		return hTokenSelf && CloseHandle( hTokenSelf ), false;
 
 	if ( FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength )
-		 || FALSE == teSelf.TokenIsElevated )
+		|| FALSE == teSelf.TokenIsElevated )
 		return hTokenSelf && CloseHandle( hTokenSelf ), false;
 
 	return true;
@@ -487,7 +489,7 @@ vector2_t CSystemInformation::GetScreenSize( )
 	return { float( recDesktop.right - recDesktop.left ), float( recDesktop.bottom - recDesktop.top ) };
 }
 
-void CSystemInformation::OpenLink( const std::string & strLink )
+void CSystemInformation::OpenLink( const std::string &strLink )
 {
 	ShellExecute( nullptr, ENC( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
 }
@@ -497,7 +499,7 @@ bool CSystemInformation::GetClipboardData( std::string &strOut )
 	if ( OpenClipboard( nullptr ) == 0 )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to open clipboard for copying." ) ), false;
 
-	const auto hClipboard =	::GetClipboardData( CF_TEXT );
+	const auto hClipboard = ::GetClipboardData( CF_TEXT );
 	if ( hClipboard == nullptr )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to get global memory for clipboard data." ) );
@@ -513,7 +515,7 @@ bool CSystemInformation::GetClipboardData( std::string &strOut )
 	return true;
 }
 
-bool CSystemInformation::SetClipboardData( const std::string& strIn )
+bool CSystemInformation::SetClipboardData( const std::string &strIn )
 {
 	if ( OpenClipboard( nullptr ) == 0 )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to open clipboard for copying." ) ), false;

@@ -19,10 +19,10 @@ public:
 		void Uninitialize( ) override;
 
 		static inline void *pReset = nullptr,
-			*pBeginScene = nullptr,
-			*pEndScene = nullptr,
-			*pPresent = nullptr,
-			*pDrawPrimitive = nullptr;
+						   *pBeginScene = nullptr,
+						   *pEndScene = nullptr,
+						   *pPresent = nullptr,
+						   *pDrawPrimitive = nullptr;
 
 	public:
 
@@ -30,7 +30,7 @@ public:
 		~CDeviceHook( ) = default;
 
 		HRESULT __stdcall Reset( D3DPRESENT_PARAMETERS *pPresentationParameters );
-		HRESULT __stdcall Present( const RECT* pSourceRect, const RECT* pDestRect, HWND hDestWindowOverride, const RGNDATA* pDirtyRegion );
+		HRESULT __stdcall Present( const RECT *pSourceRect, const RECT *pDestRect, HWND hDestWindowOverride, const RGNDATA *pDirtyRegion );
 		HRESULT __stdcall DrawPrimitive( D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount );
 		HRESULT __stdcall BeginScene( );
 		HRESULT __stdcall EndScene( );
@@ -43,7 +43,7 @@ public:
 		bool Initialize( ) override;
 		void Uninitialize( ) override;
 
-		static inline void *pCreateMove  = nullptr;
+		static inline void *pCreateMove = nullptr;
 
 	public:
 

@@ -6,32 +6,32 @@
 #define USE_NAMESPACES
 #include "../../Framework.hpp"
 
-void callbacks_t::AddCallback( const key_callback_t& _Callback, const key_t& _Key )
+void callbacks_t::AddCallback( const key_callback_t &_Callback, const key_t &_Key )
 {
 	vecKeyCallbacks[ _Key ].emplace_back( _Callback );
 }
 
-void callbacks_t::AddCallback( const key_typed_callback_t& _Callback )
+void callbacks_t::AddCallback( const key_typed_callback_t &_Callback )
 {
 	vecKeyTypedCallbacks.emplace_back( _Callback );
 }
 
-void callbacks_t::AddCallback( const global_key_callback_t& _Callback )
+void callbacks_t::AddCallback( const global_key_callback_t &_Callback )
 {
 	vecGlobalKeyCallbacks.emplace_back( _Callback );
 }
 
-void callbacks_t::AddCallback( const mouse_move_callback_t& _Callback )
+void callbacks_t::AddCallback( const mouse_move_callback_t &_Callback )
 {
 	vecMouseMoveCallbacks.emplace_back( _Callback );
 }
 
-void callbacks_t::AddCallback( const scroll_callback_t& _Callback )
+void callbacks_t::AddCallback( const scroll_callback_t &_Callback )
 {
 	vecScrollCallbacks.emplace_back( _Callback );
 }
 
-std::vector< key_callback_t >& callbacks_t::GetCallbacks( const key_t& _Key )
+std::vector< key_callback_t > &callbacks_t::GetCallbacks( const key_t &_Key )
 {
 	return vecKeyCallbacks[ _Key ];
 }

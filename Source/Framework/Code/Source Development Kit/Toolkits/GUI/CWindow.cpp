@@ -6,7 +6,7 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-CWindow::CWindow( const rectangle_t& recLocation )
+CWindow::CWindow( const rectangle_t &recLocation )
 {
 	SetLocation( recLocation.vecLocation );
 	SetSize( recLocation.vecSize );
@@ -20,12 +20,12 @@ void CWindow::ShowIcon( )
 	bUseIcon = true;
 }
 
-void CWindow::SetTitle( const std::string& strNewTitle )
+void CWindow::SetTitle( const std::string &strNewTitle )
 {
 	strTitle = strNewTitle;
 }
 
-void CWindow::SetSubtitle( const std::string& strNewSubtitle )
+void CWindow::SetSubtitle( const std::string &strNewSubtitle )
 {
 	strSubtitle = strNewSubtitle;
 }
@@ -71,12 +71,12 @@ void CWindow::Popup( CWindow *pNewPopup, bool bAbleToClosePopup )
 
 	if ( bAbleToClosePopup )
 		pPopupContainer->GetCallbacks( ).AddCallback( [ & ]( CKeyState _State )
-	{
-		if ( _State )
-			ClosePopup( );
+		{
+			if ( _State )
+				ClosePopup( );
 
-		return true;
-	}, VK_LBUTTON );
+			return true;
+		}, VK_LBUTTON );
 }
 
 void CWindow::ClosePopup( )

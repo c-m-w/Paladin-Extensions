@@ -6,7 +6,7 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-IInteractable* CGUI::GetHoveredInteractable( CContainer* pContainer /*= nullptr*/ )
+IInteractable *CGUI::GetHoveredInteractable( CContainer *pContainer /*= nullptr*/ )
 {
 	if ( pContainer == nullptr )
 	{
@@ -78,16 +78,15 @@ void CGUI::DrawCursor( ECursorType _Cursor )
 
 	if ( _Cursor != _CurrentCursor && !_CursorFade.Running( ) )
 		_NextCursor = _Cursor, _CursorFade.Start( ), DrawCursor( _Cursor );
+	else if ( _CursorFade.Running( ) )
+		DrawCursor( _CurrentCursor, EaseOut( EASE_SINE2, _CursorFade ) ), DrawCursor( _NextCursor, EaseIn( EASE_SINE2, _CursorFade ) );
 	else
-		if ( _CursorFade.Running( ) )
-			DrawCursor( _CurrentCursor, EaseOut( EASE_SINE2, _CursorFade ) ), DrawCursor( _NextCursor, EaseIn( EASE_SINE2, _CursorFade ) );
-		else
-			DrawCursor( _CurrentCursor, 1.0 );
+		DrawCursor( _CurrentCursor, 1.0 );
 }
 
 void CGUI::NotifyContainer( CContainer *pContainer )
 {
-	for ( auto& pInteractable : pContainer->GetContainedInteractables( ) )
+	for ( auto &pInteractable: pContainer->GetContainedInteractables( ) )
 	{
 		pInteractable->NewFrame( );
 
@@ -101,7 +100,7 @@ void CGUI::Setup( )
 	if ( bSetup )
 		return;
 
-	constexpr char* CURSOR_PATHS[ 4 ]
+	constexpr char *CURSOR_PATHS[ 4 ]
 	{
 		nullptr,
 		R"(Cursor\Arrow.svg)",
@@ -124,21 +123,21 @@ void CGUI::Setup( )
 
 			pActiveInteractable = pHoveredInteractable;
 		}
-		else if( pActiveInteractable )
+		else if ( pActiveInteractable )
 			pActiveInteractable->RemoveState( STATE_CLICKING );
 
 		if ( pHoveredInteractable )
 		{
 			pHoveredInteractable->OnClick( _State );
 
-			for ( auto& _Callback : pHoveredInteractable->GetCallbacks( ).GetCallbacks( VK_LBUTTON ) )
+			for ( auto &_Callback: pHoveredInteractable->GetCallbacks( ).GetCallbacks( VK_LBUTTON ) )
 				_Callback( _State );
 		}
 
 		return true;
 	}, VK_LBUTTON );
 
-	_Input.AddCallback( [ & ]( CKeyState( _State ) )
+	_Input.AddCallback( [ & ]( CKeyState ( _State ) )
 	{
 		if ( !bActive )
 			return false;
@@ -147,7 +146,7 @@ void CGUI::Setup( )
 		{
 			pHoveredInteractable->OnRightClick( _State );
 
-			for ( auto& _Callback : pHoveredInteractable->GetCallbacks( ).GetCallbacks( VK_RBUTTON ) )
+			for ( auto &_Callback: pHoveredInteractable->GetCallbacks( ).GetCallbacks( VK_RBUTTON ) )
 				_Callback( _State );
 		}
 
@@ -163,8 +162,8 @@ void CGUI::Setup( )
 		{
 			pActiveInteractable->OnKeyPress( _Key, _State );
 
-			if ( _Key != VK_RBUTTON 
-				 && _Key != VK_LBUTTON )
+			if ( _Key != VK_RBUTTON
+				&& _Key != VK_LBUTTON )
 			{
 				if ( _Input.GetKeyState( VK_CONTROL ) )
 				{
@@ -173,12 +172,12 @@ void CGUI::Setup( )
 					else if ( _Key == 'V' )
 						pActiveInteractable->OnPaste( );
 				}
-				
-				for ( auto& _Callback : pActiveInteractable->GetCallbacks( ).GetCallbacks( _Key ) )
+
+				for ( auto &_Callback: pActiveInteractable->GetCallbacks( ).GetCallbacks( _Key ) )
 					_Callback( _State );
 			}
 
-			for ( auto& _Callback : pActiveInteractable->GetCallbacks( ).GetCallbacks< global_key_callback_t >( ) )
+			for ( auto &_Callback: pActiveInteractable->GetCallbacks( ).GetCallbacks< global_key_callback_t >( ) )
 				_Callback( _Key, _State );
 		}
 
@@ -194,7 +193,7 @@ void CGUI::Setup( )
 		{
 			pActiveInteractable->OnKeyTyped( _Key );
 
-			for ( auto& _Callback : pHoveredInteractable->GetCallbacks( ).GetCallbacks< key_typed_callback_t >( ) )
+			for ( auto &_Callback: pHoveredInteractable->GetCallbacks( ).GetCallbacks< key_typed_callback_t >( ) )
 				_Callback( _Key );
 		}
 
@@ -213,7 +212,7 @@ void CGUI::Setup( )
 			while ( !pInteractable->OnScroll( int( _ScrollAmount ) ) && pInteractable->GetParent( ) )
 				pInteractable = pInteractable->GetParent( );
 
-			for ( auto& _Callback : pInteractable->GetCallbacks( ).GetCallbacks< scroll_callback_t >( ) )
+			for ( auto &_Callback: pInteractable->GetCallbacks( ).GetCallbacks< scroll_callback_t >( ) )
 				_Callback( _ScrollAmount, iMouseX, iMouseY );
 		}
 
@@ -227,11 +226,10 @@ void CGUI::Setup( )
 
 		FindHoveredInteractable( );
 		if ( pActiveInteractable
-			 && pActiveInteractable->HasState( STATE_CLICKING ) )
+			&& pActiveInteractable->HasState( STATE_CLICKING ) )
 			pActiveInteractable->OnMouseMove( vector2_t( double( iMouseX ), double( iMouseY ) ) );
 
 		return true;
-
 	} );
 
 	for ( int i = CURSOR_ARROW; i != CURSOR_MAX; i++ )
@@ -256,9 +254,9 @@ void CGUI::Shutdown( )
 	}
 }
 
-void CGUI::AddWindow( CWindow* pWindow )
+void CGUI::AddWindow( CWindow *pWindow )
 {
-	for ( auto& p : vecWindows )
+	for ( auto &p: vecWindows )
 		if ( p == pWindow )
 			return;
 

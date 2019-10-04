@@ -122,7 +122,7 @@ public:
 //-----------------------------------------------------------------------------
 // List of character conversions
 //-----------------------------------------------------------------------------
-BEGIN_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", '\\')
+BEGIN_CUSTOM_CHAR_CONVERSION( CUtlCStringConversion, s_StringCharConversion, "\"", '\\' )
 	{
 		'\n', "n"
 	},
@@ -136,18 +136,18 @@ BEGIN_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\""
 	{ '\?', "\?" },
 	{ '\'', "\'" },
 	{ '\"', "\"" },
-END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", '\\');
+END_CUSTOM_CHAR_CONVERSION( CUtlCStringConversion, s_StringCharConversion, "\"", '\\' );
 
 CUtlCharConversion *GetCStringCharConversion( )
 {
 	return &s_StringCharConversion;
 }
 
-BEGIN_CUSTOM_CHAR_CONVERSION(CUtlNoEscConversion, s_NoEscConversion, "\"", 0x7F)
+BEGIN_CUSTOM_CHAR_CONVERSION( CUtlNoEscConversion, s_NoEscConversion, "\"", 0x7F )
 	{
 		0x7F, ""
 	},
-END_CUSTOM_CHAR_CONVERSION(CUtlNoEscConversion, s_NoEscConversion, "\"", 0x7F);
+END_CUSTOM_CHAR_CONVERSION( CUtlNoEscConversion, s_NoEscConversion, "\"", 0x7F );
 
 CUtlCharConversion *GetNoEscCharConversion( )
 {
@@ -195,7 +195,7 @@ CUtlCharConversion::CUtlCharConversion( char nEscapeChar, const char *pDelimiter
 	{
 		m_pList[ i ] = pArray[ i ].m_nActualChar;
 		ConversionInfo_t &info = m_pReplacements[ m_pList[ i ] ];
-		assert(info.m_pReplacementString == 0);
+		assert( info.m_pReplacementString == 0 );
 		info.m_pReplacementString = pArray[ i ].m_pReplacementString;
 		info.m_nLength = strlen( info.m_pReplacementString );
 		if ( info.m_nLength > m_nMaxConversionLength )
@@ -289,7 +289,7 @@ CUtlBuffer::CUtlBuffer( int growSize, int initSize, int nFlags ) :
 CUtlBuffer::CUtlBuffer( const void *pBuffer, int nSize, int nFlags ) :
 	m_Memory( ( unsigned char* )pBuffer, nSize ), m_Error( 0 )
 {
-	assert(nSize != 0);
+	assert( nSize != 0 );
 
 	m_Get = 0;
 	m_Put = 0;
@@ -322,18 +322,18 @@ void CUtlBuffer::SetBufferType( bool bIsText, bool bContainsCRLF )
 		{
 			if ( bIsText )
 			{
-				assert(ContainsCRLF() == bContainsCRLF);
+				assert( ContainsCRLF() == bContainsCRLF );
 			}
 			else
 			{
-				assert(ContainsCRLF());
+				assert( ContainsCRLF() );
 			}
 		}
 		else
 		{
 			if ( bIsText )
 			{
-				assert(bContainsCRLF);
+				assert( bContainsCRLF );
 			}
 		}
 	}
@@ -716,7 +716,7 @@ void CUtlBuffer::GetString( char *pString, int nMaxChars )
 	// Read the terminating NULL in binary formats
 	if ( !IsText( ) )
 	{
-		assert(GetChar() == 0);
+		assert( GetChar() == 0 );
 	}
 }
 
@@ -726,7 +726,7 @@ void CUtlBuffer::GetString( char *pString, int nMaxChars )
 //-----------------------------------------------------------------------------
 void CUtlBuffer::GetLine( char *pLine, int nMaxChars )
 {
-	assert(IsText() && !ContainsCRLF());
+	assert( IsText() && !ContainsCRLF() );
 
 	if ( !IsValid( ) )
 	{
@@ -968,7 +968,7 @@ void CUtlBuffer::SeekGet( SeekType_t type, int offset )
 
 int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 {
-	assert(pFmt);
+	assert( pFmt );
 	if ( m_Error || !IsText( ) )
 		return 0;
 
@@ -1003,7 +1003,7 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 				{
 					case 'c':
 					{
-						char *ch = va_arg(list, char *);
+						char *ch = va_arg( list, char * );
 						if ( CheckPeekGet( 0, sizeof( char ) ) )
 						{
 							*ch = *( const char* )PeekGet( );
@@ -1020,7 +1020,7 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 					case 'i':
 					case 'd':
 					{
-						int *i = va_arg(list, int *);
+						int *i = va_arg( list, int * );
 
 						// NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
 						nLength = 128;
@@ -1040,7 +1040,7 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 
 					case 'x':
 					{
-						int *i = va_arg(list, int *);
+						int *i = va_arg( list, int * );
 
 						// NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
 						nLength = 128;
@@ -1060,7 +1060,7 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 
 					case 'u':
 					{
-						unsigned int *u = va_arg(list, unsigned int *);
+						unsigned int *u = va_arg( list, unsigned int * );
 
 						// NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
 						nLength = 128;
@@ -1080,7 +1080,7 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 
 					case 'f':
 					{
-						float *f = va_arg(list, float *);
+						float *f = va_arg( list, float * );
 
 						// NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
 						nLength = 128;
@@ -1100,7 +1100,7 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 
 					case 's':
 					{
-						char *s = va_arg(list, char *);
+						char *s = va_arg( list, char * );
 						GetString( s );
 					}
 					break;
@@ -1108,10 +1108,10 @@ int CUtlBuffer::VaScanf( const char *pFmt, va_list list )
 					default:
 					{
 						// unimplemented scanf type
-						assert(0);
+						assert( 0 );
 						return numScanned;
 					}
-						break;
+					break;
 				}
 
 				++numScanned;
@@ -1141,9 +1141,9 @@ int CUtlBuffer::Scanf( const char *pFmt, ... )
 {
 	va_list args;
 
-	va_start(args, pFmt);
+	va_start( args, pFmt );
 	int count = VaScanf( pFmt, args );
-	va_end(args);
+	va_end( args );
 
 	return count;
 }
@@ -1155,7 +1155,7 @@ int CUtlBuffer::Scanf( const char *pFmt, ... )
 //-----------------------------------------------------------------------------
 bool CUtlBuffer::GetToken( const char *pToken )
 {
-	assert(pToken);
+	assert( pToken );
 
 	// Look for the token
 	int nLen = strlen( pToken );
@@ -1219,7 +1219,7 @@ bool CUtlBuffer::ParseToken( const char *pStartingDelim, const char *pEndingDeli
 	}
 
 	// Ending delimiter is not
-	assert(pEndingDelim && pEndingDelim[0]);
+	assert( pEndingDelim && pEndingDelim[0] );
 	nEndingDelimLen = strlen( pEndingDelim );
 
 	int nStartGet = TellGet( );
@@ -1285,7 +1285,7 @@ parseFailed:
 //-----------------------------------------------------------------------------
 int CUtlBuffer::ParseToken( characterset_t *pBreaks, char *pTokenBuf, int nMaxLen, bool bParseComments )
 {
-	assert(nMaxLen > 0);
+	assert( nMaxLen > 0 );
 	pTokenBuf[ 0 ] = 0;
 
 	// skip whitespace + comments
@@ -1337,7 +1337,7 @@ int CUtlBuffer::ParseToken( characterset_t *pBreaks, char *pTokenBuf, int nMaxLe
 	}
 
 	// parse single characters
-	if ( IN_CHARACTERSET(*pBreaks, c) )
+	if ( IN_CHARACTERSET( *pBreaks, c ) )
 	{
 		pTokenBuf[ 0 ] = c;
 		pTokenBuf[ 1 ] = 0;
@@ -1358,7 +1358,7 @@ int CUtlBuffer::ParseToken( characterset_t *pBreaks, char *pTokenBuf, int nMaxLe
 		if ( !IsValid( ) )
 			break;
 
-		if ( IN_CHARACTERSET(*pBreaks, c) || c == '\"' || c <= ' ' )
+		if ( IN_CHARACTERSET( *pBreaks, c ) || c == '\"' || c <= ' ' )
 		{
 			SeekGet( SEEK_CURRENT, -1 );
 			break;
@@ -1501,7 +1501,7 @@ void CUtlBuffer::VaPrintf( const char *pFmt, va_list list )
 {
 	char temp[2048];
 	int nLen = vsnprintf( temp, sizeof( temp ), pFmt, list );
-	assert(nLen < 2048);
+	assert( nLen < 2048 );
 	PutString( temp );
 }
 
@@ -1509,9 +1509,9 @@ void CUtlBuffer::Printf( const char *pFmt, ... )
 {
 	va_list args;
 
-	va_start(args, pFmt);
+	va_start( args, pFmt );
 	VaPrintf( pFmt, args );
-	va_end(args);
+	va_end( args );
 }
 
 
@@ -1733,7 +1733,7 @@ bool CUtlBuffer::ConvertCRLF( CUtlBuffer &outBuf )
 		}
 	}
 
-	assert(nPut + nPutDelta <= outBuf.TellMaxPut());
+	assert( nPut + nPutDelta <= outBuf.TellMaxPut() );
 
 	outBuf.SeekGet( SEEK_HEAD, nGet + nGetDelta );
 	outBuf.SeekPut( SEEK_HEAD, nPut + nPutDelta );
@@ -1754,7 +1754,7 @@ CUtlInplaceBuffer::CUtlInplaceBuffer( int growSize /* = 0 */, int initSize /* = 
 
 bool CUtlInplaceBuffer::InplaceGetLinePtr( char **ppszInBufferPtr, int *pnLineLength )
 {
-	assert(IsText() && !ContainsCRLF());
+	assert( IsText() && !ContainsCRLF() );
 
 	int nLineLen = PeekLineLength( );
 	if ( nLineLen <= 1 )
@@ -1785,7 +1785,7 @@ char *CUtlInplaceBuffer::InplaceGetLinePtr( void )
 
 	if ( InplaceGetLinePtr( &pszLine, &nLineLen ) )
 	{
-		assert(nLineLen >= 1);
+		assert( nLineLen >= 1 );
 
 		switch ( pszLine[ nLineLen - 1 ] )
 		{
@@ -1805,7 +1805,7 @@ char *CUtlInplaceBuffer::InplaceGetLinePtr( void )
 				break;
 
 			default:
-				assert(pszLine[nLineLen] == 0);
+				assert( pszLine[nLineLen] == 0 );
 				break;
 		}
 	}

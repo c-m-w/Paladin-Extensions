@@ -58,7 +58,7 @@ bool CFunctionality::Initialize( )
 	pConnectionErrorNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pConnectionErrorNotificationBottom->SetHeight( 1.0 / 6.0 );
 	pLoginCodeContainers[ ELoginCode::CONNECTION_ERROR ]->AddObject( pConnectionErrorNotificationBottom, { pLoginCodeContainers[ ELoginCode::CONNECTION_ERROR ]->GetSize( ).x / 2.0 - PixelsToInches( pConnectionErrorNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pConnectionErrorNotificationTop->GetSize( ).y + 0.05208333333 } );
-	
+
 	pServerErrorNotificationTop = new CText( );
 	pServerErrorNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 	pServerErrorNotificationTop->SetText( ENC( "There was an error with the server." ) );
@@ -74,7 +74,7 @@ bool CFunctionality::Initialize( )
 	pServerErrorNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pServerErrorNotificationBottom->SetHeight( 1.0 / 6.0 );
 	pLoginCodeContainers[ ELoginCode::SERVER_ERROR ]->AddObject( pServerErrorNotificationBottom, { pLoginCodeContainers[ ELoginCode::SERVER_ERROR ]->GetSize( ).x / 2.0 - PixelsToInches( pServerErrorNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pServerErrorNotificationTop->GetSize( ).y + 0.05208333333 } );
-	
+
 	pBannedNotificationTop = new CText( );
 	pBannedNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 	pBannedNotificationTop->SetText( ENC( "You are currently banned from Paladin Extensions." ) );
@@ -90,7 +90,7 @@ bool CFunctionality::Initialize( )
 	pBannedNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pBannedNotificationBottom->SetHeight( 1.0 / 6.0 );
 	pLoginCodeContainers[ ELoginCode::BANNED ]->AddObject( pBannedNotificationBottom, { pLoginCodeContainers[ ELoginCode::BANNED ]->GetSize( ).x / 2.0 - PixelsToInches( pBannedNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pBannedNotificationTop->GetSize( ).y + 0.05208333333 } );
-	
+
 	pInvalidKeyNotificationTop = new CText( );
 	pInvalidKeyNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 	pInvalidKeyNotificationTop->SetText( ENC( "Your license appears to be invalid." ) );
@@ -124,7 +124,7 @@ bool CFunctionality::Initialize( )
 		return false;
 	}, VK_LBUTTON );
 	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyEnterKey, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - pInvalidKeyEnterKey->GetSize( ).x / 2.0, pInvalidKeyInput->GetLocation( ).y + pInvalidKeyInput->GetSize( ).y + 0.05208333333 } );
-	
+
 	pInvalidHardwareNotificationTop = new CText( );
 	pInvalidHardwareNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 	pInvalidHardwareNotificationTop->SetText( ENC( "Your hardware seems to have changed." ) );
@@ -140,7 +140,7 @@ bool CFunctionality::Initialize( )
 	pInvalidHardwareNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pInvalidHardwareNotificationBottom->SetHeight( 1.0 / 6.0 );
 	pLoginCodeContainers[ ELoginCode::INVALID_HARDWARE ]->AddObject( pInvalidHardwareNotificationBottom, { pLoginCodeContainers[ ELoginCode::INVALID_HARDWARE ]->GetSize( ).x / 2.0 - PixelsToInches( pInvalidHardwareNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pInvalidHardwareNotificationTop->GetSize( ).y + 0.05208333333 } );
-	
+
 	pLoginNotificationTop = new CText( );
 	pLoginNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 	pLoginNotificationTop->SetText( ENC( "You have been successfully logged in." ) );
@@ -182,7 +182,7 @@ void CFunctionality::Uninitialize( )
 	delete pApplicationWindow;
 }
 
-void CFunctionality::ChangeCurrentContainer( CContainer*& pNew )
+void CFunctionality::ChangeCurrentContainer( CContainer *&pNew )
 {
 	if ( mmtContainerChangeTime != 0ull ) // not done animating out
 		return;
@@ -261,33 +261,32 @@ void CFunctionality::Run( )
 
 void CFunctionality::DrawLoop( )
 {
-	auto test = new CDrawable();
+	auto test = new CDrawable( );
 	test->Rectangle( { 0, 0, InchesToPixels( LAUNCHER_WIDTH ), InchesToPixels( LAUNCHER_HEIGHT ) }, 0xFF0000FF );
-	
+
 	while ( !bExit )
 	{
 		if ( pApplicationWindow->PollInput( ) )
 			continue;
-		
+
 		const auto mmtNow = GetMoment( );
 
 		if ( &pWaitingContainer == pCurrentContainer )
 		{
-			if ( bConnected 
-			 && _LogoAlphaTimer.GetRatio( ) <= 1.0 / FPS )
+			if ( bConnected
+				&& _LogoAlphaTimer.GetRatio( ) <= 1.0 / FPS )
 				ChangeCurrentContainer( pLoginCodeContainers[ _LoginCode ] ), bLogoFaded = true, pWaitingContainer->GetAlphaRatio( ) = 0.0;
 			else if ( !bLogoFaded )
 				pWaitingContainer->GetAlphaRatio( ) = _LogoAlphaTimer.GetRatio( ), IInteractable::UpdateContainerContents( pWaitingContainer );
 		}
-		
+
 		CheckContainerAnimation( );
-		
+
 		DRAW.BeginFrame( );
 		_GUI.Draw( );
 		//test->Draw();
 		DRAW.EndFrame( );
-		
-		
+
 		const auto mmtDifference = GetMoment( ) - mmtNow;
 		if ( mmtDifference > 1000.0 / FPS )
 			continue;

@@ -37,9 +37,9 @@ public:
 	/** \brief Computes a hash of an array of bytes. */
 	/**	\param strBytes Text to be hashed. */
 	/**	\return Hash of the text. */
-	template< typename _t = CryptoPP::SHA1 > [ [ nodiscard ] ] std::string GenerateHash( const std::string & strBytes );
-	[ [nodiscard] ] unsigned GenerateNumericHash( const std::string& strBytes );
-	[ [nodiscard] ] unsigned GenerateNumericHash( const void* pData, std::size_t zSize );
+	template< typename _t = CryptoPP::SHA1 > [ [ nodiscard ] ] std::string GenerateHash( const std::string &strBytes );
+	[ [nodiscard] ] unsigned GenerateNumericHash( const std::string &strBytes );
+	[ [nodiscard] ] unsigned GenerateNumericHash( const void *pData, std::size_t zSize );
 	bool Encode( const std::string &strSubject, std::string &strOut );
 	bool Decode( const std::string &strEncoded, std::string &strOut );
 	/** \brief Encrypts or decrypts text with AES-256-CBC style.\n Requires InitializeEncryption( ) be called beforehand. */

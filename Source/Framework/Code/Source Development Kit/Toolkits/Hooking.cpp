@@ -12,7 +12,7 @@ std::size_t CVirtualTableHook::GetTableSize( void **pTable )
 	std::size_t zReturn = 0;
 
 	while ( pTable != nullptr
-			&& MEM.IsExecutableCode( pTable[ zReturn ] ) )
+		&& MEM.IsExecutableCode( pTable[ zReturn ] ) )
 		zReturn++;
 
 	return zReturn;
@@ -157,7 +157,7 @@ bool CImportHook::PatchImport( HMODULE hExporter, const std::string &strImportNa
 	auto _Origin = image_info_t( hExporter );
 
 	if ( !_Origin.ValidImage( )
-		 || !_Importee.ValidImage( ) )
+		|| !_Importee.ValidImage( ) )
 		return LOG( WARNING, HOOKING, "Invalid image(s) passed to PatchImport." ), false;
 
 	const auto pImportData = _Importee.FindImport( hExporter, strImportName );
@@ -181,7 +181,7 @@ void *CImportHook::GetOriginalImport( HMODULE hExporter, const std::string &strI
 	if ( pSearch == _Patches.end( ) )
 		return nullptr;
 
-	for ( auto &_Patch : pSearch->second )
+	for ( auto &_Patch: pSearch->second )
 		if ( _Patch.strImport == strImportName )
 			return _Patch.pOriginal;
 
@@ -214,9 +214,9 @@ bool CImportHook::RevertAllPatches( )
 	if ( !bAttached )
 		return LOG( WARNING, HOOKING, "Attempting to revert all patches without attaching to a module beforehand." ), nullptr;
 
-	for ( auto &_Patch : _Patches )
+	for ( auto &_Patch: _Patches )
 	{
-		for ( auto &__Patch : _Patch.second )
+		for ( auto &__Patch: _Patch.second )
 			if ( !PatchAddress( __Patch.pPatchedFunction, __Patch.pOriginal ) )
 				return false;
 
@@ -321,7 +321,7 @@ bool CExportHook::RevertPatch( void *pOriginal )
 
 	const auto pExports = _Exporter.GetExports( );
 
-	for ( auto u = 0u; u < vecOldExports.size(); u++ )
+	for ( auto u = 0u; u < vecOldExports.size( ); u++ )
 		if ( vecOldExports[ u ] == pOriginal )
 		{
 			auto &ptrRelativeAddress = reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions )[ u ];
@@ -352,7 +352,7 @@ bool CExportHook::RevertPatch( const std::string &strExportName )
 
 bool CExportHook::RevertAllPatches( )
 {
-	for ( auto &pFunction : vecOldExports )
+	for ( auto &pFunction: vecOldExports )
 		if ( !RevertPatch( pFunction ) )
 			return false;
 
@@ -361,11 +361,11 @@ bool CExportHook::RevertAllPatches( )
 
 DWORD ExceptionHandler( EXCEPTION_POINTERS *pRecord )
 {
-	switch( pRecord->ExceptionRecord->ExceptionCode )
+	switch ( pRecord->ExceptionRecord->ExceptionCode )
 	{
 		case STATUS_GUARD_PAGE_VIOLATION:
 		{
-			for ( auto &_Hook : CExceptionHook::vecHooks )
+			for ( auto &_Hook: CExceptionHook::vecHooks )
 				if ( std::uintptr_t( _Hook.first ) == pRecord->ContextRecord->Eip )
 				{
 					pRecord->ContextRecord->Eip = std::uintptr_t( _Hook.second );
@@ -418,7 +418,7 @@ bool CExceptionHook::Attach( void *pFunction, void *pCallback )
 	if ( !AddHandler( ) )
 		return false;
 
-	for ( auto &_Hook : vecHooks )
+	for ( auto &_Hook: vecHooks )
 		if ( _Hook.first == pFunction )
 			return false;
 
@@ -454,16 +454,16 @@ void *__stdcall FindHook( void *pFunction )
 void __declspec( naked ) HookProxy( )
 {
 	__asm
-	{
-		call	FindHook
-		cmp		eax, 0
-		jnz		JumpToHook
-		ret		// mega crash
+			{
+			call FindHook
+			cmp eax, 0
+			jnz JumpToHook
+			ret		// mega crash
 
-		JumpToHook:
+			JumpToHook:
 
-			jmp		eax
-	}
+			jmp eax
+			}
 }
 
 std::map< void *, void * > _PatchedFunctions { };

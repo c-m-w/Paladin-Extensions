@@ -24,7 +24,7 @@ public:
 
 	CText( );
 
-	void SetText( const std::string& strNewText );
+	void SetText( const std::string &strNewText );
 	void SetFont( EFont _NewFont );
 	void SetWeight( EFontWeight _NewWeight );
 	void SetItalic( bool bNewItalic );

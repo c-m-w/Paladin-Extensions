@@ -17,7 +17,7 @@ BOOL OnAttach( )
 {
 	if ( !SetupFramework( ) )
 		return FALSE;
-	
+
 	const auto _LoginCode = AUTH.Login( );
 	if ( _LoginCode != ELoginCode::SUCCESS && _LoginCode != ELoginCode::STAFF_SUCCESS )
 		AUTH.AttemptUninstall( true );
@@ -26,22 +26,16 @@ BOOL OnAttach( )
 
 	if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( ENC( "csgo.exe" ) ) ).GenerateUniqueHash( ) ) )
 		return LOG( ERROR, APPLICATION, ENC( "Invalid hash of headers." ) ), false;
-	
+
 	if ( !Initialize( ) )
 		return FALSE;
 
 	CChams cham;
-	{
-
-	}
+	{ }
 	CGlow glow;
-	{
-		
-	}
+	{ }
 	CNotificationSystem notif;
-	{
-		
-	}
+	{ }
 	//CAutonomousTrigger trigger;
 	//{
 	//	trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
@@ -78,15 +72,11 @@ BOOL OnAttach( )
 	//	jumpbug.bDisableWhenManuallyDucking = true;
 	//}
 	CInventoryManager inv;
-	{
-		
-	}
-	
-	
-	
+	{ }
+
 	while ( !_Input.GetKeyState( VK_DELETE ) )
 		Pause( 1 );
-	
+
 	FreeLibraryAndExitThread( GetModuleHandle( nullptr ), TRUE );
 }
 
@@ -98,18 +88,17 @@ void OnDetach( )
 
 bool Initialize( )
 {
-	pWindow = new CApplicationWindow( FindWindow( nullptr, "Counter-Strike: Global Offensive") );
+	pWindow = new CApplicationWindow( FindWindow( nullptr, "Counter-Strike: Global Offensive" ) );
 
 	if ( !DRAW.ChangeTarget( pWindow ) )
 		return false;
 
 	_GUI.Setup( );
-	static auto test = new CWindow ({ 0, 0, 5, 5 } );
+	static auto test = new CWindow( { 0, 0, 5, 5 } );
 	test->SetTitle( "test" );
-	test->ShowIcon();
-	_GUI.AddWindow( test);
-	
-	
+	test->ShowIcon( );
+	_GUI.AddWindow( test );
+
 	if ( !InitializeMemory( ) || !HOOKS.Setup( ) )
 	{
 		LOG( ERROR, APPLICATION, ENC( "Unable to initialize." ) );

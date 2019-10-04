@@ -14,10 +14,10 @@ void CContainer::CreateDrawables( )
 
 void CContainer::Draw( )
 {
-	for ( auto& pDrawable : vecDrawables )
+	for ( auto &pDrawable: vecDrawables )
 		pDrawable->Draw( );
 
-	for ( auto& pObject : vecInteractables )
+	for ( auto &pObject: vecInteractables )
 		pObject->PreDraw( );
 }
 
@@ -31,7 +31,7 @@ void CContainer::UpdateScrollbarInformation( )
 
 	vecBoundary = { };
 
-	for ( auto& pInteractable : vecInteractables )
+	for ( auto &pInteractable: vecInteractables )
 	{
 		const auto recInteractableLocation = pInteractable->GetLocation( );
 		const auto vecBoundaries = vector2_t( recInteractableLocation.x + recInteractableLocation.w, recInteractableLocation.y + recInteractableLocation.h ) - vecScrollAmount;
@@ -51,7 +51,7 @@ void CContainer::UpdateScrollbarInformation( )
 		vecScrollAmount.y = 0.0, bVertical = false;
 
 	if ( bInitialHorizontal == bHorizontal
-		 && bInitialVertical == bVertical )
+		&& bInitialVertical == bVertical )
 		return;
 
 	UpdateScrollbars( );
@@ -112,7 +112,7 @@ void CContainer::DrawBackground( )
 	bCreateDrawables = true;
 }
 
-double& CContainer::GetAlphaRatio( )
+double &CContainer::GetAlphaRatio( )
 {
 	return dbAlphaRatio;
 }
@@ -122,9 +122,9 @@ vector2_t CContainer::GetScrollOffset( )
 	return vecScrollAmount;
 }
 
-void CContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative )
+void CContainer::AddObject( IInteractable *pObject, const vector2_t &vecRelative )
 {
-	for ( auto& pInteractable : vecInteractables )
+	for ( auto &pInteractable: vecInteractables )
 		if ( pInteractable == pObject )
 			return;
 
@@ -142,7 +142,7 @@ void CContainer::RemoveObject( IInteractable *pObject )
 			return vecInteractables.erase( vecInteractables.begin( ) + z ), pObject->SetLocation( { } );
 }
 
-const std::deque< IInteractable* >& CContainer::GetContainedInteractables( )
+const std::deque< IInteractable* > &CContainer::GetContainedInteractables( )
 {
 	return vecInteractables;
 }
