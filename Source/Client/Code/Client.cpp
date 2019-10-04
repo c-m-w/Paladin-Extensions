@@ -10,6 +10,8 @@
 
 BOOL OnAttach( )
 {
+	MessageBox( nullptr, "rape", "men_rape__", 0 );
+	
 	if ( !SetupFramework( ) )
 		return FALSE;
 	
@@ -22,7 +24,12 @@ BOOL OnAttach( )
 	//if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( ENC( "csgo.exe" ) ) ).GenerateUniqueHash( ) ) )
 	//	return LOG( ERROR, APPLICATION, ENC( "Invalid hash of headers." ) ), false;
 
-	while ( !MEM.SetProcess( ENC( "csgo.exe" ), PROCESS_ALL_ACCESS ) ) Sleep( 1 );
+	
+	
+	while ( !_SystemInformation.IsProcessOpen( ENC( "csgo.exe" ) ) ) Sleep( 1 );
+
+	if ( !MEM.SetProcess( ENC( "csgo.exe" ), PROCESS_ALL_ACCESS ) )
+		exit( 0 );
 	
 	std::string strCSGOtoManualMap;
 	if ( !AUTH.RequestLibrary( ELibrary::CSGOX, strCSGOtoManualMap ) )

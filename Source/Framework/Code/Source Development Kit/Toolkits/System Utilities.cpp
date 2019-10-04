@@ -316,6 +316,12 @@ bool CSystemInformation::GetExecutablePath( const std::string &strExecutableName
 	return bReturn && !strOut.empty( );
 }
 
+bool CSystemInformation::IsProcessOpen( const std::string &strExecutableName )
+{
+	DWORD d;
+	return GetProcessID( strExecutableName, d ) && d;
+}
+
 BOOL CALLBACK EnumWindowsProc(
 	_In_		 HWND hwnd,
 	_In_		 LPARAM lParam

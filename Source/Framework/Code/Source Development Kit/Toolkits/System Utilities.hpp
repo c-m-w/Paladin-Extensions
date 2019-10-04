@@ -132,6 +132,7 @@ public:
 	static bool GetProcesses( std::vector< std::string > &vecOut );
 	static bool GetProgramList( std::vector< std::string > &vecOut );
 	static bool GetExecutablePath( const std::string &strExecutableName, std::string &strOut );
+	static bool IsProcessOpen( const std::string& strExecutableName );
 	static std::vector< HWND > GetOpenWindows( );
 	static std::vector< HWND > GetCurrentProcessWindows( );
 	static std::vector< std::string > GetOpenWindowNames( );
