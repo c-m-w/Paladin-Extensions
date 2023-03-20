@@ -19,3 +19,9 @@ Fully featured framework for all projects with a wide variety of functionality, 
     - Graphical User Interface
     - Compartimentalized Serial Configuration System
     - Analysis Protection
+
+## Demo videos of the CSGO Client
+
+[![Watch the video](https://img.youtube.com/vi/jjklqj_Rhf4/maxresdefault.jpg)](https://youtu.be/jjklqj_Rhf4)
+[![Watch the video](https://img.youtube.com/vi/CZ7GNl6aNF8/maxresdefault.jpg)](https://youtu.be/CZ7GNl6aNF8)
+[![Watch the video](https://img.youtube.com/vi/Q-2Wshil1fk/maxresdefault.jpg)](https://youtu.be/Q-2Wshil1fk)
